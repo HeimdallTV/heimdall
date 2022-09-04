@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "strict": true,
+    "jsx": "react-jsx",
+    "lib": ["DOM", "DOM.Iterable", "esnext"],
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "baseUrl": "src",
+    "paths": {
+      "@constants": ["constants.ts"],
+      "@components/*": ["components/*"],
+      "@extension/*": ["../extension/*"],
+      "@libs/*": ["libs/*"],
+      "@std": ["parser/std/index.ts"],
+      "@std/*": ["parser/std/*"],
+      "@views/*": ["views/*"],
+      "@yt": ["parser/yt/index.ts"],
+      "@yt/*": ["parser/yt/*"]
+    }
+  },
+  "include": ["src", "extension", "global.d.ts"]
+}

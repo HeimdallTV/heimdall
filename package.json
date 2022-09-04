@@ -1,0 +1,38 @@
+{
+  "name": "heimdall",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.14",
+    "@saghen/hermes": "^2.0.0-alpha.1",
+    "date-fns": "^2.30.0",
+    "fp-ts": "^2.16.1",
+    "lese": "^2.0.0-alpha.0",
+    "p-limit": "^4.0.0",
+    "ramda": "^0.29.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router": "^6.17.0",
+    "react-router-dom": "^6.17.0",
+    "swr": "^2.2.4",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@swc/plugin-emotion": "^2.5.92",
+    "@types/ramda": "^0.29.6",
+    "@types/react": "^18.2.29",
+    "@types/react-dom": "^18.2.13",
+    "@vitejs/plugin-react-swc": "^3.4.0",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0",
+    "vite-tsconfig-paths": "^4.2.1"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "src/main.ts"
+  },
+  "{{chrome}}.permissions": ["cookies", "storage", "declarativeNetRequest"],
+  "{{firefox}}.permissions": ["cookies", "storage", "contextualIdentities", "declarativeNetRequest"],
+  "externally_connectable": {
+    "matches": ["*://localhost/*"]
+  },
+  "host_permissions": ["https://*/*"]
+}
