@@ -1,1 +1,0 @@
-export { JSX } from 'react'
