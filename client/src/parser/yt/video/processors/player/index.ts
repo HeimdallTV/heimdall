@@ -17,6 +17,7 @@ export async function processPlayer({
   streamingData,
   captions,
 }: PlayerResponse): Promise<std.Player> {
+  console.log(videoDetails)
   return {
     provider: ProviderName.YT,
     type: videoDetails.isLiveContent ? std.VideoType.Live : std.VideoType.Static,

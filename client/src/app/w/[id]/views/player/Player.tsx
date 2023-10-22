@@ -1,5 +1,4 @@
 import {
-  FC,
   memo,
   React,
   RefObject,
@@ -13,8 +12,8 @@ import {
   Flex,
   Row,
 } from 'lese';
+import styled from 'styled-components';
 
-import styled from '@emotion/styled';
 import {
   KeyboardDoubleArrowLeftRounded,
   KeyboardDoubleArrowRightRounded,

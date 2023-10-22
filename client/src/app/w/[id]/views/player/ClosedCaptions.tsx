@@ -1,8 +1,18 @@
-import styled from '@emotion/styled'
-import { useContext, useEffect, useState } from 'react'
-import { PlayerContext } from './context'
-import { useClosedCaptions, useCurrentTimeMS } from './hooks/use'
-import * as std from '@std'
+import {
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+
+import styled from 'styled-components';
+
+import * as std from '@std';
+
+import { PlayerContext } from './context';
+import {
+  useClosedCaptions,
+  useCurrentTimeMS,
+} from './hooks/use';
 
 const ClosedCaptionsContainer = styled.div`
   background-color: rgba(0, 0, 0, 0.6);

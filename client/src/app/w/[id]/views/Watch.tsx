@@ -1,3 +1,5 @@
+'use client'
+
 import {
   useEffect,
   useRef,
@@ -13,6 +15,7 @@ import {
 } from 'lese';
 import { not } from 'ramda';
 import { useParams } from 'react-router';
+import styled from 'styled-components';
 import useSWR from 'swr';
 
 import { useAsync } from '@/hooks/useAsync';
@@ -32,7 +35,6 @@ import {
   Title,
 } from '@components/Typography';
 import { CompactVideoListItem } from '@components/Video/ListItem';
-import styled from '@emotion/styled';
 import {
   matchAsync,
   matchSWR,
@@ -250,10 +252,10 @@ const PlayerWrapper: React.FC<{ videoId: string }> = ({ videoId }) => {
   return <>{player && <Player player={player} />}</>
 }
 
-const Watch: React.FC = () => {
+const Watch = ({ videoId }: { videoId: string }) => {
   const params = useParams()
   const Video = pipe(
-    useSWR(params.id, fetchVideo),
+    useSWR(videoId, fetchVideo),
     matchSWR(
       video => <WatchInfo video={video} />,
       () => 'Failed while loading video data',

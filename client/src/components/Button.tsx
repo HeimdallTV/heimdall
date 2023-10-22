@@ -1,6 +1,10 @@
-import styled from '@emotion/styled'
-import { TextSecondary } from './Typography'
-import { SeparationProps, separationProp } from 'lese'
+import {
+  separationProp,
+  SeparationProps,
+} from 'lese';
+import styled from 'styled-components';
+
+import { TextSecondary } from './Typography';
 
 const PaperButtonStyled = styled(TextSecondary)`
   display: inline-block;

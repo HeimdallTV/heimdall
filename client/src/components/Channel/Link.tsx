@@ -3,8 +3,8 @@ import {
   Row,
 } from 'lese';
 import Link from 'next/link';
+import styled from 'styled-components';
 
-import styled from '@emotion/styled';
 import { CheckCircleRounded } from '@mui/icons-material';
 import * as std from '@std';
 

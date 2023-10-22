@@ -5,8 +5,8 @@ import {
 } from 'react';
 
 import { Grid } from 'lese';
+import styled from 'styled-components';
 
-import styled from '@emotion/styled';
 import { CheckRounded } from '@mui/icons-material';
 
 const FloatingMenuContainerStyled = styled.div<{ visible: boolean }>`

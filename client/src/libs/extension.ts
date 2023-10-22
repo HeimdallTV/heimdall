@@ -1,9 +1,6 @@
 import type { SWRResponse } from 'swr';
 
-import {
-  Endpoints,
-  Sockets,
-} from '@extension/src/main';
+import { Sockets } from '@extension/src/main';
 import {
   requestInitToTransferableRequestInit,
   transferableResponseToResponse,
@@ -20,28 +17,37 @@ import {
 // @ts-expect-error FIXME: Add typing
 const browser = typeof globalThis.browser === 'undefined' ? globalThis.chrome : globalThis.browser
 
+const isInBrowser = typeof window !== 'undefined'
+const definedInBrowser = <F extends (...args: any[]) => any>(f: F): ReturnType<F> | null =>
+  isInBrowser ? f() : null
 // FIXME: Make this generic
-export const endpoints = createEndpointClient<Endpoints>(
-  createEndpointTransport(
-    {
-      sendMessage: (extensionId, options) =>
-        new Promise((resolve, reject) =>
-          browser.runtime.sendMessage(extensionId, options, value => {
-            if (value !== undefined) resolve(value)
-            reject(browser.runtime.lastError)
-          }),
-        ),
-    },
-    import.meta.env.VITE_EXTENSION_ID,
+export const endpoints = definedInBrowser(() =>
+  createEndpointClient(
+    createEndpointTransport(
+      {
+        sendMessage: (extensionId, options) =>
+          new Promise((resolve, reject) =>
+            browser.runtime.sendMessage(extensionId, options, value => {
+              if (value !== undefined) resolve(value)
+              reject(browser.runtime.lastError)
+            }),
+          ),
+      },
+      process.env.NEXT_PUBLIC_EXTENSION_ID,
+    ),
   ),
 )
-export const sockets = createSocketClient<Sockets>(
-  createSocketTransport(browser.runtime, import.meta.env.VITE_EXTENSION_ID),
+
+export const sockets = definedInBrowser(() =>
+  createSocketClient<Sockets>(
+    createSocketTransport(browser.runtime, process.env.NEXT_PUBLIC_EXTENSION_ID ?? ''),
+  ),
 )
+
 // FIXME: Implement abort on the extension side somehow
 export const fetchProxy = (url: string, init: RequestInit = {}) =>
   requestInitToTransferableRequestInit(init).then(init =>
-    endpoints.proxy.fetch(url, init).then(transferableResponseToResponse),
+    endpoints?.proxy.fetch(url, init).then(transferableResponseToResponse),
   )
 
 export const matchSWR =

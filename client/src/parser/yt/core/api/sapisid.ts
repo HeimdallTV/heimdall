@@ -1,7 +1,7 @@
-import { endpoints } from '@libs/extension'
+import { endpoints } from '@libs/extension';
 
 export const fetchSAPISID = () =>
-  endpoints.cookies
+  endpoints?.cookies
     .get({
       url: 'https://www.youtube.com',
       name: 'SAPISID',

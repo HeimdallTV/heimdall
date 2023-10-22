@@ -5,8 +5,7 @@ import {
 } from 'react';
 
 import { Row } from 'lese';
-
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 
 import { PlayerContext } from '../context';
 import {

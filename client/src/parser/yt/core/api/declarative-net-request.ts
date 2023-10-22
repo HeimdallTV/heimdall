@@ -1,10 +1,10 @@
-import { memoizeAsync } from '@libs/cache'
-import { endpoints } from '@libs/extension'
+import { memoizeAsync } from '@libs/cache';
+import { endpoints } from '@libs/extension';
 
 // FIXME: Check if the rule exists and then run this on init
 // FIXME: Should be part of a startup process for the provider
 export const setDeclarativeNetRequestHeaderRule = memoizeAsync(() =>
-  endpoints.declarativeNetRequest.updateDynamicRules({
+  endpoints?.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: [1000],
     addRules: [
       {

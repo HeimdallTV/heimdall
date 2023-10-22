@@ -1,7 +1,10 @@
-import './globals.css';
-
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
+
+import { GlobalStyles } from '@/components/GlobalStyles';
+import { Header } from '@/components/Header';
+
+import StyledComponentsRegistry from './StyledComponentRegistry';
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -18,7 +21,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={roboto.className}>{children}</body>
+      <StyledComponentsRegistry>
+        <GlobalStyles />
+        <body className={roboto.className}>
+          <Header />
+          {children}
+        </body>
+      </StyledComponentsRegistry>
     </html>
   )
 }

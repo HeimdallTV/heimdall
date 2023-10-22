@@ -3,9 +3,10 @@
 
 import { useEffect } from 'react';
 
+import styled from 'styled-components';
+
 import { usePaginated } from '@/hooks/usePaginated';
 import { VideoCard } from '@components/Video/Card';
-import styled from '@emotion/styled';
 import * as std from '@std';
 import yt from '@yt';
 

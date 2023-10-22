@@ -1,8 +1,11 @@
-import styled from '@emotion/styled'
-import { Flex } from 'lese'
-import { SearchBar } from './SearchBar'
-import { useNavigate } from 'react-router'
-import { NavLink } from 'react-router-dom'
+'use client'
+
+import { Flex } from 'lese';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import styled from 'styled-components';
+
+import { SearchBar } from './SearchBar';
 
 const HamburgerIcon = () => (
   <svg
@@ -33,17 +36,17 @@ const HeaderContainer = styled('div')`
 `
 
 export const Header = () => {
-  const navigate = useNavigate()
+  const router = useRouter()
 
   return (
     <HeaderContainer>
       <Flex separation="24px" align>
         <HamburgerIcon />
-        <NavLink to="/">
+        <Link href="/">
           <img src="/logo.svg" style={{ height: '40px' }} />
-        </NavLink>
+        </Link>
       </Flex>
-      <SearchBar onSearch={query => navigate(`/s/${query.replace(/\s+/, '+')}`)} />
+      <SearchBar onSearch={query => router.push(`/s/${query.replace(/\s+/, '+')}`)} />
       <div
         style={{
           background: 'var(--bg-800)',

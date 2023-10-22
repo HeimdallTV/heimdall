@@ -7,8 +7,8 @@ import {
 } from 'react';
 
 import { Flex } from 'lese';
+import styled from 'styled-components';
 
-import styled from '@emotion/styled';
 import { formatNumberDuration } from '@libs/format';
 import { when } from '@libs/utils';
 import * as std from '@std';

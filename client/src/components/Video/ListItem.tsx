@@ -2,7 +2,7 @@ import {
   Flex,
   Grid,
 } from 'lese';
-import { NavLink } from 'react-router-dom';
+import Link from 'next/link';
 
 import * as std from '@std';
 
@@ -22,7 +22,7 @@ export const VideoListItem: React.FC<{
 }> = props => {
   const video = props.video
   return (
-    <NavLink to={`/w/${video.id}`}>
+    <Link href={`/w/${video.id}`}>
       <Grid columns="calc(220px * 16 / 9) 1fr" gap="12px">
         <VideoThumbnail {...video} />
 
@@ -34,13 +34,13 @@ export const VideoListItem: React.FC<{
           <TextSecondary>{video.shortDescription}</TextSecondary>
         </Flex>
       </Grid>
-    </NavLink>
+    </Link>
   )
 }
 
 export const CompactVideoListItem: React.FC<{ video: std.Video }> = ({ video }) => {
   return (
-    <NavLink to={`/w/${video.id}`}>
+    <Link href={`/w/${video.id}`}>
       <Grid columns="calc(94px * 16 / 9) 1fr" gap="8px">
         <VideoThumbnail {...video} />
 
@@ -50,6 +50,6 @@ export const CompactVideoListItem: React.FC<{ video: std.Video }> = ({ video }) 
           <VideoSubLine video={video} />
         </Flex>
       </Grid>
-    </NavLink>
+    </Link>
   )
 }

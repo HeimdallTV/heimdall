@@ -1,5 +1,5 @@
-import styled from '@emotion/styled'
-import { propertyGenerator } from 'lese'
+import { propertyGenerator } from 'lese';
+import styled from 'styled-components';
 
 type TextProps = PropsWithChildren<{
   color?: string

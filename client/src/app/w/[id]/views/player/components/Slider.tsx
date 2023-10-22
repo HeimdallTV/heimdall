@@ -1,5 +1,11 @@
-import styled from '@emotion/styled'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+import styled from 'styled-components';
 
 function throttleAndDebounce(fn: (...args: any[]) => void, delay: number): (...args: any[]) => void {
   let lastCallTime: number | null = null

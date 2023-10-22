@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Flex } from 'lese';
-import { NavLink } from 'react-router-dom';
+import Link from 'next/link';
 
 import * as std from '@std';
 
@@ -14,7 +14,7 @@ import { VideoSubLine } from './Shared';
 import { VideoThumbnail } from './Thumbnail';
 
 export const VideoCard: React.FC<{ video: std.Video }> = ({ video }) => (
-  <NavLink to={`/w/${video.id}`}>
+  <Link href={`/w/${video.id}`}>
     <Flex xAlign="stretch" column separation="12px">
       <VideoThumbnail {...video} />
 
@@ -23,14 +23,14 @@ export const VideoCard: React.FC<{ video: std.Video }> = ({ video }) => (
           <ChannelIcon channel={video.author} />
           <Flex column separation="6px 4px">
             <Title lineClamp={2}>{video.title}</Title>
-            <NavLink to={`/c/${video.author?.id}`}>
+            <Link href={`/c/${video.author?.id}`}>
               <ExternalLink secondary>{video.author?.name}</ExternalLink>
-            </NavLink>
+            </Link>
 
             <VideoSubLine video={video} />
           </Flex>
         </Flex>
       )}
     </Flex>
-  </NavLink>
+  </Link>
 )

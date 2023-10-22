@@ -2,8 +2,7 @@ import { useState } from 'react';
 
 import { Flex } from 'lese';
 import { useParams } from 'react-router';
-
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 
 const SearchIcon = () => (
   <svg

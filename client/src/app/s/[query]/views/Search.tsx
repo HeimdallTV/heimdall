@@ -1,8 +1,9 @@
+'use client'
 import { Grid } from 'lese';
+import styled from 'styled-components';
 
 import { usePaginated } from '@/hooks/usePaginated';
 import { VideoListItem } from '@components/Video/ListItem';
-import styled from '@emotion/styled';
 import * as std from '@std';
 import provider from '@yt';
 
@@ -14,7 +15,7 @@ const SearchContainer = styled('div')`
   padding: 24px;
 `
 
-const Search: React.FC = ({ query }: { query: string }) => {
+const Search = ({ query }: { query: string }) => {
   const [videos, , getMoreVideos] = usePaginated(() =>
     provider.getSearch([std.ResourceType.Video])(query ?? ''),
   )

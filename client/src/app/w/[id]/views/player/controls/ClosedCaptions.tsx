@@ -1,9 +1,12 @@
-import { ClosedCaptionRounded } from '@mui/icons-material'
-import { Button } from '../components/Button'
-import { useContext } from 'react'
-import styled from '@emotion/styled'
-import { useClosedCaptions } from '../hooks/use'
-import { PlayerContext } from '../context'
+import { useContext } from 'react';
+
+import styled from 'styled-components';
+
+import { ClosedCaptionRounded } from '@mui/icons-material';
+
+import { Button } from '../components/Button';
+import { PlayerContext } from '../context';
+import { useClosedCaptions } from '../hooks/use';
 
 const ClosedCaptionButton = styled(Button)<{ enabled: boolean }>`
   position: relative;
