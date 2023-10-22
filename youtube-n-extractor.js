@@ -2,7 +2,7 @@ async function getDecodedUrl(url) {
   const urlQueryParams = new URLSearchParams(url.search)
 
   const decodedNParam = await getDecodedNParam(urlQueryParams.get('n'))
-  console.log(decodedNParam)
+
   urlQueryParams.set('n', decodedNParam)
   const decodedUrl = new URL(url)
   decodedUrl.search = urlQueryParams.toString()
