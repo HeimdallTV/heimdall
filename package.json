@@ -16,14 +16,15 @@
     "date-fns": "^2.30.0",
     "fp-ts": "^2.16.1",
     "lese": "^2.0.0-alpha.0",
-    "p-limit": "^4.0.0",
+    "next": "13.5.5",
     "ramda": "^0.29.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.17.0",
     "react-router-dom": "^6.17.0",
     "swr": "^2.2.4",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "styled-components": "^6.1.0"
   },
   "devDependencies": {
     "@swc/plugin-emotion": "^2.5.92",

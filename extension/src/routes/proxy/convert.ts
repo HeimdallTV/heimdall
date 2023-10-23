@@ -64,7 +64,6 @@ type TransferableResponse = {
 }
 export const responseToTransferableResponse = async (response: Response): Promise<TransferableResponse> => ({
   body: await response.arrayBuffer().then(arrayBufferToBase64),
-  // @ts-expect-error Valid but Typescript doesn't recognize it
   headers: Object.fromEntries(response.headers),
   status: response.status,
   statusText: response.statusText,

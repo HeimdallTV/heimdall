@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "noEmit": true,
     "strict": true,
+    "noEmit": true,
     "jsx": "react-jsx",
     "lib": ["DOM", "DOM.Iterable", "esnext"],
     "target": "esnext",
@@ -9,16 +9,17 @@
     "moduleResolution": "bundler",
     "baseUrl": "src",
     "paths": {
-      "@constants": ["constants.ts"],
-      "@components/*": ["components/*"],
+      "@/*": ["./*"],
+      "@constants": ["./constants/index.ts"],
+      "@components/*": ["./components/*"],
       "@extension/*": ["../extension/*"],
-      "@libs/*": ["libs/*"],
-      "@std": ["parser/std/index.ts"],
-      "@std/*": ["parser/std/*"],
-      "@views/*": ["views/*"],
-      "@yt": ["parser/yt/index.ts"],
-      "@yt/*": ["parser/yt/*"]
+      "@libs/*": ["./libs/*"],
+      "@std": ["./parser/std/index.ts"],
+      "@std/*": ["./parser/std/*"],
+      "@views/*": ["./views/*"],
+      "@yt": ["./parser/yt/index.ts"],
+      "@yt/*": ["./parser/yt/*"]
     }
   },
-  "include": ["src", "extension", "global.d.ts"]
+  "include": ["next-env.d.ts", "src", "extension", "global.d.ts", ".next/types/**/*.ts"]
 }
