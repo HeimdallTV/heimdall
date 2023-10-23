@@ -1,17 +1,11 @@
-import {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
 
-import { Flex } from 'lese';
-import styled from 'styled-components';
+import { Flex } from 'lese'
+import styled from 'styled-components'
 
-import { formatNumberDuration } from '@libs/format';
-import { when } from '@libs/utils';
-import * as std from '@std';
+import { formatNumberDuration } from '@libs/format'
+import { when } from '@libs/utils'
+import * as std from '@std'
 
 const TRANSITION = 'opacity 250ms ease 250ms'
 
@@ -64,7 +58,6 @@ export type ThumbnailProps = PropsWithChildren<Pick<std.Video, 'staticThumbnail'
 export const Thumbnail: React.FC<ThumbnailProps> = ({ staticThumbnail, animatedThumbnail, children }) => {
   const [isHovered, setIsHovered] = useState(false)
   const [willShowAnimated, setWillShowAnimated] = useState(false)
-  console.log(willShowAnimated)
 
   useEffect(() => {
     if (!isHovered) return

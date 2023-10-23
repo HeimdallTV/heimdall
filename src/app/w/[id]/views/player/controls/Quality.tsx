@@ -4,7 +4,7 @@ import { PlayerContext } from '../context'
 import { useSource } from '../hooks/use'
 import { Button } from '../components/Button'
 import { CombinedSource } from '../hooks/usePlayer'
-import { not } from 'ramda'
+import { not } from 'rambda'
 import * as std from '@std'
 import { FloatingMenuContainer, Menu, MenuListItem } from '../components/Menu'
 

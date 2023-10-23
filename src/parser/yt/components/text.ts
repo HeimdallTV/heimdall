@@ -1,4 +1,4 @@
-import { dissoc, join, map, pipe, prop } from 'ramda'
+import { dissoc, join, map, pipe, prop } from 'rambda'
 import { Some, SomeOptions, someToArray } from '../core/internals'
 
 export function parseText<T extends SingleText, U extends ManyText>(

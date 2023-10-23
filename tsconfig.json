@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "lib": ["DOM", "DOM.Iterable", "esnext"],
     "target": "esnext",
     "module": "esnext",
@@ -19,7 +18,22 @@
       "@views/*": ["./views/*"],
       "@yt": ["./parser/yt/index.ts"],
       "@yt/*": ["./parser/yt/*"]
-    }
+    },
+
+    /* required by nextjs */
+    "noEmit": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["next-env.d.ts", "src", "extension", "global.d.ts", ".next/types/**/*.ts"]
+  "include": ["next-env.d.ts", "src", "extension", "global.d.ts", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

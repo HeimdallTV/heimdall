@@ -1,11 +1,13 @@
-import { __, pipe, cond, divide, concat, T, lte, split, filter, replace, head } from 'ramda'
+import { pipe, cond, divide, concat, T, split, filter, replace, head } from 'rambda'
+
+const lte = (num: number) => (max: number) => num <= max
 
 export const divideByAndConcat = (divisor: number, suffix: string) => (num: number) =>
   pipe(
     (val: number) => divide(val, divisor),
     (val: number) => (divisor < 1_000_000 ? Math.floor(val) : val.toFixed(2)),
     String,
-    concat(__, suffix),
+    prefix => concat(prefix, suffix),
   )(num)
 
 export const toShortHumanReadable = cond([

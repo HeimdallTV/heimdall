@@ -1,43 +1,27 @@
-import { prop } from 'ramda';
+import { prop } from 'rambda'
 
-import { ProviderName } from '@/parser/std';
-import * as std from '@std';
-import { isVerifiedBadge } from '@yt/components/badge';
-import { SubscribeButton } from '@yt/components/button';
-import { parseAttributedDescription } from '@yt/components/description/parser';
-import { AttributedDescription } from '@yt/components/description/types';
-import {
-  combineSomeText,
-  Text,
-} from '@yt/components/text';
-import {
-  UrlEndpoint,
-  WatchEndpoint,
-} from '@yt/components/utility/endpoint';
-import {
-  mapNavigation,
-  NavigationSome,
-} from '@yt/components/utility/navigation';
-import {
-  parseViewCount,
-  shortHumanReadableToNumber,
-} from '@yt/core/helpers';
-import {
-  headOfSome,
-  Renderer,
-  Some,
-} from '@yt/core/internals';
+import { ProviderName } from '@/parser/std'
+import * as std from '@std'
+import { isVerifiedBadge } from '@yt/components/badge'
+import { SubscribeButton } from '@yt/components/button'
+import { parseAttributedDescription } from '@yt/components/description/parser'
+import { AttributedDescription } from '@yt/components/description/types'
+import { combineSomeText, Text } from '@yt/components/text'
+import { UrlEndpoint, WatchEndpoint } from '@yt/components/utility/endpoint'
+import { mapNavigation, NavigationSome } from '@yt/components/utility/navigation'
+import { parseViewCount, shortHumanReadableToNumber } from '@yt/core/helpers'
+import { headOfSome, Renderer, Some } from '@yt/core/internals'
 
-import {
-  SentimentBar,
-  VideoActions,
-  VideoOwner,
-  VideoViewCount,
-} from '../types';
-import { VideoDetails } from '../types/video-details';
-import { parseDate } from './helpers';
+import { SentimentBar, VideoActions, VideoOwner, VideoViewCount } from '../types'
+import { VideoDetails } from '../types/video-details'
+import { parseDate } from './helpers'
 
-export function processFullVideo(id: string, fullVideo: FullVideo, videoDetails: VideoDetails, dislikeCount: number): std.Video {
+export function processFullVideo(
+  id: string,
+  fullVideo: FullVideo,
+  videoDetails: VideoDetails,
+  dislikeCount: number,
+): std.Video {
   const [{ videoPrimaryInfoRenderer: primary }, { videoSecondaryInfoRenderer: secondary }] = fullVideo
 
   const { dislikeButton, likeButton } =
@@ -115,4 +99,3 @@ export type VideoSecondaryInfo = Renderer<
     subscribeButton: SubscribeButton
   }
 >
-

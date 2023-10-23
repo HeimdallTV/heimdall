@@ -1,11 +1,11 @@
 'use client'
-import { Grid } from 'lese';
-import styled from 'styled-components';
+import { Grid } from 'lese'
+import styled from 'styled-components'
 
-import { usePaginated } from '@/hooks/usePaginated';
-import { VideoListItem } from '@components/Video/ListItem';
-import * as std from '@std';
-import provider from '@yt';
+import { usePaginated } from '@/hooks/usePaginated'
+import { VideoListItem } from '@components/Video/ListItem'
+import * as std from '@std'
+import provider from '@yt'
 
 const SearchContainer = styled('div')`
   display: flex;
@@ -24,7 +24,7 @@ const Search = ({ query }: { query: string }) => {
     <SearchContainer>
       <Grid autoRows="220px" gap="24px">
         {videos.flat().map(video => (
-          <VideoListItem video={video} />
+          <VideoListItem key={video.id} video={video} />
         ))}
       </Grid>
     </SearchContainer>

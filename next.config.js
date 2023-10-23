@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    transpilePackages: ['extension']
+  transpilePackages: ['extension'],
 }
-
-module.exports = nextConfig
+export default nextConfig

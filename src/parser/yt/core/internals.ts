@@ -1,4 +1,4 @@
-import { head, pipe } from 'ramda'
+import { head, pipe } from 'rambda'
 
 // Some
 export function someToArray<T, U>(value: Some<SomeOptions<T, U>>): (T | U)[] {

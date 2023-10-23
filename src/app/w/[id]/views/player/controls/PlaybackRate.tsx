@@ -4,7 +4,7 @@ import { PlayerContext } from '../context'
 import { usePlaybackRate } from '../hooks/use'
 import { Button } from '../components/Button'
 import { FloatingMenuContainer, Menu, MenuListItem } from '../components/Menu'
-import { not } from 'ramda'
+import { not } from 'rambda'
 
 const PLAYBACK_RATES = [2, 1.75, 1.5, 1.25, 1, 0.75, 0.5, 0.25]
 

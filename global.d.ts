@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { prop as _prop } from 'ramda'
+import { prop as _prop } from 'rambda'
 import { flow as _flow, pipe as _pipe, identity as _identity, Lazy as _Lazy } from 'fp-ts/function'
 import * as _A from 'fp-ts/Array'
 import * as _NEA from 'fp-ts/NonEmptyArray'

@@ -1,4 +1,4 @@
-import { applyTo, curry, map } from 'ramda'
+import { applyTo, curry, map } from 'rambda'
 
 export const applyEach = curry((fns, x) => map(applyTo(x), fns))
 

@@ -1,14 +1,14 @@
 /** TODO (@aaditya-sahay): refactor to not have to mark the entire component as use client   */
 'use client'
 
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import { usePaginated } from '@/hooks/usePaginated';
-import { VideoCard } from '@components/Video/Card';
-import * as std from '@std';
-import yt from '@yt';
+import { usePaginated } from '@/hooks/usePaginated'
+import { VideoCard } from '@components/Video/Card'
+import * as std from '@std'
+import yt from '@yt'
 
 const HomeGrid = styled('div')`
   display: grid;
@@ -27,7 +27,7 @@ export default function Home() {
 
   useEffect(() => {
     getNextPage()
-  }, [])
+  }, [getNextPage])
 
   return (
     <HomeGrid>

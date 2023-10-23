@@ -1,42 +1,28 @@
-import {
-  memo,
-  React,
-  RefObject,
-  useContext,
-  useEffect,
-  useRef,
-} from 'react';
+import React, { memo, RefObject, useContext, useEffect, useRef } from 'react'
 
-import {
-  Column,
-  Flex,
-  Row,
-} from 'lese';
-import styled from 'styled-components';
+import { Column, Flex, Row } from 'lese'
+import styled from 'styled-components'
 
 import {
   KeyboardDoubleArrowLeftRounded,
   KeyboardDoubleArrowRightRounded,
   SkipNextRounded,
   SkipPreviousRounded,
-} from '@mui/icons-material';
-import * as std from '@std';
+} from '@mui/icons-material'
+import * as std from '@std'
 
-import { ClosedCaptions } from './ClosedCaptions';
-import { PlayerContext } from './context';
-import { ClosedCaption } from './controls/ClosedCaptions';
-import { Duration } from './controls/Duration';
-import { EndsAt } from './controls/EndsAt';
-import {
-  FullscreenButton,
-  useIsFullscreen,
-} from './controls/FullscreenButton';
-import { PlaybackRate } from './controls/PlaybackRate';
-import { PlayButton } from './controls/PlayButton';
-import { Quality } from './controls/Quality';
-import { Volume } from './controls/Volume';
-import { usePlayerInstance } from './hooks/usePlayer';
-import { useVideoInstance } from './hooks/useVideo';
+import { ClosedCaptions } from './ClosedCaptions'
+import { PlayerContext } from './context'
+import { ClosedCaption } from './controls/ClosedCaptions'
+import { Duration } from './controls/Duration'
+import { EndsAt } from './controls/EndsAt'
+import { FullscreenButton, useIsFullscreen } from './controls/FullscreenButton'
+import { PlaybackRate } from './controls/PlaybackRate'
+import { PlayButton } from './controls/PlayButton'
+import { Quality } from './controls/Quality'
+import { Volume } from './controls/Volume'
+import { usePlayerInstance } from './hooks/usePlayer'
+import { useVideoInstance } from './hooks/useVideo'
 
 // import { SeekBar } from './controls/SeekBar'
 
@@ -98,10 +84,11 @@ const Video: React.FC = memo(() => {
     return () => {
       videoContainer.removeChild(videoInstance)
     }
-  }, [videoContainerRef.current, videoInstance])
+  }, [videoInstance])
 
   return <div ref={videoContainerRef}></div>
 })
+Video.displayName = 'Video'
 
 export const Player: React.FC<{ player: std.Player }> = ({ player }) => {
   const playerRef = useRef<HTMLDivElement>(null)

@@ -1,64 +1,35 @@
 'use client'
 
-import {
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { useEffect, useRef, useState } from 'react'
 
-import { pipe } from 'fp-ts/function';
-import {
-  Column,
-  Flex,
-  Grid,
-  Row,
-} from 'lese';
-import { not } from 'ramda';
-import { useParams } from 'react-router';
-import styled from 'styled-components';
-import useSWR from 'swr';
+import { pipe } from 'fp-ts/function'
+import { Column, Flex, Grid, Row } from 'lese'
+import { not } from 'rambda'
+import { useParams } from 'react-router'
+import styled from 'styled-components'
+import useSWR from 'swr'
 
-import { useAsync } from '@/hooks/useAsync';
-import { usePaginated } from '@/hooks/usePaginated';
-import {
-  Button,
-  PaperButton,
-} from '@components/Button';
-import {
-  ChannelIcon,
-  ChannelName,
-} from '@components/Channel/Link';
-import {
-  ExternalLink,
-  Text,
-  TextSecondary,
-  Title,
-} from '@components/Typography';
-import { CompactVideoListItem } from '@components/Video/ListItem';
-import {
-  matchAsync,
-  matchSWR,
-} from '@libs/extension';
-import {
-  formatDateAgo,
-  formatNumberShort,
-} from '@libs/format';
+import { useAsync } from '@/hooks/useAsync'
+import { usePaginated } from '@/hooks/usePaginated'
+import { Button, PaperButton } from '@components/Button'
+import { ChannelIcon, ChannelName } from '@components/Channel/Link'
+import { ExternalLink, Text, TextSecondary, Title } from '@components/Typography'
+import { CompactVideoListItem } from '@components/Video/ListItem'
+import { matchAsync, matchSWR } from '@libs/extension'
+import { formatDateAgo, formatNumberShort } from '@libs/format'
 import {
   SendRounded,
   ThumbDownAltRounded,
   ThumbDownOffAltRounded,
   ThumbUpAltRounded,
   ThumbUpOffAltRounded,
-} from '@mui/icons-material';
-import * as std from '@std';
-import { Video } from '@std';
-import { toShortHumanReadable } from '@yt/core/helpers';
-import {
-  getPlayer as fetchPlayer,
-  getVideo as fetchVideo,
-} from '@yt/video';
+} from '@mui/icons-material'
+import * as std from '@std'
+import { Video } from '@std'
+import { toShortHumanReadable } from '@yt/core/helpers'
+import { getPlayer as fetchPlayer, getVideo as fetchVideo } from '@yt/video'
 
-import { Player } from './player/Player';
+import { Player } from './player/Player'
 
 const DescriptionContainer = styled(Column)<{ isExpanded: boolean }>`
   padding: 12px;
@@ -213,7 +184,7 @@ const RelatedVideos: React.FC<{ video: Video }> = ({ video }) => {
   const [videos, errors, getNextVideos] = usePaginated(video.related!)
   useEffect(() => {
     getNextVideos()
-  }, [])
+  }, [getNextVideos])
   return (
     <Column separation="8px">
       {videos
