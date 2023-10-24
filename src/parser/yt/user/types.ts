@@ -12,7 +12,9 @@ import { BaseResponse } from '@yt/core/api'
 
 export type GuideResponse = BaseResponse & {
   items: (
-    | SubscriptionsGuideSection<ChannelGuideEntry>
+    | SubscriptionsGuideSection<
+        ChannelGuideEntry | CollapsibleGuideEntry<ButtonGuideEntry, ButtonGuideEntry, ChannelGuideEntry>
+      >
     | GuideSection<
         | BrowseGuideEntry
         | ReelGuideEntry

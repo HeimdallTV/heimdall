@@ -1,36 +1,30 @@
-import React from 'react';
+import React from 'react'
 
-import { Flex } from 'lese';
-import Link from 'next/link';
+import * as std from '@std'
 
-import * as std from '@std';
+import { ChannelIcon } from '../Channel/Link'
+import { VideoSubLine } from './Shared'
+import { VideoThumbnail } from './Thumbnail'
 
-import { ChannelIcon } from '../Channel/Link';
-import {
-  ExternalLink,
-  Title,
-} from '../Typography';
-import { VideoSubLine } from './Shared';
-import { VideoThumbnail } from './Thumbnail';
+import { Card, Group, Stack, Text } from '@mantine/core'
+import Link from 'next/link'
 
 export const VideoCard: React.FC<{ video: std.Video }> = ({ video }) => (
-  <Link href={`/w/${video.id}`}>
-    <Flex xAlign="stretch" column separation="12px">
+  <Card component={Link} href={`/w/${video.id}`} styles={{ root: { background: 'none' } }}>
+    <Card.Section>
       <VideoThumbnail {...video} />
+    </Card.Section>
 
-      {video.author && (
-        <Flex separation="12px">
-          <ChannelIcon channel={video.author} />
-          <Flex column separation="6px 4px">
-            <Title lineClamp={2}>{video.title}</Title>
-            <Link href={`/c/${video.author?.id}`}>
-              <ExternalLink secondary>{video.author?.name}</ExternalLink>
-            </Link>
+    <Group align="flex-start" wrap="nowrap" mt="sm">
+      <ChannelIcon channel={video.author!} />
+      <Stack gap="4px">
+        <Text fw="bold" size="lg" lineClamp={2}>
+          {video.title}
+        </Text>
+        <Link href={`/c/${video.author?.id}`}>{video.author?.name}</Link>
 
-            <VideoSubLine video={video} />
-          </Flex>
-        </Flex>
-      )}
-    </Flex>
-  </Link>
+        <VideoSubLine video={video} />
+      </Stack>
+    </Group>
+  </Card>
 )
