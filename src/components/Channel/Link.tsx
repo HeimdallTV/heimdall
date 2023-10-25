@@ -1,17 +1,11 @@
-import {
-  Flex,
-  Row,
-} from 'lese';
-import Link from 'next/link';
-import styled from 'styled-components';
+import { Flex, Row } from 'lese'
+import Link from 'next/link'
+import styled from 'styled-components'
 
-import { CheckCircleRounded } from '@mui/icons-material';
-import * as std from '@std';
+import { IconCircleCheckFilled } from '@tabler/icons-react'
+import * as std from '@std'
 
-import {
-  ExternalLink,
-  Text,
-} from '../Typography';
+import { ExternalLink, Text } from '../Typography'
 
 // Channel Icon
 type ChannelIconProps = {
@@ -29,9 +23,7 @@ const ChannelIconImage = styled('img')<{ size?: number } & React.ImgHTMLAttribut
 `
 
 export const ChannelIcon: React.FC<ChannelIconProps> = props => (
-  <Link href={`/c/${props.channel.id}`} {...props}>
-    <ChannelIconImage size={props.size} src={props.channel.avatar[0].url} />
-  </Link>
+  <ChannelIconImage size={props.size} src={props.channel.avatar[0].url} />
 )
 
 export const ChannelIconWithName: React.FC<ChannelIconProps> = props => (
@@ -65,7 +57,7 @@ export const ChannelName: React.FC<{ author: Pick<std.User, 'name' | 'verified' 
   <Link href={`/c/${author.id}`} style={{ color: 'currentColor' }}>
     <Row separation="4px" yAlign>
       <Text medium>{author.name}</Text>
-      {author.verified && <CheckCircleRounded />}
+      {author.verified && <IconCircleCheckFilled size={18} />}
     </Row>
   </Link>
 )

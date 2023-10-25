@@ -21,7 +21,10 @@ export const VideoCard: React.FC<{ video: std.Video }> = ({ video }) => (
         <Text fw="bold" size="lg" lineClamp={2}>
           {video.title}
         </Text>
-        <Link href={`/c/${video.author?.id}`}>{video.author?.name}</Link>
+        {/*<Link href={`/c/${video.author?.id}`}>{video.author?.name}</Link>*/}
+        <Text size="sm" color="dimmed">
+          {video.author?.name}
+        </Text>
 
         <VideoSubLine video={video} />
       </Stack>

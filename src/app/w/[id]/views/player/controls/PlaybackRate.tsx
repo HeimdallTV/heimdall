@@ -1,4 +1,4 @@
-import { SpeedRounded } from '@mui/icons-material'
+import { IconBrandSpeedtest } from '@tabler/icons-react'
 import { useContext, useState } from 'react'
 import { PlayerContext } from '../context'
 import { usePlaybackRate } from '../hooks/use'
@@ -16,7 +16,7 @@ export const PlaybackRate: React.FC = () => {
   return (
     <FloatingMenuContainer visible={visible} setVisible={setVisible}>
       <Button onClick={() => setVisible(not)}>
-        <SpeedRounded />
+        <IconBrandSpeedtest />
       </Button>
       <Menu background="var(--bg-700)">
         {PLAYBACK_RATES.map(rate => (

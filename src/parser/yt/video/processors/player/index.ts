@@ -1,23 +1,24 @@
-import { ProviderName } from '@/parser/std';
-import * as std from '@std';
-import { PlayerResponse } from '@yt/video/types/responses/player';
+import { ProviderName } from '@/parser/std'
+import * as std from '@std'
+import { PlayerResponse } from '@yt/video/types/responses/player'
 
 import {
   PlayerAdaptiveFormat,
   PlayerAudioFormat,
   PlayerFormat,
   PlayerVideoFormat,
-} from '../../types/streaming-data';
-import { processCaptions } from './captions';
-import { decodeVideoPlaybackUrl } from './decoder';
+} from '../../types/streaming-data'
+import { processCaptions } from './captions'
+import { decodeVideoPlaybackUrl } from './decoder'
 
 export async function processPlayer({
   videoDetails,
   playerConfig,
   streamingData,
   captions,
+  ...other
 }: PlayerResponse): Promise<std.Player> {
-  console.log(videoDetails)
+  console.log({ videoDetails, playerConfig, streamingData, captions, ...other })
   return {
     provider: ProviderName.YT,
     type: videoDetails.isLiveContent ? std.VideoType.Live : std.VideoType.Static,

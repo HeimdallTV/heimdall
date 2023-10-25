@@ -1,21 +1,12 @@
-import {
-  Flex,
-  Grid,
-} from 'lese';
-import Link from 'next/link';
+import { Column, Flex, Grid } from 'lese'
+import Link from 'next/link'
 
-import * as std from '@std';
+import * as std from '@std'
 
-import {
-  ChannelIconWithName,
-  CompactChannelLink,
-} from '../Channel/Link';
-import {
-  TextSecondary,
-  Title,
-} from '../Typography';
-import { VideoSubLine } from './Shared';
-import { VideoThumbnail } from './Thumbnail';
+import { ChannelIconWithName, CompactChannelLink } from '../Channel/Link'
+import { VideoSubLine } from './Shared'
+import { VideoThumbnail } from './Thumbnail'
+import { Stack, Text } from '@mantine/core'
 
 export const VideoListItem: React.FC<{
   video: std.Video
@@ -26,13 +17,13 @@ export const VideoListItem: React.FC<{
       <Grid columns="calc(220px * 16 / 9) 1fr" gap="12px">
         <VideoThumbnail {...video} />
 
-        <Flex column separation="12px">
-          <Title lineClamp={2}>{video.title}</Title>
+        <Stack gap="12px">
+          <Text lineClamp={2}>{video.title}</Text>
           <VideoSubLine video={video} short />
 
           {video.author && <ChannelIconWithName size={24} channel={video.author} />}
-          <TextSecondary>{video.shortDescription}</TextSecondary>
-        </Flex>
+          <Text c="dimmed">{video.shortDescription}</Text>
+        </Stack>
       </Grid>
     </Link>
   )
@@ -40,16 +31,16 @@ export const VideoListItem: React.FC<{
 
 export const CompactVideoListItem: React.FC<{ video: std.Video }> = ({ video }) => {
   return (
-    <Link href={`/w/${video.id}`}>
-      <Grid columns="calc(94px * 16 / 9) 1fr" gap="8px">
-        <VideoThumbnail {...video} />
+    <Grid as={Link} href={`/w/${video.id}`} columns="calc(94px * 16 / 9) 1fr" gap="8px">
+      <VideoThumbnail {...video} />
 
-        <Flex column separation="6px 2px ...0px" style={{ fontSize: '0.9em' }}>
-          <Title lineClamp={2}>{video.title}</Title>
-          {video.author && <CompactChannelLink channel={video.author} />}
-          <VideoSubLine video={video} />
-        </Flex>
-      </Grid>
-    </Link>
+      <Column separation="6px 2px ...0px" style={{ fontSize: '0.9em' }}>
+        <Text size="lg" lineClamp={2}>
+          {video.title}
+        </Text>
+        {video.author && <CompactChannelLink channel={video.author} />}
+        <VideoSubLine video={video} />
+      </Column>
+    </Grid>
   )
 }

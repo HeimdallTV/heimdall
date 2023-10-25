@@ -44,6 +44,7 @@ export async function* getRecommended(): AsyncGenerator<std.Video[]> {
 }
 
 export async function getVideo(videoId: string): Promise<std.Video> {
+  console.log('CALLED', videoId)
   const [videoResponse, playerResponse, dislikeCount] = await Promise.all([
     fetchVideo(videoId),
     fetchPlayer(videoId),

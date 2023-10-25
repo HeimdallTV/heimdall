@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { formatNumberDuration } from '@libs/format'
 import { when } from '@libs/utils'
 import * as std from '@std'
+import { Badge } from '@mantine/core'
 
 const TRANSITION = 'opacity 250ms ease 250ms'
 
@@ -20,7 +21,7 @@ const ThumbnailContainer = styled(Flex)`
     content: '';
     width: 100%;
     padding-top: 56.25%;
-    background-color: var(--bg-700);
+    background-color: var(--mantine-color-default);
   }
 
   > img {
@@ -35,18 +36,11 @@ const ThumbnailContainer = styled(Flex)`
   }
 `
 
-const Badge = styled('div')<{ background?: string; color?: string }>`
+const AbsoluteBadge = styled(Badge)`
   position: absolute;
   bottom: 0;
   right: 0;
   margin: 4px;
-  /* FIXME: Should have dd transparency */
-  background-color: ${({ background }) => background ?? 'var(--bg-200)'};
-  color: ${({ color }) => color ?? 'var(--text-primary)'};
-  padding: 3px 4px;
-  border-radius: 2px;
-  font-weight: 500;
-  font-size: 1.2rem;
 `
 
 const ThumbnailContext = createContext({
@@ -63,13 +57,6 @@ export const Thumbnail: React.FC<ThumbnailProps> = ({ staticThumbnail, animatedT
     if (!isHovered) return
     if (!animatedThumbnail || animatedThumbnail.length === 0) return
     setWillShowAnimated(true)
-
-    // const controller = new AbortController()
-    // fetch(animatedThumbnail[0].url, { signal: controller.signal }).then(res => {
-    //   console.log(res.status, res.ok)
-    //   setWillShowAnimated(res.ok)
-    // })
-    // return () => controller.abort()
   }, [isHovered, animatedThumbnail])
 
   return (
@@ -79,9 +66,10 @@ export const Thumbnail: React.FC<ThumbnailProps> = ({ staticThumbnail, animatedT
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <img src={staticThumbnail[0].url} />
+        <img src={staticThumbnail[0].url} alt="thumbnail" />
         <img
           src={animatedThumbnail?.[0].url}
+          alt="animated thumbnail"
           style={{
             opacity: willShowAnimated && isHovered ? 1 : 0,
             ...(isHovered ? { transition: TRANSITION } : {}),
@@ -101,7 +89,15 @@ export const LengthBadge: React.FC<LengthBadgeProps> = ({ type, length }) => {
     transition: when(isHovered)(TRANSITION),
   }
   const shouldShow = type === std.VideoType.Static && length !== undefined
-  return <>{shouldShow && <Badge style={styles}>{formatNumberDuration(length)}</Badge>}</>
+  return (
+    <>
+      {shouldShow && (
+        <AbsoluteBadge color="dark" styles={{ root: styles }}>
+          {formatNumberDuration(length)}
+        </AbsoluteBadge>
+      )}
+    </>
+  )
 }
 
 export type VideoThumbnailProps = ThumbnailProps & LengthBadgeProps

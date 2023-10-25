@@ -1,4 +1,4 @@
-import { SettingsRounded } from '@mui/icons-material'
+import { IconSettingsFilled } from '@tabler/icons-react'
 import { useContext, useMemo, useState } from 'react'
 import { PlayerContext } from '../context'
 import { useSource } from '../hooks/use'
@@ -61,7 +61,7 @@ export const Quality: React.FC = () => {
   return (
     <FloatingMenuContainer visible={visible} setVisible={setVisible}>
       <Button onClick={() => setVisible(not)}>
-        <SettingsRounded />
+        <IconSettingsFilled />
       </Button>
       <Menu background="var(--bg-700)">
         {qualityOptions.map(({ height, frameRate, source }) => (

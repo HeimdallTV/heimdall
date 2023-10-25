@@ -1,7 +1,6 @@
 'use client'
 import { VideoCard } from '@/components/Video/Card'
 import { usePaginated } from '@/hooks/usePaginated'
-import { useEffect } from 'react'
 
 import * as std from '@std'
 import yt from '@yt'

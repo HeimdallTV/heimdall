@@ -4,11 +4,11 @@ import { Column, Flex, Row } from 'lese'
 import styled from 'styled-components'
 
 import {
-  KeyboardDoubleArrowLeftRounded,
-  KeyboardDoubleArrowRightRounded,
-  SkipNextRounded,
-  SkipPreviousRounded,
-} from '@mui/icons-material'
+  IconChevronsLeft,
+  IconChevronsRight,
+  IconPlayerSkipForward,
+  IconPlayerSkipBack,
+} from '@tabler/icons-react'
 import * as std from '@std'
 
 import { ClosedCaptions } from './ClosedCaptions'
@@ -41,11 +41,11 @@ const Controls: React.FC<{ playerRoot: RefObject<HTMLElement> }> = ({ playerRoot
       {/* <SeekBar /> */}
       <Row xAlign="space-between">
         <Flex separation="20px" yAlign>
-          <SkipPreviousRounded sx={{ fontSize: 24 }} />
-          <KeyboardDoubleArrowLeftRounded sx={{ fontSize: 24 }} />
+          <IconPlayerSkipBack size={24} />
+          <IconChevronsLeft size={24} />
           <PlayButton />
-          <KeyboardDoubleArrowRightRounded sx={{ fontSize: 24 }} />
-          <SkipNextRounded sx={{ fontSize: 24 }} />
+          <IconChevronsRight size={24} />
+          <IconPlayerSkipForward size={24} />
           <Duration />
         </Flex>
         <Flex separation="20px" yAlign>

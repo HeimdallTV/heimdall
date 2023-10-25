@@ -1,12 +1,12 @@
-import { useContext } from 'react';
+import { useContext } from 'react'
 
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import { ClosedCaptionRounded } from '@mui/icons-material';
+import { IconBadgeCc } from '@tabler/icons-react'
 
-import { Button } from '../components/Button';
-import { PlayerContext } from '../context';
-import { useClosedCaptions } from '../hooks/use';
+import { Button } from '../components/Button'
+import { PlayerContext } from '../context'
+import { useClosedCaptions } from '../hooks/use'
 
 const ClosedCaptionButton = styled(Button)<{ enabled: boolean }>`
   position: relative;
@@ -21,7 +21,9 @@ const ClosedCaptionButton = styled(Button)<{ enabled: boolean }>`
     border-radius: 2px;
     background-color: var(--red);
 
-    transition: left 0.2s ease, right 0.2s ease;
+    transition:
+      left 0.2s ease,
+      right 0.2s ease;
   }
 `
 
@@ -41,7 +43,7 @@ export const ClosedCaption: React.FC = () => {
         )
       }
     >
-      <ClosedCaptionRounded />
+      <IconBadgeCc />
     </ClosedCaptionButton>
   )
 }

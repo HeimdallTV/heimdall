@@ -1,13 +1,9 @@
-import {
-  PropsWithChildren,
-  useEffect,
-  useRef,
-} from 'react';
+import { PropsWithChildren, useEffect, useRef } from 'react'
 
-import { Grid } from 'lese';
-import styled from 'styled-components';
+import { Grid } from 'lese'
+import styled from 'styled-components'
 
-import { CheckRounded } from '@mui/icons-material';
+import { IconCircleCheckFilled } from '@tabler/icons-react'
 
 const FloatingMenuContainerStyled = styled.div<{ visible: boolean }>`
   position: relative;
@@ -93,7 +89,7 @@ export const MenuListItem: React.FC<Partial<MenuListItemProps>> = ({
       yAlign
       onClick={onClick}
     >
-      {selected ? <CheckRounded fontSize="small" /> : <div />}
+      {selected ? <IconCircleCheckFilled size={16} /> : <div />}
       {children}
     </MenuListItemStyled>
   )

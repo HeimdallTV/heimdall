@@ -12,11 +12,10 @@
     "lint:staged": "lint-staged"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.1",
     "@mantine/core": "^7.1.5",
     "@mantine/hooks": "^7.1.5",
-    "@mui/icons-material": "^5.14.14",
     "@saghen/hermes": "^2.0.0-alpha.1",
+    "@tabler/icons-react": "^2.39.0",
     "date-fns": "^2.30.0",
     "fp-ts": "^2.16.1",
     "lese": "^2.0.0-alpha.0",
@@ -31,6 +30,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@styled/typescript-styled-plugin": "^1.0.0",
     "@types/node": "20.8.7",
     "@types/react": "^18.2.29",
     "@types/react-dom": "^18.2.13",

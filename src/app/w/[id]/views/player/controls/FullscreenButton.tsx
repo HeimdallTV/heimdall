@@ -1,4 +1,4 @@
-import { FullscreenRounded, FullscreenExitRounded } from '@mui/icons-material'
+import { IconMaximize, IconMinimize } from '@tabler/icons-react'
 import { useState, useEffect, RefObject, useCallback } from 'react'
 import { Button } from '../components/Button'
 
@@ -14,10 +14,10 @@ export const useIsFullscreen = () => {
 
 export const FullscreenButton: React.FC<{ playerRoot: RefObject<HTMLElement> }> = ({ playerRoot }) => {
   const isFullscreen = useIsFullscreen()
-  const Icon = isFullscreen ? FullscreenExitRounded : FullscreenRounded
+  const Icon = isFullscreen ? IconMinimize : IconMaximize
   const toggleFullscreen = useCallback(
     () => (isFullscreen ? document.exitFullscreen() : playerRoot.current?.requestFullscreen()),
-    [isFullscreen],
+    [isFullscreen, playerRoot],
   )
   return (
     <Button onClick={toggleFullscreen}>
