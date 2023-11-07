@@ -11,7 +11,10 @@ export type StreamingData = {
 
 type FormatBase = {
   itag: number
-  url: string
+  /** URL to the source. Either this or signatureCipher will be defined */
+  url?: string
+  /** URL and signature for the source. Either this or url will be defined. In the format s=signature&url=url */
+  signatureCipher?: string
   mimeType: string
   bitrate: number
   /** Number formatted as string. Nanoseconds since Unix Epoch. Ex. "1662194668530827" */

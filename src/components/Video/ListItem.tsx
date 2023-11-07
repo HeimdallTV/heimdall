@@ -34,12 +34,12 @@ export const CompactVideoListItem: React.FC<{ video: std.Video }> = ({ video }) 
     <Grid as={Link} href={`/w/${video.id}`} columns="calc(94px * 16 / 9) 1fr" gap="8px">
       <VideoThumbnail {...video} />
 
-      <Column separation="6px 2px ...0px" style={{ fontSize: '0.9em' }}>
-        <Text size="lg" lineClamp={2}>
+      <Column separation="4px 2px ...0px" style={{ fontSize: '0.9em' }}>
+        <Text fw={600} lineClamp={2}>
           {video.title}
         </Text>
         {video.author && <CompactChannelLink channel={video.author} />}
-        <VideoSubLine video={video} />
+        <VideoSubLine size="sm" video={video} />
       </Column>
     </Grid>
   )

@@ -4,9 +4,11 @@ import { Roboto } from 'next/font/google'
 import StyledComponentsRegistry from './StyledComponentRegistry'
 
 import { AppShell, Burger, ColorSchemeScript, MantineProvider, createTheme } from '@mantine/core'
+import { NavBar } from '@/components/NavBar'
 import { useDisclosure } from '@mantine/hooks'
 import '@mantine/core/styles.css'
-import { NavBar } from '@/components/NavBar'
+import './layout.css'
+import Link from 'next/link'
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -25,6 +27,7 @@ const theme = createTheme({
   },
 })
 
+// todo: swap appshell out for just a regular grid?
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure(true)
 
@@ -44,11 +47,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <AppShell
               header={{ height: 60 }}
               navbar={{ width: 300, breakpoint: 'sm', collapsed: { desktop: !opened, mobile: !opened } }}
-              padding="md"
+              padding={0}
               transitionDuration={0}
             >
               <AppShell.Header>
                 <Burger opened={opened} onClick={toggle} size="sm" />
+                <Link href="/">Recommended</Link>
+                <Link href="/subscriptions">Subscriptions</Link>
+                <Link href="/trending">Browse</Link>
               </AppShell.Header>
 
               <AppShell.Navbar p="md">

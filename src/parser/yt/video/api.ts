@@ -8,6 +8,7 @@ import { RichItem } from '@yt/components/item'
 import { Video } from './processors/regular'
 import { Renderer } from '@yt/core/internals'
 import { fetchProxy } from '@libs/extension'
+import { getSigTimestamp } from './processors/player/decoders/signature'
 
 export const fetchRecommended = (): Promise<RecommendedResponse> =>
   fetchYt(Endpoint.Browse, { browseId: BrowseId.Recommended })
@@ -16,7 +17,12 @@ export const fetchRecommendedContinuation = (
 ): Promise<AppendContinuationItemsResponse<RichItem<Video | Renderer<'radio'>> | ContinuationItem>> =>
   fetchYt(Endpoint.Browse, { continuation })
 
-export const fetchPlayer = (videoId: string) => fetchYt<PlayerResponse>(Endpoint.Player, { videoId })
+export const fetchPlayer = async (videoId: string) =>
+  fetchYt<PlayerResponse>(Endpoint.Player, {
+    videoId,
+    // required for signature decoding, see processors/player/decoders/signature.ts
+    playbackContext: { contentPlaybackContext: { signatureTimestamp: await getSigTimestamp() } },
+  })
 export const fetchVideo = (videoId: string) => fetchYt<VideoResponse>(Endpoint.Next, { videoId })
 export const fetchCompactVideoContinuation = fetchEndpointContinuation(
   Endpoint.Next,

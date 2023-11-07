@@ -3,15 +3,15 @@ import { useContext } from 'react'
 import { PlayerContext } from '../context'
 import { usePlayerState } from '../hooks/use'
 import { PlayerState } from '../hooks/usePlayer'
-import { Button } from '../components/Button'
+import { ControlButton } from '../components/ControlButton'
 
 export const PlayButton: React.FC = () => {
   const playerInstance = useContext(PlayerContext)
   const { state, togglePlay } = usePlayerState(playerInstance!)
-  const Icon = state === PlayerState.Playing ? IconPlayerPlayFilled : IconPlayerPauseFilled
+  const Icon = state === PlayerState.Playing ? IconPlayerPauseFilled : IconPlayerPlayFilled
   return (
-    <Button onClick={() => togglePlay(state)}>
+    <ControlButton onClick={() => togglePlay(state)}>
       <Icon />
-    </Button>
+    </ControlButton>
   )
 }

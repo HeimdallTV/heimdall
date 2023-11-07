@@ -19,6 +19,9 @@ export type PlayerInstance = {
   setState: (state: PlayerState) => void
   onStateChange: (cb: (state: PlayerState) => void) => void
 
+  seek: (seek: number) => void
+  onSeek: (cb: (seek: number) => void) => () => void
+
   getWaiting: () => boolean
   setWaiting: (waiting: boolean) => void
   onWaitingChange: (cb: (waiting: boolean) => void) => () => void
@@ -76,6 +79,7 @@ const createValueListener = <Value>(initialValue: Value) => {
 export const usePlayerInstance = (player: std.Player): PlayerInstance =>
   useMemo(() => {
     const { get: getState, set: setState, onChange: onStateChange } = createValueListener(PlayerState.Paused)
+    const { set: seek, onChange: onSeek } = createValueListener<number>(0)
     const { get: getWaiting, set: setWaiting, onChange: onWaitingChange } = createValueListener(true)
     const {
       get: getBufferedMS,
@@ -119,9 +123,8 @@ export const usePlayerInstance = (player: std.Player): PlayerInstance =>
       setState,
       onStateChange,
 
-      // TODO: Model separately so that we can have current time dictated by the video player
-      seek: (time: number) => {},
-      onSeek: (cb: (time: number) => void) => {},
+      seek,
+      onSeek,
 
       getWaiting,
       setWaiting,

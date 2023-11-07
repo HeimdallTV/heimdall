@@ -19,8 +19,14 @@ const parseXMLClosedCaptions = (xml: string): std.ClosedCaptionTrack => {
   const parser = new DOMParser().parseFromString(xml, 'text/xml')
   const cues = Array.from(parser.querySelectorAll('transcript text'))
   return cues.map<std.ClosedCaptionTrackCue>(node => ({
-    text: node.textContent ?? '',
+    text: decodeHtmlText(node.textContent ?? ''),
     startTimeMS: Number(node.getAttribute('start')) * 1000,
     endTimeMS: (Number(node.getAttribute('start')) + Number(node.getAttribute('dur'))) * 1000,
   }))
+}
+
+function decodeHtmlText(encodedString: string): string {
+  const element = document.createElement('div')
+  element.innerHTML = encodedString
+  return element.textContent!
 }

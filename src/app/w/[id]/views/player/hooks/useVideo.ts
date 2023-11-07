@@ -32,6 +32,18 @@ export const useVideoInstance = (playerInstance: PlayerInstance) => {
     }
   }, [video, audio, state])
 
+  // Seek
+  useEffect(
+    () =>
+      playerInstance.onSeek(timeMS => {
+        // video.pause()
+        video.currentTime = timeMS / 1000
+        // audio.pause()
+        audio.currentTime = timeMS / 1000
+      }),
+    [playerInstance, audio, video],
+  )
+
   // Playback rate
   const { playbackRate } = usePlaybackRate(playerInstance)
   useEffect(() => {

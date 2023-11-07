@@ -1,12 +1,11 @@
-import { IconSettingsFilled } from '@tabler/icons-react'
-import { useContext, useMemo, useState } from 'react'
+import { IconCheck, IconSettingsFilled } from '@tabler/icons-react'
+import { useContext, useMemo } from 'react'
 import { PlayerContext } from '../context'
 import { useSource } from '../hooks/use'
-import { Button } from '../components/Button'
 import { CombinedSource } from '../hooks/usePlayer'
-import { not } from 'rambda'
 import * as std from '@std'
-import { FloatingMenuContainer, Menu, MenuListItem } from '../components/Menu'
+import { Menu } from '@mantine/core'
+import { ControlButton } from '../components/ControlButton'
 
 type QualityOption = {
   height: number
@@ -48,7 +47,6 @@ const getQualityOptions = (sources: std.Source<std.SourceType>[]) => {
 }
 
 export const Quality: React.FC = () => {
-  const [visible, setVisible] = useState(false)
   const playerInstance = useContext(PlayerContext)
   const { source: selectedSource, sources, setSource } = useSource(playerInstance!)
   const selectedSourceHeight = !selectedSource
@@ -59,21 +57,24 @@ export const Quality: React.FC = () => {
   const qualityOptions: QualityOption[] = useMemo(() => getQualityOptions(sources), [sources])
 
   return (
-    <FloatingMenuContainer visible={visible} setVisible={setVisible}>
-      <Button onClick={() => setVisible(not)}>
-        <IconSettingsFilled />
-      </Button>
-      <Menu background="var(--bg-700)">
+    <Menu position="top" closeOnItemClick={false}>
+      <Menu.Target>
+        <ControlButton>
+          <IconSettingsFilled />
+        </ControlButton>
+      </Menu.Target>
+      <Menu.Dropdown>
+        <Menu.Label>Quality</Menu.Label>
         {qualityOptions.map(({ height, frameRate, source }) => (
-          <MenuListItem
+          <Menu.Item
             key={height}
+            leftSection={<IconCheck size={16} style={{ opacity: Number(selectedSourceHeight === height) }} />}
             onClick={() => setSource(source)}
-            selected={height === selectedSourceHeight}
           >
             {height}p{frameRate > 30 ? frameRate : ''}
-          </MenuListItem>
+          </Menu.Item>
         ))}
-      </Menu>
-    </FloatingMenuContainer>
+      </Menu.Dropdown>
+    </Menu>
   )
 }

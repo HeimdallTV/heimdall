@@ -12,4 +12,15 @@ export type UrlEndpoint = Endpoint<
 >
 
 /** What a name */
-export const getUrlEndpointUrl = (endpoint: UrlEndpoint) => endpoint.urlEndpoint.url
+export const getUrlEndpointUrl = (endpoint: UrlEndpoint) => stripYoutubeRedirect(endpoint.urlEndpoint.url)
+
+const stripYoutubeRedirect = (urlStr: string) => {
+  const url = new URL(urlStr)
+  if (
+    url.pathname === '/redirect' &&
+    (url.hostname === 'www.youtube.com' || url.hostname === 'youtube.com')
+  ) {
+    return new URL(url).searchParams.get('q') ?? url
+  }
+  return url
+}

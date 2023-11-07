@@ -9,17 +9,20 @@ import { Text } from '@mantine/core'
 export const VideoSubLine: React.FC<{
   video: Pick<std.Video, 'type' | 'viewCount' | 'publishDate'>
   short?: boolean
-}> = ({ video, short }) => {
+  size?: 'sm' | 'md'
+}> = ({ video, short, size = 'md' }) => {
   if (video.type === std.VideoType.Live) {
     return (
       <>
-        <Text>{formatNumberShort(video.viewCount!)} watching</Text>
+        <Text c="dimmed" size={size}>
+          {formatNumberShort(video.viewCount!)} watching
+        </Text>
         <LiveNow>LIVE NOW</LiveNow>
       </>
     )
   }
   return (
-    <Text>
+    <Text c="dimmed" size={size}>
       {formatNumberShort(video.viewCount!)}
       {short ? '' : ' views'}
       {video.publishDate ? ` • ${formatDateAgo(video.publishDate!)}` : ''}

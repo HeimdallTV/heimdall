@@ -1,27 +1,5 @@
 import { memoizeAsync } from '@libs/cache'
-import { fetchProxy } from '@libs/extension'
-
-const fetchBaseJS = memoizeAsync(() =>
-  fetchProxy('https://www.youtube.com/')
-    .then(res => res.text())
-    .then(text => `https://www.youtube.com${text.match(/"([^"]+\/base\.js)"/)![1]}`)
-    .then(fetchProxy)
-    .then(res => res.text()),
-)
-
-export async function decodeVideoPlaybackUrl(url: URL): Promise<URL> {
-  const urlQueryParams = new URLSearchParams(url.search)
-  if (!urlQueryParams.has('n')) {
-    throw Error('Video playback URL does not contain a "n" query parameter')
-  }
-
-  const decodedNParam = await getDecodedNParam(urlQueryParams.get('n')!)
-  urlQueryParams.set('n', decodedNParam)
-  const decodedUrl = new URL(url)
-  decodedUrl.search = urlQueryParams.toString()
-
-  return decodedUrl
-}
+import { fetchBaseJS } from './shared'
 
 const getNParamDecodingFunction = memoizeAsync(async (): Promise<string> => {
   const baseJS = await fetchBaseJS()
@@ -33,7 +11,7 @@ const getNParamDecodingFunction = memoizeAsync(async (): Promise<string> => {
   return functionBody
 })
 
-async function getDecodedNParam(n: string): Promise<string> {
+export async function getDecodedNParam(n: string): Promise<string> {
   const functionBody = await getNParamDecodingFunction()
   // FIXME: Using temporarily until the sandboxed code is sped up
   return eval(`(${functionBody.slice(0, -1)})("${n}")`)

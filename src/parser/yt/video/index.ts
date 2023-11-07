@@ -55,7 +55,7 @@ export async function getVideo(videoId: string): Promise<std.Video> {
   const primaryInfo = findRendererRaw('videoPrimaryInfo')(contents)
   const secondaryInfo = findRendererRaw('videoSecondaryInfo')(contents)
   if (!primaryInfo || !secondaryInfo) {
-    throw Error('Failed to find primary and secondary info in the YT request. Something has gone wrong!')
+    throw Error('Failed to find primary and secondary info in the YT request')
   }
 
   const video = processFullVideo(
@@ -76,6 +76,8 @@ export async function getVideo(videoId: string): Promise<std.Video> {
         response => response.onResponseReceivedEndpoints[0].appendContinuationItemsAction.continuationItems,
       ),
   )
+
+  console.log(video)
 
   return {
     ...video,

@@ -1,6 +1,6 @@
 import { IconMaximize, IconMinimize } from '@tabler/icons-react'
 import { useState, useEffect, RefObject, useCallback } from 'react'
-import { Button } from '../components/Button'
+import { ControlButton } from '../components/ControlButton'
 
 export const useIsFullscreen = () => {
   const [isFullscreen, setIsFullscreen] = useState(document.fullscreenElement !== null)
@@ -20,8 +20,8 @@ export const FullscreenButton: React.FC<{ playerRoot: RefObject<HTMLElement> }> 
     [isFullscreen, playerRoot],
   )
   return (
-    <Button onClick={toggleFullscreen}>
+    <ControlButton onClick={toggleFullscreen}>
       <Icon />
-    </Button>
+    </ControlButton>
   )
 }

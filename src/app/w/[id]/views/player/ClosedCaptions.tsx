@@ -1,22 +1,15 @@
-import {
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { useContext, useEffect, useState } from 'react'
 
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import * as std from '@std';
+import * as std from '@std'
 
-import { PlayerContext } from './context';
-import {
-  useClosedCaptions,
-  useCurrentTimeMS,
-} from './hooks/use';
+import { PlayerContext } from './context'
+import { useClosedCaptions, useCurrentTimeMS } from './hooks/use'
 
 const ClosedCaptionsContainer = styled.div`
   background-color: rgba(0, 0, 0, 0.6);
-  font-size: 4rem;
+  font-size: 2rem;
   text-align: center;
 
   max-width: 600px;

@@ -5,7 +5,7 @@ const lte = (num: number) => (max: number) => num <= max
 export const divideByAndConcat = (divisor: number, suffix: string) => (num: number) =>
   pipe(
     (val: number) => divide(val, divisor),
-    (val: number) => (divisor < 1_000_000 ? Math.floor(val) : val.toFixed(2)),
+    (val: number) => (val >= 10 ? Math.floor(val) : val.toFixed(1)),
     String,
     prefix => concat(prefix, suffix),
   )(num)

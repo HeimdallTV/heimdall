@@ -3,10 +3,16 @@
   "background": {
     "service_worker": "src/main.ts"
   },
-  "{{chrome}}.permissions": ["cookies", "storage", "declarativeNetRequest"],
-  "{{firefox}}.permissions": ["cookies", "storage", "contextualIdentities", "declarativeNetRequest"],
+  "{{chrome}}.permissions": ["cookies", "storage", "declarativeNetRequest", "declarativeNetRequestFeedback"],
+  "{{firefox}}.permissions": [
+    "cookies",
+    "storage",
+    "contextualIdentities",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback"
+  ],
   "externally_connectable": {
     "matches": ["*://localhost/*"]
   },
-  "host_permissions": ["https://*/*"]
+  "host_permissions": ["https://*/*", "http://*/*"]
 }

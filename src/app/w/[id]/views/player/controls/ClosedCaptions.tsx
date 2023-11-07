@@ -4,11 +4,11 @@ import styled from 'styled-components'
 
 import { IconBadgeCc } from '@tabler/icons-react'
 
-import { Button } from '../components/Button'
 import { PlayerContext } from '../context'
 import { useClosedCaptions } from '../hooks/use'
+import { ControlButton } from '../components/ControlButton'
 
-const ClosedCaptionButton = styled(Button)<{ enabled: boolean }>`
+const ClosedCaptionButton = styled(ControlButton)<{ enabled: boolean }>`
   position: relative;
 
   &::after {
@@ -19,7 +19,7 @@ const ClosedCaptionButton = styled(Button)<{ enabled: boolean }>`
     right: ${props => (props.enabled ? '6px' : '50%')};
     height: 3px;
     border-radius: 2px;
-    background-color: var(--red);
+    background-color: var(--mantine-primary-color-filled);
 
     transition:
       left 0.2s ease,

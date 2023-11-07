@@ -16,6 +16,6 @@
     "webextension-polyfill": "^0.10.0"
   },
   "dependencies": {
-    "@saghen/hermes": "file:../hermes"
+    "@saghen/hermes": "^2.0.0-alpha.1"
   }
 }
