@@ -13,11 +13,7 @@ import {
 import { Renderer, Some } from '../../core/internals'
 import { humanReadableToNumber } from '../../core/helpers'
 import { Accessibility } from '../../components/utility/accessibility'
-import {
-  getBrowseNavigationId,
-  Navigation,
-  NavigationSome,
-} from '../../components/utility/navigation'
+import { getBrowseNavigationId, Navigation, NavigationSome } from '../../components/utility/navigation'
 import { ProviderName } from '@std'
 import { getLength, getViewedLength, relativeToAbsoluteDate } from './helpers'
 import { BrowseEndpoint, WatchEndpoint } from '@yt/components/utility/endpoint'
@@ -44,7 +40,7 @@ export function processVideo({ videoRenderer: video }: Video): std.Video {
     },
 
     staticThumbnail: video.thumbnail.thumbnails,
-    animatedThumbnail: video.richThumbnail?.movingThumbnailRenderer.movingThumbnailDetails.thumbnails,
+    animatedThumbnail: video.richThumbnail?.movingThumbnailRenderer.movingThumbnailDetails?.thumbnails,
 
     length: getLength(video.lengthText),
     viewedLength: getViewedLength(video.thumbnailOverlays, getLength(video.lengthText)),

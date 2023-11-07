@@ -9,13 +9,13 @@
     "build": "vite build"
   },
   "devDependencies": {
-    "@types/webextension-polyfill": "^0.10.4",
+    "@types/webextension-polyfill": "^0.10.5",
     "typescript": "^5.2.2",
-    "vite": "^4.4.10",
+    "vite": "^4.5.0",
     "vite-plugin-web-extension": "^3.2.0",
     "webextension-polyfill": "^0.10.0"
   },
   "dependencies": {
-    "@saghen/hermes": "^2.0.0-alpha.1"
+    "@saghen/hermes": "2.0.0-alpha.2"
   }
 }

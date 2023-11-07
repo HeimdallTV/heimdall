@@ -69,5 +69,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   )
 }
-
-// repeat(auto-fit, minmax(240px, 1fr));

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "noErrorTruncation": true,
     "strict": true,
     "jsx": "preserve",
     "lib": ["DOM", "DOM.Iterable", "esnext"],

@@ -13,6 +13,10 @@ const DescriptionContainer = styled(Column)<{ isExpanded: boolean }>`
   border-radius: 12px;
   background-color: var(--mantine-color-default);
 
+  > * + * {
+    margin-top: 8px;
+  }
+
   ${({ isExpanded }) =>
     !isExpanded &&
     `
@@ -40,12 +44,7 @@ export const Description: React.FC<{
 
   // TODO Get a better key for the description list rendering
   return (
-    <DescriptionContainer
-      ref={descriptionRef}
-      separation="8px"
-      isExpanded={isExpanded}
-      onClick={() => setIsExpanded(true)}
-    >
+    <DescriptionContainer ref={descriptionRef} isExpanded={isExpanded} onClick={() => setIsExpanded(true)}>
       <DescriptionHeader viewCount={viewCount} publishDate={publishDate} />
       <DescriptionChunks chunks={description} isExpanded={isExpanded} />
       <ShowMoreLessButton
@@ -62,11 +61,11 @@ const DescriptionHeader: React.FC<{ viewCount?: number; publishDate?: Date }> = 
   publishDate,
 }) => {
   if (viewCount === undefined && publishDate === undefined) return <Skeleton width="160px" height="1.5em" />
-  return (
-    <Text fw={500}>
-      {formatNumberShort(viewCount)} views {formatDateAgo(publishDate)}
-    </Text>
-  )
+
+  const text = []
+  if (viewCount !== undefined) text.push(`${formatNumberShort(viewCount)} views`)
+  if (publishDate !== undefined) text.push(formatDateAgo(publishDate))
+  return <Text fw={500}>{text.join(' ')}</Text>
 }
 
 const ShowMoreLessButton: React.FC<{

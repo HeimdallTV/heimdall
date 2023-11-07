@@ -39,9 +39,11 @@ type Menu<FlexibleItems, Items, TopLevelButtons> = Renderer<
 >
 
 export type VideoActions = Menu<
-  MenuFlexibleItem,
-  MenuServiceItem[],
-  [SegmentedLikeDislikeButton, ShareButtonRenderer, AddToPlaylistRenderer]
+  // MenuFlexibleItem,
+  unknown,
+  // MenuServiceItem[],
+  unknown,
+  [SegmentedLikeDislikeButton /* ShareButtonRenderer, AddToPlaylistRenderer */]
 >
 
 export type VideoOwner = Renderer<

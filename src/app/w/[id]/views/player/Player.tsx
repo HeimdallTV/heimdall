@@ -1,6 +1,6 @@
 import React, { memo, RefObject, useContext, useEffect, useRef } from 'react'
 
-import { Column, Row } from 'lese'
+import { Column, FlexProps, Row } from 'lese'
 import styled from 'styled-components'
 
 import {
@@ -9,7 +9,7 @@ import {
   IconPlayerSkipForward,
   IconPlayerSkipBack,
 } from '@tabler/icons-react'
-import { Skeleton, Text } from '@mantine/core'
+import { Skeleton } from '@mantine/core'
 import * as std from '@std'
 import { PlayerContext } from './context'
 import { useVideoInstance } from './hooks/useVideo'
@@ -28,7 +28,7 @@ import { SeekBar } from './controls/SeekBar'
 import { useHover, useIdle } from '@mantine/hooks'
 import { usePlayerState } from './hooks/use'
 
-const ControlsContainer = styled(Column)<{ show: boolean }>`
+const ControlsContainer = styled(Column)<{ show: boolean } & FlexProps>`
   background: linear-gradient(transparent 20%, rgba(0, 0, 0, 0.5) 60%, rgba(0, 0, 0, 0.8) 100%);
   position: absolute;
   bottom: 0;

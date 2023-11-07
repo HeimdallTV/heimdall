@@ -22,7 +22,7 @@ export const VideoCard: React.FC<{ video: std.Video }> = ({ video }) => (
           {video.title}
         </Text>
         {/*<Link href={`/c/${video.author?.id}`}>{video.author?.name}</Link>*/}
-        <Text size="sm" color="dimmed">
+        <Text size="sm" c="dimmed">
           {video.author?.name}
         </Text>
 

@@ -69,6 +69,9 @@ const SeekBarContainer = styled(Row)`
   &:hover ${SeekBarThumbStyled} {
     transform: translate(50%, -50%) scale(1);
   }
+  > * + * {
+    margin-left: 2px;
+  }
 `
 
 const useMove = (onUp: (value: number) => void) => {
@@ -130,8 +133,8 @@ export const SeekBar: React.FC = () => {
   return (
     <SeekBarContainer
       ref={ref}
-      separation="2px"
       style={{
+        // @ts-expect-error styled-components bug
         '--current-time': `${(currentTimeMS / durationMS) * 100}%`,
         '--buffered': `${((currentTimeMS + bufferedMS) / durationMS) * 100}%`,
       }}

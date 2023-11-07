@@ -10,7 +10,7 @@ import { Skeleton, Text } from '@mantine/core'
 
 // Channel Icon
 type ChannelIconProps = {
-  channel?: std.User
+  channel: std.User
   size?: number
 }
 
@@ -23,7 +23,7 @@ const ChannelIconImage = styled('img')<{ size: number } & React.ImgHTMLAttribute
   background-color: var(--bg-700);
 `
 
-export const ChannelIcon: React.FC<ChannelIconProps> = props => {
+export const ChannelIcon: React.FC<Partial<ChannelIconProps>> = props => {
   if (!props.channel) return <Skeleton circle height={props.size ?? 36} />
   return <ChannelIconImage size={props.size ?? 36} src={props.channel.avatar[0].url} />
 }

@@ -64,4 +64,10 @@ export function durationTextToSeconds(simpleText: string): number {
     .reduce((a, b) => a + b, 0) // Add seconds together
 }
 
-export const parseViewCount = pipe(split(/([\d,]+)/), filter(Boolean), head, replace(/,/g, ''), Number)
+export const parseViewCount = (viewCount: string) =>
+  Number(
+    viewCount
+      .split(/([\d,]+)/)
+      .filter(Boolean)[0]
+      .replaceAll(',', ''),
+  )

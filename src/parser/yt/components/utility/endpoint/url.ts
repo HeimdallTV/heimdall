@@ -20,7 +20,7 @@ const stripYoutubeRedirect = (urlStr: string) => {
     url.pathname === '/redirect' &&
     (url.hostname === 'www.youtube.com' || url.hostname === 'youtube.com')
   ) {
-    return new URL(url).searchParams.get('q') ?? url
+    return new URL(url).searchParams.get('q') ?? url.toString()
   }
-  return url
+  return url.toString()
 }

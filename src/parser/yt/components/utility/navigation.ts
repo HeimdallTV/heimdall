@@ -13,7 +13,7 @@ import {
 
 export const mapNavigationEndpoint =
   <EP extends Endpoint, A>(a: (val: EP) => A) =>
-  <T, U>(some: Some<NavigationSome<EP, SomeOptions<T, U>>> | Navigation<EP>) =>
+  <T extends {}, U extends {}>(some: Some<NavigationSome<EP, SomeOptions<T, U>>> | Navigation<EP>) =>
     a(headOfSome(some).navigationEndpoint)
 
 /** General function for converting a navigation endpoint to a relative or absolute url */

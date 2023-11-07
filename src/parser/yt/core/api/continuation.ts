@@ -16,7 +16,7 @@ export const isNotContinuationItem = <T extends Renderer>(item: T | Continuation
 export async function* makeContinuationIterator<T extends Renderer>(
   getInitial: () => Promise<(T | ContinuationItem)[]>,
   getContinuation: (continuationToken: string) => Promise<(T | ContinuationItem)[]>,
-): AsyncGenerator<T[], void, never> {
+): AsyncGenerator<T[], void, undefined> {
   let continuationToken: string | undefined
   do {
     const results = await (continuationToken ? getContinuation(continuationToken) : getInitial())

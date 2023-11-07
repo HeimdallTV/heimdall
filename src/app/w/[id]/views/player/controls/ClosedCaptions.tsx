@@ -7,6 +7,7 @@ import { IconBadgeCc } from '@tabler/icons-react'
 import { PlayerContext } from '../context'
 import { useClosedCaptions } from '../hooks/use'
 import { ControlButton } from '../components/ControlButton'
+import { UnstyledButtonProps } from '@mantine/core'
 
 const ClosedCaptionButton = styled(ControlButton)<{ enabled: boolean }>`
   position: relative;
@@ -34,6 +35,7 @@ export const ClosedCaption: React.FC = () => {
   // TODO Allow the user to select the captions rather than choosing the default/first one
   return (
     <ClosedCaptionButton
+      // @ts-expect-error styled-components bug
       enabled={closedCaptions !== undefined}
       onClick={() =>
         setClosedCaptions(
