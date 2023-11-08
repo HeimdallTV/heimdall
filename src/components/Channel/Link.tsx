@@ -1,11 +1,10 @@
 import { Flex, Row } from 'lese'
-import Link from 'next/link'
-import styled from 'styled-components'
+import { Link } from 'wouter'
+import { styled } from '@linaria/react'
 
 import { IconCircleCheckFilled } from '@tabler/icons-react'
 import * as std from '@std'
 
-import { ExternalLink } from '../Typography'
 import { Skeleton, Text } from '@mantine/core'
 
 // Channel Icon
@@ -29,12 +28,10 @@ export const ChannelIcon: React.FC<Partial<ChannelIconProps>> = props => {
 }
 
 export const ChannelIconWithName: React.FC<ChannelIconProps> = props => (
-  <Flex as={Link} href={`/c/${props.channel.id}`} yAlign separation="8px">
+  <Row as={Link} href={`/c/${props.channel.id}`} yAlign separation="8px">
     <ChannelIconImage size={props.size ?? 36} src={props.channel.avatar[0].url} />
-    <ExternalLink secondary medium>
-      {props.channel.name}
-    </ExternalLink>
-  </Flex>
+    <Text c="dimmed">{props.channel.name}</Text>
+  </Row>
 )
 
 /** @deprecated */

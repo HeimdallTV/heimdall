@@ -6,8 +6,8 @@ import { ChannelIcon } from '../Channel/Link'
 import { VideoSubLine } from './Shared'
 import { VideoThumbnail } from './Thumbnail'
 
+import { Link } from 'wouter'
 import { Card, Group, Stack, Text } from '@mantine/core'
-import Link from 'next/link'
 
 export const VideoCard: React.FC<{ video: std.Video }> = ({ video }) => (
   <Card component={Link} href={`/w/${video.id}`} styles={{ root: { background: 'none' } }}>

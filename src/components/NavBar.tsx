@@ -1,6 +1,4 @@
-'use client'
-
-import Link from 'next/link'
+import { Link } from 'wouter'
 import yt from '@yt'
 import { usePaginated } from '@/hooks/usePaginated'
 import { NavLink } from '@mantine/core'

@@ -1,7 +1,6 @@
 import { PropsWithChildren, useCallback, useContext, useEffect, useRef, useState } from 'react'
 
-import { Row } from 'lese'
-import styled from 'styled-components'
+import { styled } from '@linaria/react'
 
 import { PlayerContext } from '../context'
 import { useBufferedMS, useCurrentTimeMS, useDurationMS } from '../hooks/use'
@@ -63,7 +62,8 @@ const SeekBarThumb: React.FC = () => (
   <SeekBarThumbStyled style={{ right: `calc(100% - var(--current-time-override, var(--current-time)))` }} />
 )
 
-const SeekBarContainer = styled(Row)`
+const SeekBarContainer = styled.div`
+  display: flex;
   position: relative;
   cursor: pointer;
   &:hover ${SeekBarThumbStyled} {
@@ -134,7 +134,7 @@ export const SeekBar: React.FC = () => {
     <SeekBarContainer
       ref={ref}
       style={{
-        // @ts-expect-error styled-components bug
+        // @ts-expect-error fixme: can't pass css variables through here for some reason
         '--current-time': `${(currentTimeMS / durationMS) * 100}%`,
         '--buffered': `${((currentTimeMS + bufferedMS) / durationMS) * 100}%`,
       }}

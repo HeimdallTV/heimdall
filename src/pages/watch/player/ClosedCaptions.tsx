@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 
-import styled from 'styled-components'
+import { styled } from '@linaria/react'
 
 import * as std from '@std'
 

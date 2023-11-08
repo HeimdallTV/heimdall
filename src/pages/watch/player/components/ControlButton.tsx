@@ -1,5 +1,5 @@
 import { UnstyledButton } from '@mantine/core'
-import styled from 'styled-components'
+import { styled } from '@linaria/react'
 
 export const ControlButton = styled(UnstyledButton)`
   display: flex;

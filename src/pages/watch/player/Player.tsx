@@ -1,7 +1,7 @@
 import React, { memo, RefObject, useContext, useEffect, useRef } from 'react'
 
-import { Column, FlexProps, Row } from 'lese'
-import styled from 'styled-components'
+import { FlexProps, Row } from 'lese'
+import { styled } from '@linaria/react'
 
 import {
   IconChevronsLeft,
@@ -28,7 +28,9 @@ import { SeekBar } from './controls/SeekBar'
 import { useHover, useIdle } from '@mantine/hooks'
 import { usePlayerState } from './hooks/use'
 
-const ControlsContainer = styled(Column)<{ show: boolean } & FlexProps>`
+const ControlsContainer = styled.div<{ show: boolean } & FlexProps>`
+  display: flex;
+  flex-direction: column;
   background: linear-gradient(transparent 20%, rgba(0, 0, 0, 0.5) 60%, rgba(0, 0, 0, 0.8) 100%);
   position: absolute;
   bottom: 0;
@@ -38,16 +40,7 @@ const ControlsContainer = styled(Column)<{ show: boolean } & FlexProps>`
   padding-top: 1.2rem;
 
   transition: 0.2s opacity;
-  opacity: ${({ show }) => String(Number(show))};
-
-  > ${Row} > ${Row} > span {
-    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-  }
-
-  > ${Row} > ${Row} > button > svg,
-  > ${Row} > ${Row} > svg {
-    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
-  }
+  opacity: ${({ show }) => Number(show)};
 `
 
 // todo: use a grid?
@@ -87,7 +80,7 @@ const Controls: React.FC<{ playerRoot: RefObject<HTMLElement>; mouseActive: bool
 
 const PlayerContainer = styled.div<{ isFullscreen: boolean; hideMouse: boolean }>`
   position: relative;
-  ${({ hideMouse }) => hideMouse && `cursor: none;`}
+  cursor: ${({ hideMouse }) => (hideMouse ? 'auto' : 'none')};
 
   video {
     width: 100%;
@@ -105,9 +98,10 @@ const Video: React.FC = memo(() => {
   useEffect(() => {
     const videoContainer = videoContainerRef.current
     if (!videoContainer) return
-    videoContainer.appendChild(videoInstance)
+    console.log(videoContainer)
+    videoContainer.base.appendChild(videoInstance)
     return () => {
-      videoContainer.removeChild(videoInstance)
+      videoContainer.base.removeChild(videoInstance)
     }
   }, [videoInstance])
 

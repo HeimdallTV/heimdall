@@ -1,14 +1,11 @@
-'use client'
-
-import { Flex } from 'lese'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import styled from 'styled-components'
+import { Row } from 'lese'
+import { Link, useLocation } from 'wouter'
+import { styled } from '@linaria/react'
 
 import { SearchBar } from './SearchBar'
 import { Burger } from '@mantine/core'
 
-const HeaderContainer = styled('div')`
+const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -18,17 +15,17 @@ const HeaderContainer = styled('div')`
 `
 
 export const Header = () => {
-  const router = useRouter()
+  const [_, setLocation] = useLocation()
 
   return (
     <HeaderContainer>
-      <Flex separation="24px" align>
+      <Row separation="24px" align>
         <Burger />
         <Link href="/">
           <img src="/logo.svg" style={{ height: '40px' }} />
         </Link>
-      </Flex>
-      <SearchBar onSearch={query => router.push(`/s/${query.replace(/\s+/, '+')}`)} />
+      </Row>
+      <SearchBar onSearch={query => setLocation(`/s/${query.replace(/\s+/, '+')}`)} />
       <div
         style={{
           background: 'var(--bg-800)',

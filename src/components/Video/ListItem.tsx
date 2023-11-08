@@ -1,5 +1,5 @@
-import { Column, Flex, Grid } from 'lese'
-import Link from 'next/link'
+import { Column, Grid } from 'lese'
+import { Link } from 'wouter'
 
 import * as std from '@std'
 

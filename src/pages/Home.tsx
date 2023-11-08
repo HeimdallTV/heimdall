@@ -1,10 +1,9 @@
-'use client'
 import { VideoCard } from '@/components/Video/Card'
 import { usePaginated } from '@/hooks/usePaginated'
 
 import * as std from '@std'
 import yt from '@yt'
-import styled from 'styled-components'
+import { styled } from '@linaria/react'
 
 const HomeGrid = styled('section')`
   display: grid;

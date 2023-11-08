@@ -1,11 +1,6 @@
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react'
 
-import styled from 'styled-components';
+import { styled } from '@linaria/react'
 
 function throttleAndDebounce(fn: (...args: any[]) => void, delay: number): (...args: any[]) => void {
   let lastCallTime: number | null = null

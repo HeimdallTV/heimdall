@@ -1,7 +1,6 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
 
-import { Flex } from 'lese'
-import styled from 'styled-components'
+import { styled } from '@linaria/react'
 
 import { formatNumberDuration } from '@libs/format'
 import { when } from '@libs/utils'
@@ -10,7 +9,9 @@ import { Badge } from '@mantine/core'
 
 const TRANSITION = 'opacity 250ms ease 250ms'
 
-const ThumbnailContainer = styled(Flex)`
+const ThumbnailContainer = styled.div`
+  display: flex;
+  position: relative;
   width: 100%;
   position: relative;
   border-radius: 8px;
@@ -61,11 +62,7 @@ export const Thumbnail: React.FC<ThumbnailProps> = ({ staticThumbnail, animatedT
 
   return (
     <ThumbnailContext.Provider value={{ isHovered, willShowAnimated }}>
-      <ThumbnailContainer
-        relative
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
+      <ThumbnailContainer onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
         <img src={staticThumbnail[0].url} alt="thumbnail" />
         <img
           src={animatedThumbnail?.[0].url}

@@ -13,7 +13,7 @@ import { Description } from './Description'
 import { Video } from '@/parser/std'
 import { RelatedVideos } from './RelatedVideos'
 import * as std from '@/parser/std'
-import styled from 'styled-components'
+import { styled } from '@linaria/react'
 
 const WatchGrid = styled(Grid)`
   max-width: 1280px;

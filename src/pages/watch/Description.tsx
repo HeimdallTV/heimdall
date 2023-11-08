@@ -1,13 +1,14 @@
-import styled from 'styled-components'
-import { Column } from 'lese'
+import { Link } from 'wouter'
+import { styled } from '@linaria/react'
+
 import { RichText, RichTextChunk, RichTextChunkType } from '@/parser/std'
 import { useEffect, useRef, useState } from 'react'
 import { formatDateAgo, formatNumberShort } from '@/libs/format'
-import Link from 'next/link'
 import { Anchor, Skeleton, Text, UnstyledButton } from '@mantine/core'
-import { not } from 'rambda'
 
-const DescriptionContainer = styled(Column)<{ isExpanded: boolean }>`
+const DescriptionContainer = styled.div<{ isExpanded: boolean }>`
+  display: flex;
+  flex-direction: column;
   justify-content: flex-start;
   padding: 12px;
   border-radius: 12px;
@@ -17,13 +18,11 @@ const DescriptionContainer = styled(Column)<{ isExpanded: boolean }>`
     margin-top: 8px;
   }
 
-  ${({ isExpanded }) =>
-    !isExpanded &&
-    `
   &:hover {
-    background-color: var(--mantine-color-default-hover);
-    cursor: pointer;
-  }`}
+    background-color: ${({ isExpanded }) =>
+      !isExpanded ? 'var(--mantine-color-default-hover)' : 'var(--mantine-color-default)'};
+    cursor: ${({ isExpanded }) => (!isExpanded ? 'pointer' : 'auto')};
+  }
 `
 
 export const Description: React.FC<{
@@ -79,7 +78,7 @@ const ShowMoreLessButton: React.FC<{
       fw={500}
       onClick={e => {
         e.stopPropagation()
-        setIsExpanded(not)
+        setIsExpanded(expanded => !expanded)
       }}
     >
       {isExpanded ? 'Show Less' : 'Show More'}

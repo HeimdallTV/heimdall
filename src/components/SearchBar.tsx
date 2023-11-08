@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
-import { Flex } from 'lese';
-import { useParams } from 'react-router';
-import styled from 'styled-components';
+import { Row } from 'lese'
+import { useParams } from 'wouter'
+import { styled } from '@linaria/react'
 
 const SearchIcon = () => (
   <svg
@@ -57,7 +57,7 @@ export const SearchBar: React.FC<SearchBarProps> = props => {
   const [query, setQuery] = useState(params.query)
 
   return (
-    <Flex>
+    <Row>
       <SearchBarStyled
         placeholder="Search..."
         value={query}
@@ -73,6 +73,6 @@ export const SearchBar: React.FC<SearchBarProps> = props => {
       <SearchBarButton>
         <SearchIcon />
       </SearchBarButton>
-    </Flex>
+    </Row>
   )
 }

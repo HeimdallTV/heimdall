@@ -1,6 +1,5 @@
-'use client'
 import { Grid } from 'lese'
-import styled from 'styled-components'
+import { styled } from '@linaria/react'
 
 import { usePaginated } from '@/hooks/usePaginated'
 import { VideoListItem } from '@components/Video/ListItem'

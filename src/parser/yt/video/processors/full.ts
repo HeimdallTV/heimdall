@@ -1,5 +1,3 @@
-import { prop } from 'rambda'
-
 import { ProviderName } from '@/parser/std'
 import * as std from '@std'
 import { isVerifiedBadge } from '@yt/components/badge'
@@ -48,7 +46,7 @@ export function processFullVideo(
     id,
     author: {
       name: combineSomeText(owner.title),
-      id: mapNavigation(prop('id'), owner),
+      id: mapNavigation(_ => _.id, owner),
       avatar: owner.thumbnail.thumbnails,
       verified: Boolean(owner.badges?.some(isVerifiedBadge))
         ? std.VerifiedStatus.Verified

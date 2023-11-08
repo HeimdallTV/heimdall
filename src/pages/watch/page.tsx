@@ -1,6 +1,4 @@
-'use client'
-
-import styled from 'styled-components'
+import { styled } from '@linaria/react'
 
 import { useAsync } from '@/hooks/useAsync'
 import { getPlayer as fetchPlayer, getVideo as fetchVideo } from '@yt/video'

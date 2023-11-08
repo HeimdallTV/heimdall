@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "noErrorTruncation": true,
+    "noErrorTruncation": false,
     "strict": true,
     "jsx": "preserve",
     "lib": ["DOM", "DOM.Iterable", "esnext"],
@@ -9,6 +9,7 @@
     "moduleResolution": "bundler",
     "baseUrl": "src",
     "paths": {
+      "lese": ["./components/Lese.tsx"],
       "@/*": ["./*"],
       "@constants": ["./constants/index.ts"],
       "@components/*": ["./components/*"],
@@ -19,18 +20,8 @@
       "@views/*": ["./views/*"],
       "@yt": ["./parser/yt/index.ts"],
       "@yt/*": ["./parser/yt/*"]
-    },
-
-    /* required by nextjs */
-    "noEmit": true,
-    "allowJs": true,
-    "skipLibCheck": true,
-    "incremental": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "plugins": [{ "name": "next" }, { "name": "@styled/typescript-styled-plugin" }]
+    }
   },
-  "include": ["next-env.d.ts", "src", "extension", "global.d.ts", ".next/types/**/*.ts"],
+  "include": ["src", "extension"],
   "exclude": ["node_modules"]
 }

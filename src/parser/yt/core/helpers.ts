@@ -1,21 +1,15 @@
-import { pipe, cond, divide, concat, T, split, filter, replace, head } from 'rambda'
+export const divideByAndConcat = (divisor: number, suffix: string) => (num: number) => {
+  const val = num / divisor
+  const rounded = val >= 10 ? String(Math.floor(val)) : val.toFixed(1)
+  return rounded + suffix
+}
 
-const lte = (num: number) => (max: number) => num <= max
-
-export const divideByAndConcat = (divisor: number, suffix: string) => (num: number) =>
-  pipe(
-    (val: number) => divide(val, divisor),
-    (val: number) => (val >= 10 ? Math.floor(val) : val.toFixed(1)),
-    String,
-    prefix => concat(prefix, suffix),
-  )(num)
-
-export const toShortHumanReadable = cond([
-  [lte(1_000_000_000), divideByAndConcat(1_000_000_000, 'B')],
-  [lte(1_000_000), divideByAndConcat(1_000_000, 'M')],
-  [lte(1_000), divideByAndConcat(1_000, 'K')],
-  [T, divideByAndConcat(1, '')],
-]) as (viewCount: number) => string
+export const toShortHumanReadable = (viewCount: number) => {
+  if (viewCount <= 1_000) return String(viewCount)
+  if (viewCount <= 1_000_000) return divideByAndConcat(1_000, 'K')(viewCount)
+  if (viewCount <= 1_000_000_000) return divideByAndConcat(1_000_000, 'M')(viewCount)
+  return divideByAndConcat(1_000_000_000, 'B')(viewCount)
+}
 
 /**
  * Text must be in the form "123,345 views"

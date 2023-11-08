@@ -1,12 +1,10 @@
-import { head, pipe } from 'rambda'
-
 // Some
 export function someToArray<T, U>(value: Some<SomeOptions<T, U>>): (T | U)[] {
   if (typeof value === 'object' && value !== null && 'runs' in value) return value.runs
   return [value as T]
 }
 
-export const headOfSome = pipe(someToArray, head) as <T, U>(value: Some<SomeOptions<T, U>>) => T | U
+export const headOfSome = <T, U>(value: Some<SomeOptions<T, U>>) => someToArray(value)[0]
 
 export type Runs<T> = { runs: T[] }
 export type Some<T extends SomeOptions<any, any> | SubCommand> = T extends SomeOptions<
