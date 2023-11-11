@@ -1,7 +1,8 @@
 {
   "manifest_version": 3,
   "background": {
-    "service_worker": "src/main.ts"
+    "{{chrome}}.service_worker": "src/main.ts",
+    "{{firefox}}.scripts": ["src/main.ts"]
   },
   "{{chrome}}.permissions": ["cookies", "storage", "declarativeNetRequest", "declarativeNetRequestFeedback"],
   "{{firefox}}.permissions": [

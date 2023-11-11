@@ -3,8 +3,18 @@ import React from 'react'
 import { formatDateAgo, formatNumberShort } from '@libs/format'
 import * as std from '@std'
 
-import { LiveNow } from './Badge'
 import { Text } from '@mantine/core'
+import styled from 'styled-components'
+
+export const LiveNow = styled.span`
+  color: var(--mantine-primary-color-filled);
+  border: 1px solid var(--mantine-primary-color-filled);
+  border-radius: 2px;
+  padding: 3px 4px;
+
+  /* FIXME: Should be unnecessary */
+  align-self: flex-start;
+`
 
 export const VideoSubLine: React.FC<{
   video: Pick<std.Video, 'type' | 'viewCount' | 'publishDate'>

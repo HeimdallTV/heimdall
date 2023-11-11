@@ -30,10 +30,19 @@ export type HorizontalList<Item extends Renderer> = Renderer<
   }
 >
 
-export type ItemSection<Content extends Renderer, Identifier extends string | undefined = undefined> = Renderer<
+export type ItemSectionWithIdentifier<
+  Content extends Renderer,
+  Identifier extends string | undefined = undefined,
+> = Renderer<
   'itemSection',
   Tracking & {
     contents: Content[]
     sectionIdentifier: Identifier
   }
+>
+
+export type ItemSectionHeader = Renderer<'itemSectionHeader', Tracking & { title: Some<Text> }>
+export type ItemSectionWithHeader<Content extends Renderer> = Renderer<
+  'itemSection',
+  Tracking & { contents: Content[]; header: ItemSectionHeader }
 >

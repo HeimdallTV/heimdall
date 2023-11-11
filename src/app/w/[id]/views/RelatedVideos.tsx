@@ -11,8 +11,8 @@ export const RelatedVideos: React.FC<{ video: Video }> = ({ video }) => {
         .flat()
         // TODO: Concrete way of telling its a video
         .filter((video): video is Video => 'type' in video)
-        .map(video => (
-          <CompactVideoListItem key={video.id} video={video} />
+        .map((video, i) => (
+          <CompactVideoListItem key={i} video={video} />
         ))}
     </Column>
   )

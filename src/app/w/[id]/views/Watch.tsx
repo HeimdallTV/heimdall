@@ -10,8 +10,6 @@ import { WatchInfo } from './WatchInfo'
 import { useEffect } from 'react'
 
 const VideoContainer = styled('section')`
-  height: calc(100vh - 53px);
-
   > iframe {
     width: 100vw;
     height: min(87vh, calc(100vw / 16 * 9));
@@ -23,7 +21,6 @@ const VideoContainer = styled('section')`
 `
 
 const PlayerWrapper: React.FC<{ videoId: string }> = ({ videoId }) => {
-  console.log(videoId)
   const { data: player, error } = useAsync(() => fetchPlayer(videoId), [videoId])
   useEffect(() => {
     if (error) console.error(error)
@@ -33,7 +30,6 @@ const PlayerWrapper: React.FC<{ videoId: string }> = ({ videoId }) => {
 }
 
 const Watch: React.FC<{ videoId: string }> = ({ videoId }) => {
-  console.log(videoId)
   const { data: video, error } = useAsync(() => fetchVideo(videoId), [videoId])
   useEffect(() => {
     if (error) console.error(error)

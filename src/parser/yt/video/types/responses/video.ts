@@ -1,6 +1,6 @@
 import { Button } from '@yt/components/button'
 import { ContinuationItem } from '@yt/components/continuation'
-import { ItemSection } from '@yt/components/core'
+import { ItemSectionWithIdentifier } from '@yt/components/core'
 import { Text } from '@yt/components/text'
 import { Thumbnail } from '@yt/components/thumbnail'
 import { TwoColumnWatchNext } from '@yt/components/two-column'
@@ -18,10 +18,10 @@ export type VideoResponse = BaseResponse & {
     [
       VideoPrimaryInfo,
       VideoSecondaryInfo,
-      ItemSection<Renderer<'commentsEntryPointHeader', { TODO: true }>, 'comments-entry-point'>,
-      ItemSection<ContinuationItem, 'comment-item-section'>,
+      ItemSectionWithIdentifier<Renderer<'commentsEntryPointHeader', { TODO: true }>, 'comments-entry-point'>,
+      ItemSectionWithIdentifier<ContinuationItem, 'comment-item-section'>,
     ],
-    [ItemSection<CompactVideo | ContinuationItem>, Renderer<'relatedChipCloud'>]
+    [ItemSectionWithIdentifier<CompactVideo | ContinuationItem>, Renderer<'relatedChipCloud'>]
   >
   currentVideoEndpoint: CurrentVideoEndpoint
   playerOverlays: Renderer<

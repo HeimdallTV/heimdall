@@ -3,6 +3,8 @@ import { Button, Skeleton, Text } from '@mantine/core'
 import { ChannelIcon, ChannelName } from '@/components/Channel/Link'
 import { toShortHumanReadable } from '@/parser/yt/core/helpers'
 import {
+  IconHeart,
+  IconHeartFilled,
   IconSend,
   IconThumbDown,
   IconThumbDownFilled,
@@ -19,14 +21,13 @@ const WatchGrid = styled(Grid)`
   max-width: 1280px;
   width: 100%;
   margin: auto;
-  padding: 24px;
-  padding-top: 12px;
+  padding: 0 24px;
 `
 
 export const WatchInfo: React.FC<{ video?: Video }> = ({ video }) => (
   <WatchGrid columns="auto 400px" gap="24px">
     <VideoInfo video={video} />
-    {/*<RelatedVideos video={video} /> */}
+    {video && <RelatedVideos video={video} />}
   </WatchGrid>
 )
 
@@ -40,18 +41,29 @@ const VideoTitle: React.FC<{ title?: string }> = ({ title }) => {
 }
 
 const VideoAuthor: React.FC<{ author?: std.User }> = ({ author }) => {
-  if (author === undefined) return <Skeleton height="1em" />
+  if (author === undefined) {
+    return (
+      <Row separation="16px 32px" yAlign>
+        <Skeleton circle height="40px" />
+        <Column separation="4px">
+          <Skeleton width="120px" height="1em" />
+          <Skeleton width="80px" height="1em" />
+        </Column>
+        <Skeleton width="110px" height="36px" />
+      </Row>
+    )
+  }
   return (
     <Row separation="16px 32px" yAlign>
       <ChannelIcon size={40} channel={author} />
       <ChannelInfo author={author} />
-      <SubscribeButton followed={author?.followed} />
+      <FollowButton followed={author?.followed} />
     </Row>
   )
 }
 
 const VideoInteractions: React.FC<{ video?: Video }> = ({ video }) => {
-  if (!video) return <Skeleton height="2em" />
+  if (!video) return <Skeleton width="400px" height="36px" />
   return (
     <Row separation="8px" yAlign>
       <LikeButtons {...video} />
@@ -95,9 +107,21 @@ const SubscriberCount: React.FC<{ followerCount?: number }> = ({ followerCount }
   )
 }
 
-export const SubscribeButton: React.FC<{ followed?: boolean }> = ({ followed }) => {
+export const FollowButton: React.FC<{
+  followed?: boolean
+  setFollowed: (cb: (followed: boolean) => boolean) => void
+}> = ({ followed, setFollowed }) => {
   if (followed === undefined) return <Skeleton width="110px" height="36px" />
-  return <Button variant={followed ? 'light' : 'filled'}>{followed ? 'Subscribed' : 'Subscribe'}</Button>
+  return (
+    <Button onClick={() => setFollowed(followed => !followed)} variant={followed ? 'light' : 'filled'}>
+      {followed ? (
+        <IconHeartFilled size={24} style={{ marginRight: '6px' }} />
+      ) : (
+        <IconHeart size={24} style={{ marginRight: '6px' }} />
+      )}
+      {followed ? 'Following' : 'Follow'}
+    </Button>
+  )
 }
 
 export const LikeButtons: React.FC<{

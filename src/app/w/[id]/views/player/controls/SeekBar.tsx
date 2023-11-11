@@ -75,47 +75,43 @@ const SeekBarContainer = styled(Row)`
 `
 
 const useMove = (onUp: (value: number) => void) => {
-  const ref = useRef<HTMLDivElement>(null)
+  const [elem, setElem] = useState<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    if (!ref.current) return
+    if (!elem) return
 
     const calculateValue = (x: number) => {
-      if (!ref.current) return 0
-      const { left, width } = ref.current.getBoundingClientRect()
+      const { left, width } = elem.getBoundingClientRect()
       return ((x - left) / width) * 100
     }
 
     const onMouseMove = (e: MouseEvent) => {
-      if (!ref.current) return
       e.preventDefault()
       e.stopPropagation()
-      ref.current.style.setProperty('--current-time-override', `${calculateValue(e.clientX)}%`)
+      elem.style.setProperty('--current-time-override', `${calculateValue(e.clientX)}%`)
     }
 
     const onMouseUp = (e: MouseEvent) => {
       window.removeEventListener('mousemove', onMouseMove, true)
-      if (!ref.current) return
       onUp(calculateValue(e.clientX))
       // fixme: sweet mother of god. @aaditya told me to
-      setTimeout(() => ref.current!.style.removeProperty('--current-time-override'), 100)
+      setTimeout(() => elem!.style.removeProperty('--current-time-override'), 100)
     }
 
     const onMouseDown = (e: MouseEvent) => {
-      if (!ref.current) return
       window.addEventListener('mousemove', onMouseMove, true)
-      ref.current.addEventListener('mouseup', onMouseUp)
-      ref.current.style.setProperty('--current-time-override', `${calculateValue(e.clientX)}%`)
+      elem.addEventListener('mouseup', onMouseUp)
+      elem.style.setProperty('--current-time-override', `${calculateValue(e.clientX)}%`)
     }
-    ref.current!.addEventListener('mousedown', onMouseDown)
+    elem.addEventListener('mousedown', onMouseDown)
 
     return () => {
-      ref.current?.removeEventListener('mouseup', onMouseUp)
-      ref.current?.removeEventListener('mousedown', onMouseDown)
+      elem.removeEventListener('mouseup', onMouseUp)
+      elem.removeEventListener('mousedown', onMouseDown)
     }
-  }, [ref.current, onUp])
+  }, [elem, onUp])
 
-  return ref
+  return (elem: HTMLDivElement) => setElem(elem)
 }
 
 export const SeekBar: React.FC = () => {

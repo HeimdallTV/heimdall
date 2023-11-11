@@ -18,17 +18,13 @@
     "@saghen/hermes": "2.0.0-alpha.2",
     "@tabler/icons-react": "^2.40.0",
     "date-fns": "^2.30.0",
-    "fp-ts": "^2.16.1",
-    "lese": "file:../lese",
     "next": "13.5.5",
     "p-limit": "^4.0.0",
-    "rambda": "^8.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.18.0",
     "styled-components": "^6.1.0",
-    "swr": "^2.2.4",
-    "zod": "^3.22.4"
+    "swr": "^2.2.4"
   },
   "devDependencies": {
     "@styled/typescript-styled-plugin": "^1.0.0",

@@ -33,9 +33,7 @@ export const endpoints = definedInBrowser(() =>
 )
 
 export const sockets = definedInBrowser(() =>
-  createSocketClient<Sockets>(
-    createSocketTransport(browser.runtime, process.env.NEXT_PUBLIC_EXTENSION_ID ?? ''),
-  ),
+  createSocketClient<Sockets>(createSocketTransport(browser.runtime, process.env.NEXT_PUBLIC_EXTENSION_ID!)),
 )
 
 // FIXME: Implement abort on the extension side somehow

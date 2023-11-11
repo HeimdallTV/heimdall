@@ -10,7 +10,7 @@ export function useDebounce<T>(value: T, delay: number, shouldIgnoreUpdate?: (va
       delay,
     )
     return () => clearTimeout(timeoutId)
-  }, [value, delay])
+  }, [value, delay, shouldIgnoreUpdate])
 
   return debouncedValue
 }

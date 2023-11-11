@@ -1,11 +1,7 @@
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useEffect, useMemo, useState } from 'react'
 
-import { Lazy } from 'fp-ts/lib/function';
-import pLimit from 'p-limit';
+import { Lazy } from 'fp-ts/lib/function'
+import pLimit from 'p-limit'
 
 export const usePaginated = <T>(iterator: Lazy<AsyncGenerator<T>>) => {
   const [errors, setErrors] = useState<any[]>([])
@@ -28,7 +24,7 @@ export const usePaginated = <T>(iterator: Lazy<AsyncGenerator<T>>) => {
 
   useEffect(() => {
     next()
-  }, [])
+  }, [next])
 
   return [data, errors, next, done] as const
 }

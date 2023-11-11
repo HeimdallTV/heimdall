@@ -6,7 +6,7 @@ import { RichText } from './components/rich-text'
 export enum VideoType {
   Live = 'live',
   Static = 'static',
-  Clip = 'clip'
+  Clip = 'clip',
 }
 
 export type Video = {
@@ -42,3 +42,4 @@ export type Video = {
   publishDate?: Date
 }
 
+export type HistoryVideos = { date: Date; videos: Video[] }

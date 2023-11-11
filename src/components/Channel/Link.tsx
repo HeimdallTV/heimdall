@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import { IconCircleCheckFilled } from '@tabler/icons-react'
 import * as std from '@std'
 
-import { ExternalLink } from '../Typography'
 import { Skeleton, Text } from '@mantine/core'
 
 // Channel Icon
@@ -31,9 +30,9 @@ export const ChannelIcon: React.FC<Partial<ChannelIconProps>> = props => {
 export const ChannelIconWithName: React.FC<ChannelIconProps> = props => (
   <Flex as={Link} href={`/c/${props.channel.id}`} yAlign separation="8px">
     <ChannelIconImage size={props.size ?? 36} src={props.channel.avatar[0].url} />
-    <ExternalLink secondary medium>
+    <Text c="dimmed" fw="medium">
       {props.channel.name}
-    </ExternalLink>
+    </Text>
   </Flex>
 )
 

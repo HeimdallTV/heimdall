@@ -27,6 +27,7 @@ import { PlayerState, usePlayerInstance } from './hooks/usePlayer'
 import { SeekBar } from './controls/SeekBar'
 import { useHover, useIdle } from '@mantine/hooks'
 import { usePlayerState } from './hooks/use'
+import Link from 'next/link'
 
 const ControlsContainer = styled(Column)<{ show: boolean } & FlexProps>`
   background: linear-gradient(transparent 20%, rgba(0, 0, 0, 0.5) 60%, rgba(0, 0, 0, 0.8) 100%);
@@ -122,7 +123,7 @@ export const Player: React.FC<{ player?: std.Player }> = ({ player }) => {
 
 const PlayerSkeleton: React.FC = () => (
   <div style={{ aspectRatio: '16 / 9' }}>
-    <Skeleton height="100%" width="100%" style={{ aspectRatio: '16 / 9' }} />
+    <Skeleton height="100%" width="100%" style={{ aspectRatio: '16 / 9', maxHeight: '87vh' }} />
   </div>
 )
 

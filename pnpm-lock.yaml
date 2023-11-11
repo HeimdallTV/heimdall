@@ -26,9 +26,6 @@ dependencies:
   fp-ts:
     specifier: ^2.16.1
     version: 2.16.1
-  lese:
-    specifier: file:../lese
-    version: file:../lese(react-dom@18.2.0)(react@18.2.0)
   next:
     specifier: 13.5.5
     version: 13.5.5(react-dom@18.2.0)(react@18.2.0)
@@ -53,9 +50,6 @@ dependencies:
   swr:
     specifier: ^2.2.4
     version: 2.2.4(react@18.2.0)
-  zod:
-    specifier: ^3.22.4
-    version: 3.22.4
 
 devDependencies:
   '@styled/typescript-styled-plugin':
@@ -3143,20 +3137,4 @@ packages:
   /yocto-queue@1.0.0:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
-    dev: false
-
-  /zod@3.22.4:
-    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
-    dev: false
-
-  file:../lese(react-dom@18.2.0)(react@18.2.0):
-    resolution: {directory: ../lese, type: directory}
-    id: file:../lese
-    name: lese
-    dependencies:
-      '@emotion/is-prop-valid': 1.2.1
-      styled-components: 6.1.0(react-dom@18.2.0)(react@18.2.0)
-    transitivePeerDependencies:
-      - react
-      - react-dom
     dev: false

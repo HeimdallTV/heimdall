@@ -1,6 +1,6 @@
 import { Channel } from '@yt/channel'
 import { ContinuationItem, AppendContinuationItemsResponse } from '@yt/components/continuation'
-import { ItemSection, SectionList, Shelf } from '@yt/components/core'
+import { ItemSectionWithIdentifier, SectionList, Shelf } from '@yt/components/core'
 import { TwoColumnSearchResults } from '@yt/components/two-column'
 import { VerticalList } from '@yt/components/vertical-list'
 import { BaseResponse } from '@yt/core/api'
@@ -14,7 +14,11 @@ type NestedSearchItem = SearchItem | Shelf<VerticalList<SearchItem>>
 
 export type SearchResponse = BaseResponse & {
   /** TODO: Search filtering can be found in sub menu of section list. Need to type it */
-  contents: TwoColumnSearchResults<SectionList<ItemSection<NestedSearchItem> | ContinuationItem>>
+  contents: TwoColumnSearchResults<
+    SectionList<ItemSectionWithIdentifier<NestedSearchItem> | ContinuationItem>
+  >
 }
 
-export type SearchResponseContinuation = AppendContinuationItemsResponse<ItemSection<NestedSearchItem>>
+export type SearchResponseContinuation = AppendContinuationItemsResponse<
+  ItemSectionWithIdentifier<NestedSearchItem>
+>

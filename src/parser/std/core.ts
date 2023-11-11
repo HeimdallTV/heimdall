@@ -1,4 +1,4 @@
-import { Channel, Comment, Playlist, Video, Player, User } from '.'
+import { Channel, Comment, Playlist, Video, Player, User, HistoryVideos } from '.'
 import { GameCategory } from './category'
 import { Shelf } from './shelf'
 
@@ -50,6 +50,7 @@ type IdIfNotSelf<ResourceTypes extends ResourceType, ReturnType> = <
 
 export type Provider = {
   getRecommended?: () => AsyncGenerator<(Video | Shelf)[]>
+  getHistory?: () => AsyncGenerator<HistoryVideos[]>
   // What about getting new videos from followed channels? /subscribed on YT
 
   getGamingCategoryById?: (id: string) => Promise<GameCategory>
@@ -65,6 +66,7 @@ export type Provider = {
   getUser: (userId: string) => Promise<User>
   listFollowedUsers: () => AsyncGenerator<User[]>
   listLiveFollowedUsers?: () => AsyncGenerator<User[]>
+  listFollowedUsersVideos?: () => AsyncGenerator<Video[]>
   listUserPlaylists?: (userId: string) => AsyncGenerator<Playlist[]>
   setUserFollowed: (id: string) => (isFollowing: boolean) => Promise<void>
 

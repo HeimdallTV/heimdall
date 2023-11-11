@@ -1,4 +1,4 @@
-import { Column, Flex, Grid } from 'lese'
+import { Column, Grid } from 'lese'
 import Link from 'next/link'
 
 import * as std from '@std'
@@ -29,18 +29,21 @@ export const VideoListItem: React.FC<{
   )
 }
 
-export const CompactVideoListItem: React.FC<{ video: std.Video }> = ({ video }) => {
-  return (
-    <Grid as={Link} href={`/w/${video.id}`} columns="calc(94px * 16 / 9) 1fr" gap="8px">
-      <VideoThumbnail {...video} />
+export const CompactVideoListItem: React.FC<{ video: std.Video }> = ({ video }) => (
+  <Grid as={Link} href={`/w/${video.id}`} columns="calc(94px * 16 / 9) 1fr" gap="8px">
+    <VideoThumbnail
+      type={video.type}
+      length={video.length}
+      staticThumbnail={video.staticThumbnail}
+      animatedThumbnail={video.animatedThumbnail}
+    />
 
-      <Column separation="4px 2px ...0px" style={{ fontSize: '0.9em' }}>
-        <Text fw={600} lineClamp={2}>
-          {video.title}
-        </Text>
-        {video.author && <CompactChannelLink channel={video.author} />}
-        <VideoSubLine size="sm" video={video} />
-      </Column>
-    </Grid>
-  )
-}
+    <Column separation="4px 2px ...0px" style={{ fontSize: '0.9em' }}>
+      <Text fw={600} lineClamp={2}>
+        {video.title}
+      </Text>
+      {video.author && <CompactChannelLink channel={video.author} />}
+      <VideoSubLine size="sm" video={video} />
+    </Column>
+  </Grid>
+)

@@ -83,7 +83,8 @@ export async function getVideo(videoId: string): Promise<std.Video> {
     ...video,
     related: async function* (): AsyncGenerator<std.Video[]> {
       for await (const relatedVideos of relatedVideosIterator) {
-        yield relatedVideos.map(processCompactVideo)
+        // todo: handle compactPlaylistRenderer
+        yield relatedVideos.filter(isRenderer('compactVideo')).map(processCompactVideo)
       }
     },
   }

@@ -28,7 +28,7 @@ export async function processPlayer({
       ...streamingData.formats.map(processFormat).map(decodeFormatUrl),
       ...streamingData.adaptiveFormats.map(processAdaptiveFormat).map(decodeFormatUrl),
     ]),
-    closedCaptions: processCaptions(captions),
+    closedCaptions: captions !== undefined ? processCaptions(captions) : [],
     viewedLength: playerConfig.playbackStartConfig?.startSeconds ?? 0,
     length: Number(videoDetails.lengthSeconds),
   }

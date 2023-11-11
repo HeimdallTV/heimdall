@@ -1,7 +1,7 @@
 import { ContinuationItem } from '@yt/components/continuation'
 import { MetadataBadge } from '../components/badge'
 import { SubscribeButton } from '../components/button'
-import { HorizontalList, ItemSection, SectionList, Shelf } from '../components/core'
+import { HorizontalList, ItemSectionWithIdentifier, SectionList, Shelf } from '../components/core'
 import { Grid } from '../components/grid'
 import { ExpandableTab, Tab } from '../components/tab'
 import { Text } from '../components/text'
@@ -47,7 +47,7 @@ export type HomeTab<Selected extends boolean> = Tab<
 >
 export type VideosTab<Selected extends boolean> = Tab<
   ChannelTabName.Videos,
-  SectionList<ItemSection<Grid<GridVideo | ContinuationItem>, undefined>>,
+  SectionList<ItemSectionWithIdentifier<Grid<GridVideo | ContinuationItem>>>,
   Selected
 >
 export type PlaylistsTab<Selected extends boolean> = Tab<ChannelTabName.Playlists, Renderer<'TODO'>, Selected>

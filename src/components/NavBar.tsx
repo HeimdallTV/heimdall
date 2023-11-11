@@ -3,20 +3,130 @@
 import Link from 'next/link'
 import yt from '@yt'
 import { usePaginated } from '@/hooks/usePaginated'
-import { NavLink } from '@mantine/core'
+import { Text, Tooltip } from '@mantine/core'
 import { ChannelIcon } from './Channel/Link'
+import {
+  IconHeart,
+  IconHistory,
+  IconHome,
+  IconLayoutSidebarLeftCollapse,
+  IconLayoutSidebarLeftExpand,
+  IconSearch,
+} from '@tabler/icons-react'
+import styled from 'styled-components'
+import { useDisclosure } from '@mantine/hooks'
 
+const NavBarItemButton = styled.button`
+  display: grid;
+  align-items: center;
+
+  grid-template-columns: 48px fit-content(200px);
+  grid-template-rows: 48px;
+
+  cursor: ${({ onClick, href }) => (onClick !== undefined || href !== undefined ? 'pointer' : 'default')};
+
+  background-color: transparent;
+  color: var(--mantine-color-text);
+  outline: none;
+  border: none;
+  padding: 0;
+
+  > *:first-child {
+    justify-self: center;
+  }
+`
+const NavBarItem: FC<
+  PropsWithChildren<{
+    as?: React.ElementType
+    expanded: boolean
+    tooltip: string
+    onClick?: () => void
+    href?: string
+    style?: React.CSSProperties
+  }>
+> = ({ tooltip, expanded, ...props }) => (
+  <Tooltip label={tooltip} position="right" withArrow arrowSize={6} disabled={expanded}>
+    <NavBarItemButton {...props} />
+  </Tooltip>
+)
+
+const NavBarContainer = styled.nav<{ $expanded: boolean }>`
+  display: flex;
+  flex-direction: column;
+
+  overflow: ${({ $expanded }) => ($expanded ? 'auto' : 'hidden')} !important;
+
+  ${({ $expanded }) =>
+    !$expanded &&
+    `
+    > * > *:nth-child(2) {
+      display: none;
+    }
+  `}
+`
+
+// todo: custom tooltip for channels
+// todo: virtual list for channels
 export const NavBar = () => {
+  const [expanded, { toggle }] = useDisclosure(false)
   const [followedUsers, , getNextPage] = usePaginated(yt.listFollowedUsers!)
-  return followedUsers
-    .flat()
-    .map(user => (
-      <NavLink
-        key={user.id}
-        component={Link}
-        href={`/c/${user.id}`}
-        leftSection={<ChannelIcon size={28} channel={user} />}
-        label={user.name}
-      />
-    ))
+  return (
+    <NavBarContainer $expanded={expanded}>
+      {/* Ensures that the tooltip delays are synced with each other */}
+      <Tooltip.Group openDelay={500} closeDelay={500}>
+        <NavBarItem
+          as="button"
+          onClick={toggle}
+          style={{ background: 'var(--mantine-color-text)', color: 'black' }}
+          expanded={expanded}
+          tooltip="Expand Sidebar"
+        >
+          {expanded ? <IconLayoutSidebarLeftCollapse size={24} /> : <IconLayoutSidebarLeftExpand size={24} />}
+          <Text size="sm" fw={700}>
+            Collapse Sidebar
+          </Text>
+        </NavBarItem>
+
+        <NavBarItem as={Link} href="/" expanded={expanded} tooltip="Home">
+          <IconHome size={24} />
+          <Text size="sm" fw={700}>
+            Home
+          </Text>
+        </NavBarItem>
+
+        <NavBarItem as={Link} href="/search" expanded={expanded} tooltip="Search">
+          <IconSearch size={24} />
+          <Text size="sm" fw={700}>
+            Search
+          </Text>
+        </NavBarItem>
+
+        <NavBarItem as={Link} href="/history" expanded={expanded} tooltip="History">
+          <IconHistory size={24} />
+          <Text size="sm" fw={700}>
+            History
+          </Text>
+        </NavBarItem>
+
+        <NavBarItem as={Link} href="/following" expanded={expanded} tooltip="Following">
+          <IconHeart size={24} />
+          <Text size="sm" fw={700}>
+            Following
+          </Text>
+        </NavBarItem>
+
+        {followedUsers
+          .flat()
+          .slice(0, 20)
+          .map(user => (
+            <NavBarItemButton as={Link} href={`/c/${user.id}`} key={user.id}>
+              <ChannelIcon size={30} channel={user} />
+              <Text size="sm" fw={700} truncate="end">
+                {user.name}
+              </Text>
+            </NavBarItemButton>
+          ))}
+      </Tooltip.Group>
+    </NavBarContainer>
+  )
 }

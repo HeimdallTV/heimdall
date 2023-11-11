@@ -9,6 +9,7 @@
     "moduleResolution": "bundler",
     "baseUrl": "src",
     "paths": {
+      "lese": ["./components/lese/index.ts"],
       "@/*": ["./*"],
       "@constants": ["./constants/index.ts"],
       "@components/*": ["./components/*"],

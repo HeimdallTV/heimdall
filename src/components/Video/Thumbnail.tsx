@@ -7,22 +7,16 @@ import { formatNumberDuration } from '@libs/format'
 import { when } from '@libs/utils'
 import * as std from '@std'
 import { Badge } from '@mantine/core'
+import Image from 'next/image'
 
 const TRANSITION = 'opacity 250ms ease 250ms'
 
 const ThumbnailContainer = styled(Flex)`
   width: 100%;
+  aspect-ratio: 16 / 9;
   position: relative;
   border-radius: 8px;
   overflow: hidden;
-
-  &::before {
-    display: block;
-    content: '';
-    width: 100%;
-    padding-top: 56.25%;
-    background-color: var(--mantine-color-default);
-  }
 
   > img {
     position: absolute;
@@ -67,14 +61,16 @@ export const Thumbnail: React.FC<ThumbnailProps> = ({ staticThumbnail, animatedT
         onMouseLeave={() => setIsHovered(false)}
       >
         <img src={staticThumbnail[0].url} alt="thumbnail" />
-        <img
-          src={animatedThumbnail?.[0].url}
-          alt="animated thumbnail"
-          style={{
-            opacity: willShowAnimated && isHovered ? 1 : 0,
-            ...(isHovered ? { transition: TRANSITION } : {}),
-          }}
-        />
+        {animatedThumbnail !== undefined && (
+          <img
+            src={animatedThumbnail[0].url}
+            alt="animated thumbnail"
+            style={{
+              opacity: willShowAnimated && isHovered ? 1 : 0,
+              ...(isHovered ? { transition: TRANSITION } : {}),
+            }}
+          />
+        )}
         {children}
       </ThumbnailContainer>
     </ThumbnailContext.Provider>
@@ -100,7 +96,7 @@ export const LengthBadge: React.FC<LengthBadgeProps> = ({ type, length }) => {
   )
 }
 
-export type VideoThumbnailProps = ThumbnailProps & LengthBadgeProps
+export type VideoThumbnailProps = Partial<ThumbnailProps & LengthBadgeProps>
 export const VideoThumbnail: React.FC<ThumbnailProps & LengthBadgeProps> = props => (
   <Thumbnail {...props}>
     <LengthBadge {...props} />

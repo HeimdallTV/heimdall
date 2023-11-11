@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useEffect, useMemo } from 'react'
 import { usePlaybackRate, usePlayerState, useSource, useVolume, useWaiting } from './use'
 import { PlayerInstance, PlayerState } from './usePlayer'
@@ -5,6 +7,12 @@ import { PlayerInstance, PlayerState } from './usePlayer'
 const onInterval = (callback: () => void, intervalMS = 20) => {
   const intervalId = setInterval(callback, intervalMS)
   return () => clearInterval(intervalId)
+}
+
+const useMemoWithCleanup = <T>(callback: () => [T, () => void], deps: any[]): T => {
+  const [value, cleanup] = useMemo(callback, deps)
+  useEffect(() => cleanup, [cleanup])
+  return value
 }
 
 export const useVideoInstance = (playerInstance: PlayerInstance) => {
@@ -133,7 +141,10 @@ export const useVideoInstance = (playerInstance: PlayerInstance) => {
       const bufferedRange = Array.from({ length: video.buffered.length }, (_, i) => ({
         start: video.buffered.start(i) * 1000,
         end: video.buffered.end(i) * 1000,
-      })).find(range => range.start <= video.currentTime && range.end >= video.currentTime)
+      })).find(
+        range =>
+          range.start <= playerInstance.getCurrentTimeMS() && range.end >= playerInstance.getCurrentTimeMS(),
+      )
       if (!bufferedRange) {
         return playerInstance.setBufferedMS(0)
       }

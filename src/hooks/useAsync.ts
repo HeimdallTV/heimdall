@@ -11,6 +11,7 @@ export function useAsync<T>(fn: () => Promise<T>, deps: any[]): UseAsyncResponse
       .then(setData)
       .catch(setError)
       .finally(() => setLoading(false))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps)
   return { data, error, isLoading }
 }

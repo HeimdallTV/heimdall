@@ -36,6 +36,7 @@ export enum BrowseId {
   // Subscribed = 'FEchannels',
   Recommended = 'FEwhat_to_watch',
   History = 'FEhistory',
+  Subscriptions = 'FEsubscriptions',
 }
 
 /** Must be escaped and converted to base64 */

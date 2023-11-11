@@ -1,11 +1,6 @@
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 function throttleAndDebounce(fn: (...args: any[]) => void, delay: number): (...args: any[]) => void {
   let lastCallTime: number | null = null
@@ -83,21 +78,24 @@ export const Slider: React.FC<SliderProps> = ({
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState(0)
   const [dragValue, setDragValue] = useState(value)
-  const throttledOnChange = useMemo(() => throttleAndDebounce(onChange, 100), [])
+  const throttledOnChange = useMemo(() => throttleAndDebounce(onChange, 100), [onChange])
 
   useEffect(() => {
     if (!isDragging) setDragValue(value)
   }, [isDragging, value])
 
-  const calculateDragValue = (e: React.MouseEvent | MouseEvent) => {
-    const trackElem = trackRef.current!
-    const trackRect = trackElem.getBoundingClientRect()
-    const value =
-      orientation === 'horizontal'
-        ? (e.clientX - trackRect.left) / trackRect.width
-        : (trackRect.bottom - e.clientY) / trackRect.height
-    return Math.max(0, Math.min(1, value))
-  }
+  const calculateDragValue = useCallback(
+    (e: React.MouseEvent | MouseEvent) => {
+      const trackElem = trackRef.current!
+      const trackRect = trackElem.getBoundingClientRect()
+      const value =
+        orientation === 'horizontal'
+          ? (e.clientX - trackRect.left) / trackRect.width
+          : (trackRect.bottom - e.clientY) / trackRect.height
+      return Math.max(0, Math.min(1, value))
+    },
+    [trackRef, orientation],
+  )
 
   useEffect(() => {
     if (!isDragging) return
@@ -108,7 +106,7 @@ export const Slider: React.FC<SliderProps> = ({
     }
     document.addEventListener('mousemove', listener)
     return () => document.removeEventListener('mousemove', listener)
-  }, [isDragging, dragStart])
+  }, [isDragging, dragStart, calculateDragValue, throttledOnChange])
 
   useEffect(() => {
     if (!isDragging) return
@@ -118,7 +116,7 @@ export const Slider: React.FC<SliderProps> = ({
     }
     document.addEventListener('mouseup', listener)
     return () => document.removeEventListener('mouseup', listener)
-  }, [dragValue])
+  }, [dragValue, isDragging])
 
   return (
     <SliderContainer

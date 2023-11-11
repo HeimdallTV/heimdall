@@ -27,7 +27,7 @@ export type PlayerResponse = BaseResponse & {
   >
 
   videoQualityPromoSupportedRenderers: Record<string, unknown>
-  captions: PlayerCaptionsTracklist
+  captions?: PlayerCaptionsTracklist
   storyboards: Renderer<'playerStoryboardSpec', { spec: string }>
   heartbeatParams: Record<string, unknown>
   playbackTracking: Record<string, unknown>

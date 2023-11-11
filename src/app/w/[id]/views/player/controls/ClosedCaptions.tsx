@@ -31,8 +31,9 @@ const ClosedCaptionButton = styled(ControlButton)<{ enabled: boolean }>`
 export const ClosedCaption: React.FC = () => {
   const playerContext = useContext(PlayerContext)
   const { closedCaptions, allClosedCaptions, setClosedCaptions } = useClosedCaptions(playerContext!)
-  // TODO Handle no captions available, probably just hide this button?
-  // TODO Allow the user to select the captions rather than choosing the default/first one
+  // todo: Handle no captions available, probably just hide this button?
+  // todo: Allow the user to select the captions rather than choosing the default/first one
+  // probably just a popup when hovering?
   return (
     <ClosedCaptionButton
       // @ts-expect-error styled-components bug
