@@ -15,8 +15,8 @@ dependencies:
     specifier: ^7.3.1
     version: 7.3.1(react@18.2.0)
   '@saghen/hermes':
-    specifier: ^2.0.0-alpha.4
-    version: 2.0.0-alpha.4
+    specifier: ^2.0.0-alpha.5
+    version: 2.0.0-alpha.5
   '@tabler/icons-react':
     specifier: ^2.44.0
     version: 2.44.0(react@18.2.0)
@@ -382,8 +382,8 @@ packages:
     resolution: {integrity: sha512-6i/8UoL0P5y4leBIGzvkZdS85RDMG9y1ihZzmTZQ5LdHUYmZ7pKFoj8X0236s3lusPs1Fa5HTQUpwI+UfTcmeA==}
     dev: true
 
-  /@saghen/hermes@2.0.0-alpha.4:
-    resolution: {integrity: sha512-oFmXoUTtYijcMe60Cm3Y0RXPbGNpWsI3uxkOtUQTT8bjQ8Svt9rMsm5nbfZzS5Bc4pyddpq95F998wS7NAwaNg==}
+  /@saghen/hermes@2.0.0-alpha.5:
+    resolution: {integrity: sha512-ltnRWdL0CPHHrP+fMTcMzyuD3tXHlpDKYr+QdwDcQ0EUf/EXBWdXzb52t+8S4MPgos60RIggmetPxjpkUlSF/g==}
     optionalDependencies:
       '@types/webextension-polyfill': 0.10.7
     dev: false

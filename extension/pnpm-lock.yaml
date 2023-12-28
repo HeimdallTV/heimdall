@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@saghen/hermes':
-    specifier: ^2.0.0-alpha.4
-    version: 2.0.0-alpha.4
+    specifier: ^2.0.0-alpha.5
+    version: 2.0.0-alpha.5
 
 devDependencies:
   '@types/webextension-polyfill':
@@ -232,8 +232,8 @@ packages:
     dev: true
     optional: true
 
-  /@saghen/hermes@2.0.0-alpha.4:
-    resolution: {integrity: sha512-oFmXoUTtYijcMe60Cm3Y0RXPbGNpWsI3uxkOtUQTT8bjQ8Svt9rMsm5nbfZzS5Bc4pyddpq95F998wS7NAwaNg==}
+  /@saghen/hermes@2.0.0-alpha.5:
+    resolution: {integrity: sha512-ltnRWdL0CPHHrP+fMTcMzyuD3tXHlpDKYr+QdwDcQ0EUf/EXBWdXzb52t+8S4MPgos60RIggmetPxjpkUlSF/g==}
     optionalDependencies:
       '@types/webextension-polyfill': 0.10.7
     dev: false
