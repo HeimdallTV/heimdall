@@ -9,12 +9,6 @@ const onInterval = (callback: () => void, intervalMS = 20) => {
   return () => clearInterval(intervalId)
 }
 
-const useMemoWithCleanup = <T>(callback: () => [T, () => void], deps: any[]): T => {
-  const [value, cleanup] = useMemo(callback, deps)
-  useEffect(() => cleanup, [cleanup])
-  return value
-}
-
 export const useVideoInstance = (playerInstance: PlayerInstance) => {
   const video = useMemo(() => {
     const video = document.createElement('video')
