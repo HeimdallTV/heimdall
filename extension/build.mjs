@@ -11,21 +11,23 @@ const buildContext = (outdir) =>
     sourcemap: true,
   })
 
-const buildManifest = (inFile, outFile) =>
-  readFile(inFile, 'utf-8')
-    .then((contents) => JSON.parse(contents))
-    .then((manifest) => ({
-      ...manifest,
-      content_scripts: [
-        {
-          matches: [args.mode === 'release' ? 'https://heimdall.tv/*' : 'http://localhost:3000/*'],
-          js: ['content-script.js'],
-          run_at: 'document_start',
-        },
-      ],
-    }))
-    .then((manifest) => JSON.stringify(manifest, null, 2))
-    .then((contents) => writeFile(outFile, contents))
+async function buildManifest(inFile, outFile) {
+  const inManifest = await readFile(inFile, 'utf-8').then(JSON.parse)
+  const packageJson = await readFile('package.json', 'utf-8').then(JSON.parse)
+  const outManifest = {
+    ...inManifest,
+    name: packageJson.name,
+    version: packageJson.version,
+    content_scripts: [
+      {
+        matches: [args.mode === 'release' ? 'https://heimdall.tv/*' : 'http://localhost:3000/*'],
+        js: ['content-script.js'],
+        run_at: 'document_start',
+      },
+    ],
+  }
+  await writeFile(outFile, JSON.stringify(outManifest, null, 2))
+}
 
 // Build
 const chromeCtx = await buildContext('build/chrome')
