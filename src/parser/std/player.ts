@@ -54,19 +54,40 @@ export const isAudioAndOptionalVideoSource = (
 ): source is Source<SourceType.Audio | SourceType.AudioVideo> =>
   isAudioSource(source) || isAudioVideoSource(source)
 
+export enum ClosedCaptionType {
+  /** Overlapping captions where the cues should be concatenated */
+  Overlapping = 'overlapping',
+  /** Non-overlapping captions where the cues should be displayed in parallel when needed */
+  Default = 'default',
+}
 export type ClosedCaption = {
   /** Whether to use this track as the default for captions */
   isDefault: boolean
   /** The language of the closed captions in the ISO 639-1/2/3 format such as 'en' or 'fr' */
   language: string
-  /** Provider specific implementation for fetching and parsing the track */
-  getTrack: () => Promise<ClosedCaptionTrack>
-}
-
-export type ClosedCaptionTrack = ClosedCaptionTrackCue[]
-
+} & (
+  | {
+      /** The type of closed captions */
+      type: ClosedCaptionType.Default
+      /** Provider specific implementation for fetching and parsing the track */
+      getTrack: () => Promise<ClosedCaptionTrackCue[]>
+    }
+  | {
+      /** The type of closed captions */
+      type: ClosedCaptionType.Overlapping
+      /** Provider specific implementation for fetching and parsing the track */
+      getTrack: () => Promise<ClosedCaptionTrackCueLine[]>
+    }
+)
+export type ClosedCaptionTrack = ClosedCaptionTrackCue[] | ClosedCaptionTrackCueLine[]
 export type ClosedCaptionTrackCue = {
   text: string
   startTimeMS: number
   endTimeMS: number
 }
+export type ClosedCaptionTrackCueLine = {
+  startTimeMS: number
+  endTimeMS: number
+  words: ClosedCaptionTrackCueWord[]
+}
+export type ClosedCaptionTrackCueWord = Omit<ClosedCaptionTrackCue, 'endTimeMS'>

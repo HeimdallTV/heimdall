@@ -1,35 +1,95 @@
+import { Button, ToggleButton } from '../../components/button'
 import { LikeStatus } from '../../components/like-status'
 import { ManyText, SingleText, Text } from '../../components/text'
 import { Thumbnail } from '../../components/thumbnail'
 import { Accessibility } from '../../components/utility/accessibility'
 import { BrowseEndpoint } from '../../components/utility/endpoint'
-import { AllNavigation } from '../../components/utility/navigation'
-import { CommandMetadata, Renderer, Some, SomeOptions } from '../../core/internals'
+import { AllNavigation, Navigation } from '../../components/utility/navigation'
+import {
+  Command,
+  CommandMetadata,
+  Endpoint,
+  Renderer,
+  ServiceEndpoint,
+  Some,
+  SomeOptions,
+} from '../../core/internals'
 import { AuthorCommentBadge, PinnedCommentBadge } from './badge'
+
+type PerformCommentActionCommand = Command<
+  'performCommentAction',
+  { action: string; clientActions: { TODO: true } }
+>
+
+type CommentLikeToggleButton = ToggleButton<
+  Command<'', {}, PerformCommentActionCommand & CommandMetadata>,
+  Command<'', {}, PerformCommentActionCommand & CommandMetadata>
+>
+
+type CreateCommentReply = Command<'createCommentReply', { createReplyParams: string }>
+type CreateCommentReplyDialog = Endpoint<'createCommentReplyDialog', { dialog: CommentReplyDialog }>
+type CommentReplyDialog = Renderer<
+  'commentReplyDialog',
+  {
+    aadcGuidelinesStateEntityKey: string
+    authorThumbnails: Thumbnail
+    cancelButton: Button
+    emojiButton: Button
+    emojiPicker: { TODO: true }
+    errorMessage: Some<Text>
+    placeholderText: Some<Text>
+    replyButton: Button<ServiceEndpoint<'', {}, CreateCommentReply>>
+  }
+>
+
+type CommentActionButtons = Renderer<
+  'commentActionButtons',
+  {
+    dislikeButton: CommentLikeToggleButton
+    likeButton: CommentLikeToggleButton
+    replyButton: Button<Navigation<CreateCommentReplyDialog>>
+    style: string
+    /**
+     * Number in the form of a string that seems to indicate the unix
+     * timestamp of when the parameters for sending like/dislike/reply requests
+     * were created
+     */
+    protoCreationMs: string
+  }
+>
 
 export type Comment = Renderer<
   'comment',
   {
+    /** Unique identifier for the comment */
+    commentId: string
+    /** Comment message */
+    // fixme: not correct because the navigation is optional
+    contentText: CommentContent
+
     actionMenu: any // todo:
-    actionButtons: any // todo:
+    actionButtons: CommentActionButtons // todo:
+
     authorCommentBadge: AuthorCommentBadge
     /** Name of the author */
     authorText: Some<Text>
     authorThumbnail: Thumbnail & Accessibility
     authorEndpoint: BrowseEndpoint & CommandMetadata
     authorIsChannelOwner: boolean
-    /** Comment message */
-    // fixme: not correct because the navigation is optional
-    contentText: CommentContent
-    /** Unique identifier for the comment */
-    commentId: string
+
     /** Thumbnail for the logged in user */
     currentUserReplyThumbnail: Thumbnail
     /** Only defined when the comment is pinned */
     pinnedCommentBadge?: PinnedCommentBadge
     /** Relative time like "15 hours ago" but can include "(edited)" at the end */
     publishedTimeText: Some<Text>
+
     replyCount: number
+    /** Defined when the replyCount > 0 */
+    collapseButton?: Button
+    /** Defined when the replyCount > 0 */
+    expandButton?: Button
+
     isLiked: boolean
     /** Text like "366" indicating the number of likes */
     voteCount: Some<Accessibility<Text>>

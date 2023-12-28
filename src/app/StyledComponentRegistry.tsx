@@ -18,7 +18,6 @@ export default function StyledComponentsRegistry({ children }: { children: React
   })
 
   if (typeof window !== 'undefined') return <>{children}</>
-
   return (
     <StyleSheetManager enableVendorPrefixes sheet={styledComponentsStyleSheet.instance}>
       {children}

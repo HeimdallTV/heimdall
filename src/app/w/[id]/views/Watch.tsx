@@ -1,45 +1,36 @@
 'use client'
 
 import styled from 'styled-components'
+import { useEffect } from 'react'
 
 import { useAsync } from '@/hooks/useAsync'
 import { getPlayer as fetchPlayer, getVideo as fetchVideo } from '@yt/video'
-
 import { Player } from './player/Player'
 import { WatchInfo } from './WatchInfo'
-import { useEffect } from 'react'
+import { PlayerContext } from './player/context'
+import { usePlayerInstance } from './player/hooks/usePlayer'
 
 const VideoContainer = styled('section')`
-  > iframe {
-    width: 100vw;
-    height: min(87vh, calc(100vw / 16 * 9));
-  }
-
   > * + * {
     margin-top: 16px;
   }
 `
 
-const PlayerWrapper: React.FC<{ videoId: string }> = ({ videoId }) => {
-  const { data: player, error } = useAsync(() => fetchPlayer(videoId), [videoId])
-  useEffect(() => {
-    if (error) console.error(error)
-  }, [error])
-
-  return <Player player={player} />
-}
-
 const Watch: React.FC<{ videoId: string }> = ({ videoId }) => {
-  const { data: video, error } = useAsync(() => fetchVideo(videoId), [videoId])
+  const { data: video, error: videoError } = useAsync(() => fetchVideo(videoId), [videoId])
+  const { data: player, error: playerError } = useAsync(() => fetchPlayer(videoId), [videoId])
+  const playerInstance = usePlayerInstance(player)
   useEffect(() => {
-    if (error) console.error(error)
-  }, [error])
-
+    if (videoError) console.error(videoError)
+    if (playerError) console.error(playerError)
+  }, [videoError, playerError])
   return (
-    <VideoContainer>
-      <PlayerWrapper videoId={videoId} />
-      <WatchInfo video={video} />
-    </VideoContainer>
+    <PlayerContext.Provider value={playerInstance}>
+      <VideoContainer>
+        <Player player={player} />
+        <WatchInfo video={video} />
+      </VideoContainer>
+    </PlayerContext.Provider>
   )
 }
 

@@ -6,9 +6,9 @@ import styled from 'styled-components'
 import { PlayerContext } from '../context'
 import { useBufferedMS, useCurrentTimeMS, useDurationMS } from '../hooks/use'
 
-const SeekBarSectionContainer = styled.div<{ widthPercent: number }>`
+const SeekBarSectionContainer = styled.div<{ $widthPercent: number }>`
   position: relative;
-  width: ${_ => _.widthPercent}%;
+  width: ${_ => _.$widthPercent}%;
   background-color: rgba(255, 255, 255, 0.2);
   height: 3px;
   border-radius: 2px;
@@ -32,19 +32,19 @@ const SeekBarSection: React.FC<PropsWithChildren<{ widthPercent: number }>> = ({
   widthPercent,
   children,
 }) => (
-  <SeekBarSectionContainer widthPercent={widthPercent}>
+  <SeekBarSectionContainer $widthPercent={widthPercent}>
     <SeekBarSectionPadding />
     {children}
   </SeekBarSectionContainer>
 )
 
-const SeekBarOverlay = styled.div<{ cssVar: string; color: string }>`
+const SeekBarOverlay = styled.div<{ $cssVar: string; $color: string }>`
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
-  right: calc(100% - var(--${_ => _.cssVar}-override, var(--${_ => _.cssVar})));
-  background-color: ${_ => _.color};
+  right: calc(100% - var(--${_ => _.$cssVar}-override, var(--${_ => _.$cssVar})));
+  background-color: ${_ => _.$color};
 `
 
 const SeekBarThumbStyled = styled.div`
@@ -136,8 +136,8 @@ export const SeekBar: React.FC = () => {
       }}
     >
       <SeekBarSection widthPercent={100}>
-        <SeekBarOverlay cssVar="buffered" color="rgba(255, 255, 255, 0.2)" />
-        <SeekBarOverlay cssVar="current-time" color="var(--mantine-primary-color-filled)" />
+        <SeekBarOverlay $cssVar="buffered" $color="rgba(255, 255, 255, 0.2)" />
+        <SeekBarOverlay $cssVar="current-time" $color="var(--mantine-primary-color-filled)" />
       </SeekBarSection>
       <SeekBarThumb />
     </SeekBarContainer>

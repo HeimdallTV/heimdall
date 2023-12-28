@@ -6,41 +6,23 @@ import {
   transferableResponseToResponse,
 } from '@extension/src/routes/proxy/convert'
 import { createEndpointClient, createSocketClient } from '@saghen/hermes'
-import { createEndpointTransport, createSocketTransport } from '@saghen/hermes/transports/extension'
-import type { Runtime } from 'webextension-polyfill'
+import { createEndpointTransport, createSocketTransport } from '@saghen/hermes/transports/web'
 
-// @ts-expect-error  fixme: add global typing for .chrome and .browser
-const browser = typeof globalThis.browser === 'undefined' ? globalThis.chrome : globalThis.browser
-const isInBrowser = typeof window !== 'undefined'
 const definedInBrowser = <F extends (...args: any[]) => any>(f: F): ReturnType<F> =>
-  isInBrowser ? f() : null
+  globalThis.window !== undefined ? f() : null
 
-const sendMessage: Runtime.Static['sendMessage'] = (
-  extensionId: string | undefined,
-  message: any,
-  options?: Runtime.SendMessageOptionsType,
-) =>
-  new Promise<any>((resolve, reject) =>
-    browser.runtime.sendMessage(extensionId, message, options, (value: any) => {
-      if (value !== undefined) resolve(value)
-      reject(browser.runtime.lastError)
-    }),
-  )
 export const endpoints = definedInBrowser(() =>
-  createEndpointClient<Endpoints>(
-    createEndpointTransport({ sendMessage }, process.env.NEXT_PUBLIC_EXTENSION_ID!),
-  ),
+  createEndpointClient<Endpoints>(createEndpointTransport(location.origin)),
 )
-
 export const sockets = definedInBrowser(() =>
-  createSocketClient<Sockets>(createSocketTransport(browser.runtime, process.env.NEXT_PUBLIC_EXTENSION_ID!)),
+  createSocketClient<Sockets>(createSocketTransport(location.origin)),
 )
 
 // FIXME: Implement abort on the extension side somehow
 export const fetchProxy = (url: string, init: RequestInit = {}) =>
-  requestInitToTransferableRequestInit(init).then(init =>
-    endpoints!.proxy.fetch(url, init).then(transferableResponseToResponse),
-  )
+  requestInitToTransferableRequestInit(init)
+    .then(init => endpoints!.proxy.fetch(url, init))
+    .then(transferableResponseToResponse)
 
 export const matchSWR =
   <Data, A, B, C>(onData: (data: Data) => A, onError: (error: any) => B, onLoading?: () => C) =>

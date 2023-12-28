@@ -7,17 +7,16 @@ import { IconBadgeCc } from '@tabler/icons-react'
 import { PlayerContext } from '../context'
 import { useClosedCaptions } from '../hooks/use'
 import { ControlButton } from '../components/ControlButton'
-import { UnstyledButtonProps } from '@mantine/core'
 
-const ClosedCaptionButton = styled(ControlButton)<{ enabled: boolean }>`
+const ClosedCaptionButton = styled(ControlButton)<{ $enabled: boolean }>`
   position: relative;
 
   &::after {
     content: '';
     position: absolute;
     bottom: 2px;
-    left: ${props => (props.enabled ? '6px' : '50%')};
-    right: ${props => (props.enabled ? '6px' : '50%')};
+    left: ${props => (props.$enabled ? '6px' : '50%')};
+    right: ${props => (props.$enabled ? '6px' : '50%')};
     height: 3px;
     border-radius: 2px;
     background-color: var(--mantine-primary-color-filled);
@@ -37,7 +36,7 @@ export const ClosedCaption: React.FC = () => {
   return (
     <ClosedCaptionButton
       // @ts-expect-error styled-components bug
-      enabled={closedCaptions !== undefined}
+      $enabled={closedCaptions !== undefined}
       onClick={() =>
         setClosedCaptions(
           closedCaptions === undefined

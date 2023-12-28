@@ -3,6 +3,8 @@ import { Navigation } from './utility/navigation'
 import { Text } from './text'
 import { Tracking } from './utility/tracking'
 
+// TODO: remove tracking
+
 export type Shelf<Content extends Renderer> = Renderer<
   'shelf',
   Tracking &
@@ -27,6 +29,13 @@ export type HorizontalList<Item extends Renderer> = Renderer<
   'horizontalList',
   Tracking & {
     items: Item[]
+  }
+>
+
+export type ItemSection<Content extends Renderer> = Renderer<
+  'itemSection',
+  Tracking & {
+    contents: Content[]
   }
 >
 

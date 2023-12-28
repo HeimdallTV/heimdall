@@ -1,7 +1,27 @@
-import { formatDistance } from 'date-fns/esm'
+import formatDistance from 'date-fns/formatDistance'
+import enGB from 'date-fns/locale/en-GB'
+import formatRelative from 'date-fns/formatRelative'
 
 export const formatDateAgo = (date: Date) =>
   formatDistance(date, new Date(), { addSuffix: true }).replace(/^about\s+/, '')
+
+// https://github.com/date-fns/date-fns/issues/1218#issuecomment-599182307
+const formatRelativeLocale = {
+  lastWeek: 'eeee',
+  yesterday: "'Yesterday'",
+  today: "'Today'",
+  tomorrow: "'Tomorrow'",
+  nextWeek: "'Next' eeee",
+  other: 'MMMM do, yyyy',
+}
+/** Returns a date like "Today", "Yesterday", "Last Monday", "Next Friday", "January 1st, 2023" */
+export const formatDayRelative = (date: Date) =>
+  formatRelative(date, new Date(), {
+    locale: {
+      ...enGB,
+      formatRelative: (token: keyof typeof formatRelativeLocale) => formatRelativeLocale[token],
+    },
+  })
 
 export const formatNumberShort = (num: number) => {
   if (num > 1_000_000_000) return (num / 1_000_000_000).toFixed(1) + 'B'

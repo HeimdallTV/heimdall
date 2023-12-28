@@ -1,6 +1,6 @@
 import { Image } from './components/image'
 import { RichText } from './components/rich-text'
-import { Video, Playlist, User, ProviderName } from '.'
+import { Video, Playlist, User, ProviderName, Shelf } from '.'
 
 // TODO: How to handle twitch's panel?
 /**
@@ -15,14 +15,12 @@ export type Channel = {
   shortDescription?: string
   description?: RichText
 
-  viewCount?: number
-  followerCount?: number
-
-  featuredUsers?: User[]
-  featuredPlaylists?: AsyncGenerator<Playlist>
   /** Ex. trailer or hosted channel */
   featuredVideo?: Video
-  featuredVideos?: AsyncGenerator<Video>
+  /** Currently active live stream if applicable */
+  listLiveVideos?: () => Promise<Video[]>
+  /** Ex. Playlists, For You and so on */
+  listShelves?: () => Promise<Shelf[]>
   /** Ex. social media or discord server */
-  featuredLinks?: AsyncGenerator<string>
+  listLinks?: () => Promise<string[]>
 }

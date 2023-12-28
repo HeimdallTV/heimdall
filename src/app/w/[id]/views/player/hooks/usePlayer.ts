@@ -13,7 +13,7 @@ export type CombinedSource =
   | { audio: std.Source<std.SourceType.Audio>; video: std.Source<std.SourceType.Video> }
 
 export type PlayerInstance = {
-  player: std.Player
+  player?: std.Player
 
   getState: () => PlayerState
   setState: (state: PlayerState) => void
@@ -76,7 +76,7 @@ const createValueListener = <Value>(initialValue: Value) => {
   }
 }
 
-export const usePlayerInstance = (player: std.Player): PlayerInstance =>
+export const usePlayerInstance = (player: std.Player | undefined): PlayerInstance =>
   useMemo(() => {
     const { get: getState, set: setState, onChange: onStateChange } = createValueListener(PlayerState.Paused)
     const { set: seek, onChange: onSeek } = createValueListener<number>(0)
@@ -107,8 +107,8 @@ export const usePlayerInstance = (player: std.Player): PlayerInstance =>
       set: setSource,
       onChange: onSourceChange,
     } = createValueListener<CombinedSource>({
-      video: player.sources.find(std.isVideoSource)!,
-      audio: player.sources.find(std.isAudioSource)!,
+      video: player?.sources.find(std.isVideoSource)!,
+      audio: player?.sources.find(std.isAudioSource)!,
     })
     const {
       get: getClosedCaptions,

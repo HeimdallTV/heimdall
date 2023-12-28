@@ -7,12 +7,13 @@ import * as std from '@std'
 import { PlayerContext } from './context'
 import { useClosedCaptions, useCurrentTimeMS } from './hooks/use'
 
-const ClosedCaptionsContainer = styled.div`
+const ClosedCaptionsContainer = styled.div<{ $overlapping: boolean }>`
   background-color: rgba(0, 0, 0, 0.6);
   font-size: 2rem;
-  text-align: center;
+  text-align: ${({ $overlapping }) => ($overlapping ? 'left' : 'center')};
 
-  max-width: 600px;
+  width: ${({ $overlapping }) => ($overlapping ? '100%' : 'auto')};
+  max-width: 632px;
   border-radius: 4px;
 
   position: absolute;
@@ -23,7 +24,8 @@ const ClosedCaptionsContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 8px;
+  padding: 8px 16px;
+  white-space: pre-wrap;
 `
 
 export const ClosedCaptions: React.FC = () => {
@@ -39,9 +41,22 @@ export const ClosedCaptions: React.FC = () => {
     closedCaptions.getTrack().then(setClosedCaptionsTrack).catch(console.error)
   }, [closedCaptions])
 
-  const currentCaption = closedCaptionsTrack?.find(
+  const currentCaptionCues = closedCaptionsTrack?.filter(
     caption => caption.startTimeMS <= currentTimeMS && caption.endTimeMS >= currentTimeMS,
   )
-  if (!currentCaption) return <></>
-  return <ClosedCaptionsContainer>{currentCaption.text}</ClosedCaptionsContainer>
+  if (!currentCaptionCues || currentCaptionCues.length === 0) return <></>
+  return (
+    <ClosedCaptionsContainer $overlapping={closedCaptions?.type === std.ClosedCaptionType.Overlapping}>
+      {currentCaptionCues
+        .map(cue =>
+          'words' in cue
+            ? cue.words
+                .filter(word => word.startTimeMS <= currentTimeMS)
+                .map(cue => cue.text)
+                .join('')
+            : cue.text,
+        )
+        .join('\n')}
+    </ClosedCaptionsContainer>
+  )
 }

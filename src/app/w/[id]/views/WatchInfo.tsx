@@ -1,11 +1,13 @@
 import { Grid, Column, Row } from 'lese'
-import { Button, Skeleton, Text } from '@mantine/core'
+import { Button, Skeleton, Text, Tooltip } from '@mantine/core'
 import { ChannelIcon, ChannelName } from '@/components/Channel/Link'
 import { toShortHumanReadable } from '@/parser/yt/core/helpers'
 import {
+  IconCheck,
+  IconClipboard,
+  IconClock,
   IconHeart,
   IconHeartFilled,
-  IconSend,
   IconThumbDown,
   IconThumbDownFilled,
   IconThumbUp,
@@ -16,6 +18,10 @@ import { Video } from '@/parser/std'
 import { RelatedVideos } from './RelatedVideos'
 import * as std from '@/parser/std'
 import styled from 'styled-components'
+import { Comments } from './Comments'
+import { useContext, useState } from 'react'
+import { PlayerContext } from './player/context'
+import yt from '@yt'
 
 const WatchGrid = styled(Grid)`
   max-width: 1280px;
@@ -57,24 +63,33 @@ const VideoAuthor: React.FC<{ author?: std.User }> = ({ author }) => {
     <Row separation="16px 32px" yAlign>
       <ChannelIcon size={40} channel={author} />
       <ChannelInfo author={author} />
-      <FollowButton followed={author?.followed} />
+      <FollowButton
+        followed={author.followed}
+        setFollowed={() => {
+          throw Error('not implemented')
+        }}
+      />
     </Row>
   )
 }
 
 const VideoInteractions: React.FC<{ video?: Video }> = ({ video }) => {
-  if (!video) return <Skeleton width="400px" height="36px" />
+  if (!video) return <Skeleton width="250px" height="36px" />
   return (
     <Row separation="8px" yAlign>
-      <LikeButtons {...video} />
-      <ShareButton />
-      <OverflowButton />
+      <LikeButtons
+        videoId={video.id}
+        likeCount={video.likeCount}
+        dislikeCount={video.dislikeCount}
+        likeStatus={video.likeStatus}
+      />
+      <CopyLinkButton videoId={video.id} provider={video.provider} />
     </Row>
   )
 }
 
 export const VideoInfo: React.FC<{ video?: Video }> = ({ video }) => (
-  <Column separation="12px 24px">
+  <Column separation="12px 24px 24px">
     <VideoTitle title={video?.title} />
     <Row xAlign="space-between" yAlign>
       {(!video || video.author) && <VideoAuthor author={video?.author} />}
@@ -85,6 +100,7 @@ export const VideoInfo: React.FC<{ video?: Video }> = ({ video }) => (
       viewCount={video?.viewCount!}
       publishDate={video?.publishDate!}
     />
+    <Comments videoId={video?.id!} />
   </Column>
 )
 
@@ -125,37 +141,75 @@ export const FollowButton: React.FC<{
 }
 
 export const LikeButtons: React.FC<{
+  videoId: string
   likeStatus?: std.LikeStatus
   likeCount?: number
   dislikeCount?: number
-}> = ({ likeStatus, likeCount, dislikeCount }) => {
+}> = ({ videoId, likeStatus: initialLikeStatus, likeCount, dislikeCount }) => {
+  const [likeStatus, setLikeStatus] = useState(initialLikeStatus)
+  const LikeIcon = likeStatus === std.LikeStatus.Like ? IconThumbUpFilled : IconThumbUp
+  const DislikeIcon = likeStatus === std.LikeStatus.Dislike ? IconThumbDownFilled : IconThumbDown
+  // todo: handle provider not supporing like counts
   return (
     <Button.Group>
-      <Button variant="default">
-        {likeStatus === std.LikeStatus.Like ? (
-          <IconThumbUpFilled fontSize="large" />
-        ) : (
-          <IconThumbUp fontSize="large" />
-        )}
-        <Text ml="6px">{toShortHumanReadable(likeCount ?? 0)}</Text>
+      <Button
+        variant="default"
+        leftSection={<LikeIcon fontSize="large" />}
+        onClick={async () => {
+          const desiredLikeStatus =
+            likeStatus === std.LikeStatus.Like ? std.LikeStatus.Indifferent : std.LikeStatus.Like
+          // todo: send notification on error
+          await yt.setVideoLikeStatus!(
+            videoId,
+            likeStatus ?? std.LikeStatus.Indifferent,
+            desiredLikeStatus,
+          ).catch(console.error)
+          setLikeStatus(desiredLikeStatus)
+        }}
+      >
+        {toShortHumanReadable(likeCount ?? 0)}
       </Button>
-      <Button variant="default">
-        {likeStatus === std.LikeStatus.Dislike ? (
-          <IconThumbDownFilled fontSize="large" />
-        ) : (
-          <IconThumbDown fontSize="large" />
-        )}
-        <Text ml="6px">{toShortHumanReadable(dislikeCount ?? 0)}</Text>
+      <Button variant="default" leftSection={<DislikeIcon fontSize="large" />}>
+        {toShortHumanReadable(dislikeCount ?? 0)}
       </Button>
     </Button.Group>
   )
 }
 
-export const ShareButton = () => (
-  <Button variant="default">
-    <IconSend fontSize="large" />
-    <Text ml="6px">Share</Text>
-  </Button>
-)
-
-export const OverflowButton = () => <Button variant="default">...</Button>
+export const CopyLinkButton: FC<{ provider: std.ProviderName; videoId: string }> = ({
+  provider,
+  videoId,
+}) => {
+  const playerInstance = useContext(PlayerContext)!
+  const [copied, setCopied] = useState(false)
+  const [copiedAt, setCopiedAt] = useState<boolean>(false)
+  return (
+    <Button.Group>
+      <Button
+        variant="default"
+        leftSection={copied ? <IconCheck fontSize="large" /> : <IconClipboard fontSize="large" />}
+        onClick={() => {
+          // TODO: use provider
+          navigator.clipboard.writeText(`https://youtube.com/watch?v=${videoId}`)
+          setCopied(true)
+        }}
+      >
+        {copied ? 'Copied!' : 'Copy Link'}
+      </Button>
+      <Tooltip label="Copy link at current time" openDelay={500}>
+        <Button
+          variant="default"
+          onClick={() => {
+            // TODO: use provider
+            const currentTimeSeconds = Math.floor(playerInstance.getCurrentTimeMS() / 1000)
+            navigator.clipboard.writeText(`https://youtube.com/watch?v=${videoId}&t=${currentTimeSeconds}`)
+            setCopiedAt(true)
+          }}
+        >
+          {copiedAt && <IconCheck fontSize="large" />}
+          {!copiedAt && <IconClock fontSize="large" />}
+        </Button>
+      </Tooltip>
+    </Button.Group>
+  )
+}

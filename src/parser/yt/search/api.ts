@@ -6,7 +6,6 @@ import { SearchResponse, SearchResponseContinuation, SearchSuggestions } from '.
 export const fetchSearch = (query: string): Promise<SearchResponse> => fetchYt(Endpoint.Search, { query })
 export const fetchSearchContinuation = fetchEndpointContinuation(Endpoint.Search)<SearchResponseContinuation>
 
-// TODO: Make much cleaner
 export const fetchSearchIterator = (query: string) =>
   makeContinuationIterator(
     () =>

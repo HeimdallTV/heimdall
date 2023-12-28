@@ -1,4 +1,4 @@
-import { endpoints } from '@libs/extension';
+import { endpoints } from '@libs/extension'
 
 export const fetchSAPISID = () =>
   endpoints?.cookies
@@ -7,6 +7,7 @@ export const fetchSAPISID = () =>
       name: 'SAPISID',
     })
     .then(cookie => {
+      console.log(cookie)
       if (!cookie) throw Error('No SAPISID cookie found')
       return hashSAPISID(cookie.value)
     })

@@ -7,7 +7,7 @@ const GridContainer = styled.div`
   display: grid;
   grid-template-rows: 48px 1fr;
   grid-gap: 8px;
-  align-items: center;
+  align-items: start;
   padding: 24px;
   padding-top: 0;
 `
@@ -27,11 +27,11 @@ export const VideoGrid: FC<{
   as: React.ElementType
   header: React.ReactElement | string
   videos: (std.Video | std.Shelf)[]
-  getNext: () => void
+  getNext?: () => void
 }> = ({ as, header, videos, getNext }) => (
   <GridContainer as={as}>
     {typeof header === 'string' ? (
-      <Text size="xl" fw={700}>
+      <Text size="xl" fw={700} style={{ alignSelf: 'center' }}>
         {header}
       </Text>
     ) : (

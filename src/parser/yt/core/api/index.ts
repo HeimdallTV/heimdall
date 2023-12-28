@@ -2,6 +2,7 @@ import { fetchProxy } from '@libs/extension'
 import { fetchSAPISID } from './sapisid'
 import { fetchAPIKey } from './api-key'
 import { setDeclarativeNetRequestHeaderRule } from './declarative-net-request'
+import { memoizeAsync } from '@/libs/cache'
 export * from './continuation'
 
 export enum Endpoint {
@@ -24,11 +25,17 @@ export enum Endpoint {
   /** Used for subscribing to a channel. ~500ms */
   Subscribe = 'subscribe',
   /** Used for liking a video. ~300ms */
-  Like = 'like',
+  Like = 'like/like',
   /** Used for disliking a video. ~300ms */
-  Dislike = 'dislike',
+  Dislike = 'like/dislike',
   /** Used for removing like or dislike from a video. ~300ms */
-  RemoveLike = 'removelike',
+  RemoveLike = 'like/removelike',
+  /** Used for commenting on a video. ~600ms */
+  CreateComment = 'create_comment',
+  /** Used for replying to a comment. ~600ms */
+  CreateCommentReply = 'create_comment_reply',
+  /** Used for liking/disliking a comment and likely others. ~400ms */
+  PerformCommentAction = 'perform_comment_action',
 }
 
 export enum BrowseId {
@@ -39,7 +46,10 @@ export enum BrowseId {
   Subscriptions = 'FEsubscriptions',
 }
 
-/** Must be escaped and converted to base64 */
+/**
+ * Must be escaped and converted to base64
+ * The data sent to youtube is a protobuf message. The first byte is the type and the second byte is the field number.
+ */
 export enum BrowseParams {
   ChannelHome = '\x12\bfeatured',
   ChannelVideos = '\x12\x06videos',
@@ -47,27 +57,32 @@ export enum BrowseParams {
   ChannelCommunity = '\x12\tcommunity',
   ChannelChannels = '\x12\bchannels',
   ChannelAbout = '\x12\x05about',
+  ChannelLive = '\x12\x04live',
 }
 
-export const fetchYt = async <T = any>(endpoint: Endpoint, body: Record<string, any>): Promise<T> => {
-  await setDeclarativeNetRequestHeaderRule()
-  const [sapisid, apiKey] = await Promise.all([fetchSAPISID(), fetchAPIKey()])
-  const res = await fetchProxy(`https://www.youtube.com/youtubei/v1/${endpoint}?key=${apiKey}`, {
-    headers: {
-      authorization: `SAPISIDHASH ${sapisid}`,
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      context: getContext(),
-      ...body,
-    }),
-    method: 'POST',
-    credentials: 'include',
-  })
-  if (res.ok) return res.json()
-  const errorText = await res.text()
-  throw Error(`YT ${endpoint} request failed with status code ${res.status}:\n${errorText}`)
-}
+export const fetchYt = memoizeAsync(
+  async <T = any>(endpoint: Endpoint, body: Record<string, any>): Promise<T> => {
+    console.log('fetchYt', endpoint, body)
+    await setDeclarativeNetRequestHeaderRule()
+    const [sapisid, apiKey] = await Promise.all([fetchSAPISID(), fetchAPIKey()])
+    const res = await fetchProxy(`https://www.youtube.com/youtubei/v1/${endpoint}?key=${apiKey}`, {
+      headers: {
+        authorization: `SAPISIDHASH ${sapisid}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        context: getContext(),
+        ...body,
+      }),
+      method: 'POST',
+      credentials: 'include',
+    })
+    if (res.ok) return res.json()
+    const errorText = await res.text()
+    throw Error(`YT ${endpoint} request failed with status code ${res.status}:\n${errorText}`)
+  },
+  { argsToKey: (endpoint, body) => `${endpoint}|${JSON.stringify(body)}` },
+)
 
 const getContext = () =>
   Object.freeze({
@@ -75,6 +90,7 @@ const getContext = () =>
       clientName: 'WEB',
       // TODO: Fetch from youtube page? Or manually update
       clientVersion: '2.20231016.04.01',
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
   })
 

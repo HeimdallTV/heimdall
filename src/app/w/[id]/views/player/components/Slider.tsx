@@ -31,6 +31,41 @@ function throttleAndDebounce(fn: (...args: any[]) => void, delay: number): (...a
 }
 
 type SliderProps = {
+  $barColor: string
+  $handleColor: string
+  $orientation: 'horizontal' | 'vertical'
+  $length: string
+  /** Number between 0 and 1 */
+  $value: number
+}
+
+const SliderTrack = styled.div<Pick<SliderProps, '$barColor' | '$orientation' | '$length'>>`
+  position: relative;
+  width: ${({ $orientation, $length }) => ($orientation === 'horizontal' ? $length : '4px')};
+  height: ${({ $orientation, $length }) => ($orientation === 'horizontal' ? '4px' : $length)};
+  background-color: ${({ $barColor }) => $barColor};
+  border-radius: 2px;
+`
+
+const SliderHandle = styled.div<Pick<SliderProps, '$handleColor' | '$orientation' | '$value'>>`
+  position: absolute;
+  bottom: ${({ $orientation, $value }) => ($orientation === 'horizontal' ? '50%' : `${$value * 100}%`)};
+  left: ${({ $orientation, $value }) => ($orientation === 'horizontal' ? `${$value * 100}%` : '50%')};
+  transform: translate(-50%, 50%);
+
+  width: 16px;
+  height: 16px;
+  background-color: ${({ $handleColor }) => $handleColor};
+  border-radius: 50%;
+`
+
+const SliderContainer = styled.div<Pick<SliderProps, '$orientation'>>`
+  position: relative;
+  padding: 16px;
+  cursor: pointer;
+`
+
+export const Slider: React.FC<{
   barColor: string
   handleColor: string
   orientation: 'horizontal' | 'vertical'
@@ -38,42 +73,7 @@ type SliderProps = {
   /** Number between 0 and 1 */
   value: number
   onChange: (value: number) => void
-}
-
-const SliderTrack = styled.div<Pick<SliderProps, 'barColor' | 'orientation' | 'length'>>`
-  position: relative;
-  width: ${({ orientation, length }) => (orientation === 'horizontal' ? length : '4px')};
-  height: ${({ orientation, length }) => (orientation === 'horizontal' ? '4px' : length)};
-  background-color: ${({ barColor }) => barColor};
-  border-radius: 2px;
-`
-
-const SliderHandle = styled.div<Pick<SliderProps, 'handleColor' | 'orientation' | 'value'>>`
-  position: absolute;
-  bottom: ${({ orientation, value }) => (orientation === 'horizontal' ? '50%' : `${value * 100}%`)};
-  left: ${({ orientation, value }) => (orientation === 'horizontal' ? `${value * 100}%` : '50%')};
-  transform: translate(-50%, 50%);
-
-  width: 16px;
-  height: 16px;
-  background-color: ${({ handleColor }) => handleColor};
-  border-radius: 50%;
-`
-
-const SliderContainer = styled.div<Pick<SliderProps, 'orientation'>>`
-  position: relative;
-  padding: 16px;
-  cursor: pointer;
-`
-
-export const Slider: React.FC<SliderProps> = ({
-  barColor,
-  handleColor,
-  orientation,
-  length,
-  value,
-  onChange,
-}) => {
+}> = ({ barColor, handleColor, orientation, length, value, onChange }) => {
   const trackRef = useRef<HTMLDivElement>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState(0)
@@ -113,23 +113,25 @@ export const Slider: React.FC<SliderProps> = ({
     const listener = (e: MouseEvent) => {
       e.preventDefault()
       setIsDragging(false)
+      throttledOnChange(calculateDragValue(e))
     }
     document.addEventListener('mouseup', listener)
     return () => document.removeEventListener('mouseup', listener)
-  }, [dragValue, isDragging])
+  }, [dragValue, isDragging, calculateDragValue, throttledOnChange])
 
   return (
     <SliderContainer
       className="slider"
-      orientation={orientation}
+      $orientation={orientation}
       onMouseDown={e => {
         setIsDragging(true)
         setDragStart(orientation === 'horizontal' ? e.clientX : e.clientY)
         setDragValue(calculateDragValue(e))
+        throttledOnChange(calculateDragValue(e))
       }}
     >
-      <SliderTrack ref={trackRef} barColor={barColor} orientation={orientation} length={length}>
-        <SliderHandle handleColor={handleColor} orientation={orientation} value={dragValue} />
+      <SliderTrack ref={trackRef} $barColor={barColor} $orientation={orientation} $length={length}>
+        <SliderHandle $handleColor={handleColor} $orientation={orientation} $value={dragValue} />
       </SliderTrack>
     </SliderContainer>
   )

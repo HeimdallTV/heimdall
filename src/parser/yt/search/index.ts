@@ -10,7 +10,7 @@ const processSearchItem = (item: SearchItem) =>
   'videoRenderer' in item ? processVideo(item) : processChannel(item)
 
 // TODO: Refactor
-export const getSearch = <
+export const listSearch = <
   Type extends std.ResourceType.Channel | std.ResourceType.Playlist | std.ResourceType.Video,
 >(
   resourceTypes: Type[],
@@ -39,5 +39,5 @@ export const getSearch = <
     }
   }
 
-export const getSearchSuggestions = (_: std.ResourceType[]) => (query: string) =>
+export const listSearchSuggestions = (_: std.ResourceType[]) => (query: string) =>
   fetchSearchSuggestions(query).then(res => res[1].map(suggestion => suggestion[0]))

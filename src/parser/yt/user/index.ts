@@ -1,6 +1,5 @@
 import { getChannel } from '@yt/channel'
 import { findRenderer, isRenderer } from '@yt/core/internals'
-import { pipe } from 'fp-ts/lib/function'
 import {
   fetchGuide,
   fetchHistory,
@@ -13,8 +12,9 @@ import {
 import { processChannelGuideEntry } from './processors'
 import { processVideo } from '../video/processors/regular'
 import { makeContinuationIterator } from '../core/api'
-import { addDays, parse, subDays } from 'date-fns'
+import { parse, subDays } from 'date-fns'
 import { combineSomeText } from '../components/text'
+import { getAppendContinuationItemsResponseItems } from '../components/continuation'
 
 export const getUser = (userId: string) => getChannel(userId).then(channel => channel.user)
 
@@ -30,13 +30,12 @@ const historyHeaderToDate = (header: string) => {
   const dayOfTheWeek = daysOfTheWeek.indexOf(header)
   if (dayOfTheWeek !== -1) {
     const day = today.getDay()
-    const diff = day - dayOfTheWeek
-    return addDays(today, diff)
+    if (day < dayOfTheWeek) return subDays(today, 7 - dayOfTheWeek + day)
+    return subDays(today, day - dayOfTheWeek)
   }
-
-  return parse('MMM d', header, new Date())
+  return parse(header, 'MMM d', new Date())
 }
-export const getHistory = async function* () {
+export const listHistory = async function* () {
   const historyIterator = makeContinuationIterator(
     () =>
       fetchHistory().then(
@@ -44,17 +43,14 @@ export const getHistory = async function* () {
           response.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer
             .contents,
       ),
-    token =>
-      fetchHistoryContinuation(token).then(
-        response => response.onResponseReceivedActions[0].appendContinuationItemsAction.continuationItems,
-      ),
+    token => fetchHistoryContinuation(token).then(getAppendContinuationItemsResponseItems),
   )
   for await (const section of historyIterator) {
-    section
+    yield section
       .map(section => section.itemSectionRenderer)
       .map(({ header, contents }) => ({
         date: historyHeaderToDate(combineSomeText(header.itemSectionHeaderRenderer.title)),
-        videos: contents.map(processVideo),
+        videos: contents.filter(isRenderer('video')).map(processVideo),
       }))
   }
 }
@@ -62,17 +58,10 @@ export const getHistory = async function* () {
 export const listFollowedUsers = async function* () {
   const guideResponse = await fetchGuide()
 
-  const subscriptionSectionItems = pipe(
-    guideResponse.items,
-    findRenderer('guideSubscriptionsSection'),
-    _ => _?.items ?? [],
-  )
+  const subscriptionSectionItems = findRenderer('guideSubscriptionsSection')(guideResponse.items)?.items ?? []
   const nonCollapsedItems = subscriptionSectionItems.filter(isRenderer('guideEntry'))
-  const collapsedItems = pipe(
-    subscriptionSectionItems,
-    findRenderer('guideCollapsibleEntry'),
-    _ => _?.expandableItems.filter(isRenderer('guideEntry')) ?? [],
-  )
+  const guideCollapsibleSection = findRenderer('guideCollapsibleEntry')(subscriptionSectionItems)
+  const collapsedItems = guideCollapsibleSection?.expandableItems.filter(isRenderer('guideEntry')) ?? []
 
   yield [...nonCollapsedItems, ...collapsedItems]
     // fixme: update types to include the buttons at the bottom of the guideCollapsibleEntry which are just buttons
@@ -95,10 +84,7 @@ export const listFollowedUsersVideos = async function* () {
           response.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.richGridRenderer
             .contents,
       ),
-    token =>
-      fetchSubscriptionsContinuation(token).then(
-        response => response.onResponseReceivedActions[0].appendContinuationItemsAction.continuationItems,
-      ),
+    token => fetchSubscriptionsContinuation(token).then(getAppendContinuationItemsResponseItems),
   )
   for await (const videos of subscriptionsIterator) {
     yield videos

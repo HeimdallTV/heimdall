@@ -5,10 +5,13 @@
  * We must take the parameter and decode it using other functions found in the base.js
  * Failure to do this results in a 403
  **/
-import { memoizeAsync } from '@/libs/cache'
+import { createStorageProvider, memoizeAsync } from '@/libs/cache'
 import { fetchBaseJS } from './shared'
 
-export const getSigTimestamp = () => fetchBaseJS().then(js => js.match(/signatureTimestamp:(\d+)/)![1])
+export const getSigTimestamp = memoizeAsync(
+  () => fetchBaseJS().then(js => js.match(/signatureTimestamp:(\d+)/)![1]),
+  { provider: createStorageProvider('YT_SIG_TIMESTAMP'), timeout: 1000 * 60 * 60 * 24 },
+)
 
 export const getSigFunction = memoizeAsync(async () => {
   const baseJS = await fetchBaseJS()

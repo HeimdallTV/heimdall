@@ -7,7 +7,6 @@ import { formatNumberDuration } from '@libs/format'
 import { when } from '@libs/utils'
 import * as std from '@std'
 import { Badge } from '@mantine/core'
-import Image from 'next/image'
 
 const TRANSITION = 'opacity 250ms ease 250ms'
 
@@ -84,15 +83,11 @@ export const LengthBadge: React.FC<LengthBadgeProps> = ({ type, length }) => {
     opacity: willShowAnimated && isHovered ? 0 : 1,
     transition: when(isHovered)(TRANSITION),
   }
-  const shouldShow = type === std.VideoType.Static && length !== undefined
+  if (type !== std.VideoType.Static || length === undefined) return
   return (
-    <>
-      {shouldShow && (
-        <AbsoluteBadge color="dark" styles={{ root: styles }}>
-          {formatNumberDuration(length)}
-        </AbsoluteBadge>
-      )}
-    </>
+    <AbsoluteBadge color="dark" styles={{ root: styles }}>
+      {formatNumberDuration(length)}
+    </AbsoluteBadge>
   )
 }
 

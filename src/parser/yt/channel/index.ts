@@ -3,7 +3,7 @@ import { getAppendContinuationItemsResponseItems } from '@yt/components/continua
 import { makeContinuationIterator } from '@yt/core/api'
 import { unwrapRenderer } from '@yt/core/internals'
 
-import { fetchChannel, fetchChannelVideos, fetchChannelVideosContinuation } from './api'
+import { fetchChannelHome, fetchChannelVideos, fetchChannelVideosContinuation } from './api'
 import { isTab } from './helpers'
 import { processChannelPage } from './processors/channel-page'
 import { ChannelTabName } from './types'
@@ -11,7 +11,7 @@ import { ChannelTabName } from './types'
 export type { Channel, FullChannel } from './types'
 
 export const getChannel = (channelId: string): Promise<std.Channel> =>
-  fetchChannel(channelId).then(processChannelPage(channelId))
+  fetchChannelHome(channelId).then(processChannelPage(channelId))
 
 export async function* listChannelVideos(channelId: string): AsyncGenerator<std.Video[]> {
   return makeContinuationIterator(

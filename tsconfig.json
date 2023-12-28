@@ -32,6 +32,6 @@
     "isolatedModules": true,
     "plugins": [{ "name": "next" }, { "name": "@styled/typescript-styled-plugin" }]
   },
-  "include": ["next-env.d.ts", "src", "extension", "global.d.ts", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "src", "extension/src", "global.d.ts", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

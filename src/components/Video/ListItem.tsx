@@ -6,7 +6,7 @@ import * as std from '@std'
 import { ChannelIconWithName, CompactChannelLink } from '../Channel/Link'
 import { VideoSubLine } from './Shared'
 import { VideoThumbnail } from './Thumbnail'
-import { Stack, Text } from '@mantine/core'
+import { Text } from '@mantine/core'
 
 export const VideoListItem: React.FC<{
   video: std.Video
@@ -17,13 +17,13 @@ export const VideoListItem: React.FC<{
       <Grid columns="calc(220px * 16 / 9) 1fr" gap="12px">
         <VideoThumbnail {...video} />
 
-        <Stack gap="12px">
+        <Column separation="12px">
           <Text lineClamp={2}>{video.title}</Text>
           <VideoSubLine video={video} short />
 
           {video.author && <ChannelIconWithName size={24} channel={video.author} />}
           <Text c="dimmed">{video.shortDescription}</Text>
-        </Stack>
+        </Column>
       </Grid>
     </Link>
   )

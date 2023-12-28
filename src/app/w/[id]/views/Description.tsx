@@ -1,13 +1,12 @@
 import styled from 'styled-components'
 import { Column } from 'lese'
-import { RichText, RichTextChunk, RichTextChunkType } from '@/parser/std'
+import * as std from '@/parser/std'
 import { useEffect, useRef, useState } from 'react'
 import { formatDateAgo, formatNumberShort } from '@/libs/format'
-import Link from 'next/link'
-import { Anchor, Skeleton, Text, UnstyledButton } from '@mantine/core'
-import { not } from 'rambda'
+import { Skeleton, Text, UnstyledButton } from '@mantine/core'
+import { RichTextChunk } from '@/components/RichText'
 
-const DescriptionContainer = styled(Column)<{ isExpanded: boolean }>`
+const DescriptionContainer = styled(Column)<{ $canExpanded: boolean }>`
   justify-content: flex-start;
   padding: 12px;
   border-radius: 12px;
@@ -17,7 +16,7 @@ const DescriptionContainer = styled(Column)<{ isExpanded: boolean }>`
     margin-top: 8px;
   }
 
-  ${({ isExpanded }) =>
+  ${({ $canExpanded: isExpanded }) =>
     !isExpanded &&
     `
   &:hover {
@@ -27,7 +26,7 @@ const DescriptionContainer = styled(Column)<{ isExpanded: boolean }>`
 `
 
 export const Description: React.FC<{
-  description?: RichText
+  description?: std.RichText
   viewCount?: number
   publishDate?: Date
 }> = ({ viewCount, publishDate, description }) => {
@@ -40,11 +39,17 @@ export const Description: React.FC<{
     if (descriptionText) {
       setRequiresExpansion(descriptionText.scrollHeight > descriptionText.clientHeight)
     }
-  }, [])
+    // todo: why is this necessary?
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [descriptionRef.current])
 
   // TODO Get a better key for the description list rendering
   return (
-    <DescriptionContainer ref={descriptionRef} isExpanded={isExpanded} onClick={() => setIsExpanded(true)}>
+    <DescriptionContainer
+      ref={descriptionRef}
+      $canExpanded={isExpanded || !requiresExpansion}
+      onClick={() => setIsExpanded(true)}
+    >
       <DescriptionHeader viewCount={viewCount} publishDate={publishDate} />
       <DescriptionChunks chunks={description} isExpanded={isExpanded} />
       <ShowMoreLessButton
@@ -79,7 +84,7 @@ const ShowMoreLessButton: React.FC<{
       fw={500}
       onClick={e => {
         e.stopPropagation()
-        setIsExpanded(not)
+        setIsExpanded(expanded => !expanded)
       }}
     >
       {isExpanded ? 'Show Less' : 'Show More'}
@@ -87,7 +92,7 @@ const ShowMoreLessButton: React.FC<{
   )
 }
 
-const DescriptionChunks: React.FC<{ chunks?: RichTextChunk[]; isExpanded: boolean }> = ({
+const DescriptionChunks: React.FC<{ chunks?: std.RichTextChunk[]; isExpanded: boolean }> = ({
   chunks,
   isExpanded,
 }) => {
@@ -103,34 +108,8 @@ const DescriptionChunks: React.FC<{ chunks?: RichTextChunk[]; isExpanded: boolea
   return (
     <Text lineClamp={isExpanded ? Infinity : 3}>
       {chunks.map((chunk, i) => (
-        <DescriptionChunk key={i} chunk={chunk} />
+        <RichTextChunk key={i} chunk={chunk} />
       ))}
-    </Text>
-  )
-}
-
-const DescriptionChunk: React.FC<{ chunk: RichTextChunk }> = ({ chunk }) => {
-  if (chunk.type !== RichTextChunkType.Text) return
-  if (chunk.href !== undefined) {
-    // todo: instead of stopping propagation here, we should instead check the target in the top
-    // level listener
-    return (
-      <Anchor component={Link} href={chunk.href} target="_blank" onClick={e => e.stopPropagation()}>
-        {chunk.content}
-      </Anchor>
-    )
-  }
-  return (
-    <Text
-      component="span"
-      style={{
-        display: 'inline',
-        wordWrap: 'break-word',
-        whiteSpace: 'pre-wrap',
-        wordBreak: 'break-word',
-      }}
-    >
-      {chunk.content}
     </Text>
   )
 }

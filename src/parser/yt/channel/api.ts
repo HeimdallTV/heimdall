@@ -8,10 +8,11 @@ import { Navigation } from '../components/utility/navigation'
 import { BrowseEndpoint } from '../components/utility/endpoint'
 import { BaseResponse, BrowseParams, Endpoint, fetchYt, fetchEndpointContinuation } from '../core/api'
 import { Renderer, Some } from '../core/internals'
-import { FullChannel, ChannelTabName } from './types'
+import { FullChannel, ChannelTabName, ChannelTab, ChannelTabByName } from './types'
+import { Tab } from '../components/tab'
 
 // Channel
-export const fetchChannel = (channelId: string): Promise<ChannelResponse<ChannelTabName.Home>> =>
+export const fetchChannelHome = (channelId: string): Promise<ChannelResponse<ChannelTabName.Home>> =>
   fetchYt(Endpoint.Browse, { browseId: channelId, params: BrowseParams.ChannelHome })
 
 export const fetchChannelVideos = (
@@ -33,10 +34,25 @@ export const fetchChannelPlaylists = (
   channelId: string,
 ): Promise<ChannelResponse<ChannelTabName.Playlists>> =>
   fetchYt(Endpoint.Browse, { browseId: channelId, params: BrowseParams.ChannelPlaylists })
+
+export const fetchChannelLive = (channelId: string): Promise<ChannelResponse<ChannelTabName.Live>> =>
+  fetchYt(Endpoint.Browse, { browseId: channelId, params: BrowseParams.ChannelLive })
+
 export const fetchChannelChannels = (channelId: string): Promise<ChannelResponse<ChannelTabName.Channels>> =>
   fetchYt(Endpoint.Browse, { browseId: channelId, params: BrowseParams.ChannelChannels })
+
 export const fetchChannelAbout = (channelId: string): Promise<ChannelResponse<ChannelTabName.About>> =>
   fetchYt(Endpoint.Browse, { browseId: channelId, params: BrowseParams.ChannelAbout })
+
+export const getSelectedChannelTab = <SelectedTab extends ChannelTabName>(
+  channelResponse: ChannelResponse<SelectedTab>,
+): ChannelTabByName<SelectedTab> =>
+  channelResponse.contents.twoColumnBrowseResultsRenderer.tabs.find(
+    tab => 'tabRenderer' in tab && tab.tabRenderer.selected === true,
+  )! as unknown as ChannelTabByName<SelectedTab>
+
+export const getTabContent = <Content extends Renderer>(tab: Tab<string, Content, true>): Content =>
+  tab.tabRenderer.content
 
 export type ChannelResponse<SelectedTab extends ChannelTabName> = BaseResponse & {
   contents: FullChannel<SelectedTab>

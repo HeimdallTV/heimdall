@@ -16,7 +16,7 @@ import {
 import styled from 'styled-components'
 import { useDisclosure } from '@mantine/hooks'
 
-const NavBarItemButton = styled.button`
+const NavBarItemButton = styled.button<{ href?: string }>`
   display: grid;
   align-items: center;
 

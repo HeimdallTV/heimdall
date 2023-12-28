@@ -1,8 +1,14 @@
 import { ContinuationItem } from '@yt/components/continuation'
 import { MetadataBadge } from '../components/badge'
 import { SubscribeButton } from '../components/button'
-import { HorizontalList, ItemSectionWithIdentifier, SectionList, Shelf } from '../components/core'
-import { Grid } from '../components/grid'
+import {
+  HorizontalList,
+  ItemSection,
+  ItemSectionWithIdentifier,
+  SectionList,
+  Shelf,
+} from '../components/core'
+import { Grid, RichGrid } from '../components/grid'
 import { ExpandableTab, Tab } from '../components/tab'
 import { Text } from '../components/text'
 import { Thumbnail } from '../components/thumbnail'
@@ -12,12 +18,16 @@ import { Navigation, NavigationSome } from '../components/utility/navigation'
 import { BrowseEndpoint, UrlEndpoint, WatchEndpoint } from '@yt/components/utility/endpoint'
 import { CommandMetadata, Renderer, Some } from '../core/internals'
 import { GridVideo } from '../video/processors/grid'
+import { RichItem } from '../components/item'
+import { Video } from '../video/processors/regular'
 
 export type FullChannel<SelectedTab extends ChannelTabName> = TwoColumnBrowseResults<ChannelTab<SelectedTab>>
 
 export enum ChannelTabName {
   Home = 'Home',
   Videos = 'Videos',
+  Shorts = 'Shorts',
+  Live = 'Live',
   Playlists = 'Playlists',
   Community = 'Community',
   Store = 'Store',
@@ -33,6 +43,8 @@ type IsTabName<Expected extends ChannelTabName, Received extends ChannelTabName>
 export type ChannelTab<Selected extends ChannelTabName = ChannelTabName> =
   | HomeTab<IsTabName<ChannelTabName.Home, Selected>>
   | VideosTab<IsTabName<ChannelTabName.Videos, Selected>>
+  | ShortsTab<IsTabName<ChannelTabName.Shorts, Selected>>
+  | LiveTab<IsTabName<ChannelTabName.Live, Selected>>
   | PlaylistsTab<IsTabName<ChannelTabName.Playlists, Selected>>
   | CommunityTab<IsTabName<ChannelTabName.Community, Selected>>
   | StoreTab<IsTabName<ChannelTabName.Store, Selected>>
@@ -40,9 +52,33 @@ export type ChannelTab<Selected extends ChannelTabName = ChannelTabName> =
   | AboutTab<IsTabName<ChannelTabName.About, Selected>>
   | SearchExpandableTab
 
+export type ChannelTabByName<Name extends ChannelTabName> = IsTabName<ChannelTabName.Home, Name> extends true
+  ? HomeTab<true>
+  : IsTabName<ChannelTabName.Videos, Name> extends true
+    ? VideosTab<true>
+    : IsTabName<ChannelTabName.Shorts, Name> extends true
+      ? ShortsTab<true>
+      : IsTabName<ChannelTabName.Live, Name> extends true
+        ? LiveTab<true>
+        : IsTabName<ChannelTabName.Playlists, Name> extends true
+          ? PlaylistsTab<true>
+          : IsTabName<ChannelTabName.Community, Name> extends true
+            ? CommunityTab<true>
+            : IsTabName<ChannelTabName.Store, Name> extends true
+              ? StoreTab<true>
+              : IsTabName<ChannelTabName.Channels, Name> extends true
+                ? ChannelsTab<true>
+                : IsTabName<ChannelTabName.About, Name> extends true
+                  ? AboutTab<true>
+                  : never
+
 export type HomeTab<Selected extends boolean> = Tab<
   ChannelTabName.Home,
-  SectionList<ChannelVideoPlayer | Shelf<HorizontalList<GridVideo> | HorizontalList<GridChannel>>>,
+  SectionList<
+    | ItemSection<ChannelFeaturedContent<Video>>
+    | ItemSection<ChannelVideoPlayer>
+    | ItemSection<Shelf<HorizontalList<GridVideo> | HorizontalList<GridChannel>>>
+  >,
   Selected
 >
 export type VideosTab<Selected extends boolean> = Tab<
@@ -50,6 +86,8 @@ export type VideosTab<Selected extends boolean> = Tab<
   SectionList<ItemSectionWithIdentifier<Grid<GridVideo | ContinuationItem>>>,
   Selected
 >
+export type ShortsTab<Selected extends boolean> = Tab<ChannelTabName.Videos, Renderer<'TODO'>, Selected>
+export type LiveTab<Selected extends boolean> = Tab<ChannelTabName.Live, RichGrid<RichItem<Video>>, Selected>
 export type PlaylistsTab<Selected extends boolean> = Tab<ChannelTabName.Playlists, Renderer<'TODO'>, Selected>
 export type CommunityTab<Selected extends boolean> = Tab<ChannelTabName.Community, Renderer<'TODO'>, Selected>
 export type StoreTab<Selected extends boolean> = Tab<ChannelTabName.Store, Renderer<'TODO'>, Selected>
@@ -70,6 +108,7 @@ type GridChannel = Renderer<
   }
 >
 
+// todo: does this still exist?
 type ChannelVideoPlayer = Renderer<
   'channelVideoPlayer',
   {
@@ -80,6 +119,11 @@ type ChannelVideoPlayer = Renderer<
     videoId: string
     viewCountText: Some<Text>
   }
+>
+
+type ChannelFeaturedContent<Item extends Renderer> = Renderer<
+  'channelFeaturedContent',
+  { title: Record<never, never>; items: Item[] }
 >
 
 export type Channel = Renderer<

@@ -1,4 +1,4 @@
-import { SegmentedLikeDislikeButton } from '../../components/button'
+import { SegmentedLikeDislikeButtonVM } from '../../components/button'
 import { Text } from '../../components/text'
 import { Thumbnail } from '../../components/thumbnail'
 import { Renderer, Some } from '../../core/internals'
@@ -43,7 +43,7 @@ export type VideoActions = Menu<
   unknown,
   // MenuServiceItem[],
   unknown,
-  [SegmentedLikeDislikeButton /* ShareButtonRenderer, AddToPlaylistRenderer */]
+  [SegmentedLikeDislikeButtonVM /* ShareButtonRenderer, AddToPlaylistRenderer */]
 >
 
 export type VideoOwner = Renderer<

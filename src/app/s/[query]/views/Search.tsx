@@ -17,7 +17,7 @@ const SearchContainer = styled('div')`
 
 const Search = ({ query }: { query: string }) => {
   const [videos, , getMoreVideos] = usePaginated(() =>
-    provider.getSearch([std.ResourceType.Video])(query ?? ''),
+    provider.listSearch([std.ResourceType.Video])(query ?? ''),
   )
 
   return (

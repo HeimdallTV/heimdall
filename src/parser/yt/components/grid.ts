@@ -1,4 +1,4 @@
-import { Renderer } from "../core/internals"
+import { Renderer } from '../core/internals'
 
 export type Grid<Item extends Renderer> = Renderer<
   'grid',
@@ -8,7 +8,7 @@ export type Grid<Item extends Renderer> = Renderer<
   }
 >
 
-export type RichGrid<Content extends Renderer, Header extends Renderer> = Renderer<
+export type RichGrid<Content extends Renderer, Header extends Renderer | undefined = undefined> = Renderer<
   'richGrid',
   {
     contents: Content[]

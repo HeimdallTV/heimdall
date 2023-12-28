@@ -33,7 +33,7 @@ export interface TransferableRequestInit {
 export const transferableRequestInitToRequestInit = (
   transferableRequest: TransferableRequestInit,
 ): RequestInit => ({
-  body: transferableRequest.body && base64ToArrayBuffer(transferableRequest.body),
+  body: transferableRequest.body && stringToArrayBuffer(transferableRequest.body),
   cache: transferableRequest.cache,
   credentials: transferableRequest.credentials,
   headers: new Headers(transferableRequest.headers),
@@ -49,7 +49,7 @@ export const requestInitToTransferableRequestInit = async (
   requestInit: RequestInit,
 ): Promise<TransferableRequestInit> => ({
   ...requestInit,
-  body: requestInit.body && (await new Response(requestInit.body).arrayBuffer().then(arrayBufferToBase64)),
+  body: requestInit.body && (await new Response(requestInit.body).text()),
   // @ts-expect-error Valid but Typescript doesn't recognize it
   headers: requestInit.headers instanceof Headers ? requestInit.headers.entries() : requestInit.headers,
 })
@@ -63,20 +63,28 @@ type TransferableResponse = {
   statusText: string
 }
 export const responseToTransferableResponse = async (response: Response): Promise<TransferableResponse> => ({
-  body: await response.arrayBuffer().then(arrayBufferToBase64),
-  headers: Object.fromEntries(response.headers),
+  body: await response.text(),
+  headers: headersToObject(response.headers),
   status: response.status,
   statusText: response.statusText,
 })
 
 export const transferableResponseToResponse = (transferableResponse: TransferableResponse): Response =>
-  new Response(base64ToArrayBuffer(transferableResponse.body), {
+  new Response(stringToArrayBuffer(transferableResponse.body), {
     headers: new Headers(transferableResponse.headers),
     status: transferableResponse.status,
     statusText: transferableResponse.statusText,
   })
 
 /// Helpers
-const base64ToArrayBuffer = (base64: string) => Uint8Array.from(atob(base64), (c) => c.charCodeAt(0))
-const arrayBufferToBase64 = (arrayBuffer: ArrayBuffer) =>
-  btoa(new Uint8Array(arrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), ''))
+const stringToArrayBuffer = (str: string) => {
+  const encoder = new TextEncoder()
+  return encoder.encode(str)
+}
+const headersToObject = (headers: Headers) => {
+  const headersObject: Record<string, string> = {}
+  headers.forEach((value, key) => {
+    headersObject[key] = value
+  })
+  return headersObject
+}

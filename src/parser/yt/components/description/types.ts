@@ -91,8 +91,8 @@ export type AttributedDescriptionStyle = {
 
 export type AttributedDescription = {
   content: string
-  attachmentRuns: AttributedDescriptionAttachment[]
-  commandRuns: AttributedDescriptionCommand[]
-  decorationRuns: AttributedDescriptionDecoration[]
-  styleRuns: AttributedDescriptionStyle[]
+  attachmentRuns?: AttributedDescriptionAttachment[]
+  commandRuns?: AttributedDescriptionCommand[]
+  decorationRuns?: AttributedDescriptionDecoration[]
+  styleRuns?: AttributedDescriptionStyle[]
 }

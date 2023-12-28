@@ -1,15 +1,18 @@
-import { memoizeAsync } from '@libs/cache'
+import { createStorageProvider, memoizeAsync } from '@libs/cache'
 import { fetchBaseJS } from './shared'
 
-const getNParamDecodingFunction = memoizeAsync(async (): Promise<string> => {
-  const baseJS = await fetchBaseJS()
-  const nameOfConsumerFunction = baseJS.match(/\.get\("n"\).+?(\w+)\[\d+\]\(\w+?\)/)![1]
-  const nameOfWrapperFunction = baseJS.match(new RegExp(`${nameOfConsumerFunction}=\\[(\\w+?)\\]`))![1]
-  const functionBody = baseJS.match(
-    new RegExp(`${nameOfWrapperFunction}=(function\\(.+?\\){[^]+?};)\\n?.+?=function`),
-  )![1]
-  return functionBody
-})
+const getNParamDecodingFunction = memoizeAsync(
+  async (): Promise<string> => {
+    const baseJS = await fetchBaseJS()
+    const nameOfConsumerFunction = baseJS.match(/\.get\("n"\).+?(\w+)\[\d+\]\(\w+?\)/)![1]
+    const nameOfWrapperFunction = baseJS.match(new RegExp(`${nameOfConsumerFunction}=\\[(\\w+?)\\]`))![1]
+    const functionBody = baseJS.match(
+      new RegExp(`${nameOfWrapperFunction}=(function\\(.+?\\){[^]+?};)\\n?.+?=function`),
+    )![1]
+    return functionBody
+  },
+  { provider: createStorageProvider('YT_N_PARAM_DECODING_FUNCTION'), timeout: 1000 * 60 * 60 * 24 },
+)
 
 export async function getDecodedNParam(n: string): Promise<string> {
   const functionBody = await getNParamDecodingFunction()

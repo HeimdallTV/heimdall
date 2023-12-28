@@ -1,21 +1,21 @@
 import { Provider } from 'parser/std'
 import { getChannel, listChannelVideos } from './channel'
 import { listComments } from './comment'
-import { getPlayer, getRecommended, getVideo, setVideoLikeStatus } from './video'
+import { getPlayer, listRecommended, getVideo, setVideoLikeStatus } from './video'
 import {
   getUser,
-  getHistory,
+  listHistory,
   listFollowedUsers,
   listLiveFollowedUsers,
   listFollowedUsersVideos,
   setUserFollowed,
 } from './user'
-import { getSearch, getSearchSuggestions } from './search'
+import { listSearch, listSearchSuggestions } from './search'
 
 const provider: Provider = Object.freeze({
   // todo: should periodically fetch and return the cached result
-  getRecommended,
-  getHistory,
+  listRecommended,
+  listHistory,
 
   // todo: all of these should have a way to do pre-caching
 
@@ -37,8 +37,8 @@ const provider: Provider = Object.freeze({
 
   listComments,
 
-  getSearch,
-  getSearchSuggestions,
+  listSearch,
+  listSearchSuggestions,
 })
 
 export default provider

@@ -1,20 +1,10 @@
 import React from 'react'
-
 import { formatDateAgo, formatNumberShort } from '@libs/format'
 import * as std from '@std'
+import { Badge, Text } from '@mantine/core'
+import { Row } from 'lese'
 
-import { Text } from '@mantine/core'
-import styled from 'styled-components'
-
-export const LiveNow = styled.span`
-  color: var(--mantine-primary-color-filled);
-  border: 1px solid var(--mantine-primary-color-filled);
-  border-radius: 2px;
-  padding: 3px 4px;
-
-  /* FIXME: Should be unnecessary */
-  align-self: flex-start;
-`
+export const LiveNow = () => <Badge>LIVE NOW</Badge>
 
 export const VideoSubLine: React.FC<{
   video: Pick<std.Video, 'type' | 'viewCount' | 'publishDate'>
@@ -23,12 +13,12 @@ export const VideoSubLine: React.FC<{
 }> = ({ video, short, size = 'md' }) => {
   if (video.type === std.VideoType.Live) {
     return (
-      <>
+      <Row separation="4px">
         <Text c="dimmed" size={size}>
           {formatNumberShort(video.viewCount!)} watching
         </Text>
-        <LiveNow>LIVE NOW</LiveNow>
-      </>
+        <LiveNow />
+      </Row>
     )
   }
   return (

@@ -6,7 +6,6 @@ export const processChannelGuideEntry = ({ guideEntryRenderer: entry }: ChannelG
   name: combineSomeText(entry.formattedTitle),
   id: entry.navigationEndpoint.browseEndpoint.browseId,
   avatar: entry.thumbnail.thumbnails,
-  verified: std.VerifiedStatus.Unknown,
   followed: true,
   isLive: Boolean(entry.badges.liveBroadcasting),
 })

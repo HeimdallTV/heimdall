@@ -1,5 +1,5 @@
-import { dissoc, join, map, pipe, prop } from 'rambda'
 import { Some, SomeOptions, someToArray } from '../core/internals'
+import { dissoc } from '@libs/utils'
 
 export function parseText<T extends SingleText, U extends ManyText>(
   value: T | U,
@@ -13,9 +13,10 @@ export function parseText<T extends SingleText, U extends ManyText>(
 export const someTextToArray = <T extends SingleText, U extends ManyText>(value: Some<SomeOptions<T, U>>) =>
   someToArray(value).map(run => parseText<T, U>(run))
 
-export const combineSomeText = pipe(someTextToArray, map(prop('text')), join('')) as <T extends Some<Text>>(
-  value: T,
-) => string
+export const combineSomeText = <T extends Some<Text>>(value: T) =>
+  someTextToArray(value)
+    .map(_ => _.text)
+    .join('')
 
 export type SingleText = { simpleText: string }
 export type ManyText = { text: string }

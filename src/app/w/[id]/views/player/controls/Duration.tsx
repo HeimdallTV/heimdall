@@ -10,7 +10,8 @@ export const Duration: React.FC = () => {
   const { currentTimeMS } = useCurrentTimeMS(playerInstance!)
   return (
     <Text span fw={500}>
-      {formatNumberDuration(currentTimeMS / 1000)} / {formatNumberDuration(durationMS / 1000)}
+      {formatNumberDuration(currentTimeMS / 1000)} /{' '}
+      {formatNumberDuration((isNaN(durationMS) ? 0 : durationMS) / 1000)}
     </Text>
   )
 }

@@ -1,0 +1,8 @@
+{
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "permissions": ["cookies", "storage", "declarativeNetRequest", "declarativeNetRequestFeedback"],
+  "host_permissions": ["https://*/*", "http://*/*"]
+}

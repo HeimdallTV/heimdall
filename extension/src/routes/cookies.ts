@@ -1,11 +1,14 @@
 import { ExtensionRequestMetadata } from '@saghen/hermes/transports/extension'
 import browser from 'webextension-polyfill'
 
-export const get = (details: browser.Cookies.GetDetailsType, metadata: ExtensionRequestMetadata) =>
-  browser.cookies.get({
+export const get = async (details: browser.Cookies.GetDetailsType, metadata: ExtensionRequestMetadata) => {
+  const cookie = await browser.cookies.get({
     ...details,
     storeId: details.storeId ?? metadata.sender.tab?.cookieStoreId,
   })
+  console.log(cookie)
+  return cookie
+}
 export const getAll = (details: browser.Cookies.GetAllDetailsType, metadata: ExtensionRequestMetadata) =>
   browser.cookies.getAll({
     ...details,

@@ -4,10 +4,8 @@ import {
   fetchRecommended,
   fetchPlayer,
   fetchCompactVideoContinuation,
-  fetchSetVideoLike,
-  fetchSetVideoDislike,
-  fetchSetVideoIndifferent,
-  fetchVideoDislikeCount,
+  fetchSetVideoLikeStatus,
+  fetchVideoLikeCounts,
   fetchRecommendedContinuation,
 } from './api'
 
@@ -19,9 +17,10 @@ import { RichItem } from '@yt/components/item'
 import { processVideo, Video } from './processors/regular'
 import { processCompactVideo } from './processors/compact'
 import { processPlayer } from './processors/player'
+import { getAppendContinuationItemsResponseItems } from '../components/continuation'
 export * from './types'
 
-export async function* getRecommended(): AsyncGenerator<std.Video[]> {
+export async function* listRecommended(): AsyncGenerator<std.Video[]> {
   const recommendedVideosIterator = makeContinuationIterator(
     () =>
       fetchRecommended().then(
@@ -29,10 +28,7 @@ export async function* getRecommended(): AsyncGenerator<std.Video[]> {
           response.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.richGridRenderer
             .contents,
       ),
-    token =>
-      fetchRecommendedContinuation(token).then(
-        response => response.onResponseReceivedActions[0].appendContinuationItemsAction.continuationItems,
-      ),
+    token => fetchRecommendedContinuation(token).then(getAppendContinuationItemsResponseItems),
   )
   for await (const recommendedVideos of recommendedVideosIterator) {
     yield recommendedVideos
@@ -45,10 +41,10 @@ export async function* getRecommended(): AsyncGenerator<std.Video[]> {
 
 export async function getVideo(videoId: string): Promise<std.Video> {
   console.log('CALLED', videoId)
-  const [videoResponse, playerResponse, dislikeCount] = await Promise.all([
+  const [videoResponse, playerResponse, likeCounts] = await Promise.all([
     fetchVideo(videoId),
     fetchPlayer(videoId),
-    fetchVideoDislikeCount(videoId),
+    fetchVideoLikeCounts(videoId),
   ])
 
   const contents = videoResponse.contents.twoColumnWatchNextResults.results.results.contents
@@ -62,7 +58,8 @@ export async function getVideo(videoId: string): Promise<std.Video> {
     videoId,
     [primaryInfo, secondaryInfo],
     playerResponse.videoDetails,
-    dislikeCount,
+    likeCounts.likes,
+    likeCounts.dislikes,
   )
 
   const relatedVideos = findRenderer('itemSection')(
@@ -71,10 +68,7 @@ export async function getVideo(videoId: string): Promise<std.Video> {
 
   const relatedVideosIterator = makeContinuationIterator(
     async () => relatedVideos,
-    token =>
-      fetchCompactVideoContinuation(token).then(
-        response => response.onResponseReceivedEndpoints[0].appendContinuationItemsAction.continuationItems,
-      ),
+    token => fetchCompactVideoContinuation(token).then(getAppendContinuationItemsResponseItems),
   )
 
   console.log(video)
@@ -92,12 +86,11 @@ export async function getVideo(videoId: string): Promise<std.Video> {
 
 export const getPlayer = (videoId: string) => fetchPlayer(videoId).then(processPlayer)
 
-export const setVideoLikeStatus = (videoId: string) => (likeStatus: std.LikeStatus) =>
-  (likeStatus === std.LikeStatus.Like
-    ? fetchSetVideoLike
-    : likeStatus === std.LikeStatus.Dislike
-    ? fetchSetVideoDislike
-    : fetchSetVideoIndifferent)(videoId).then(() => {})
+export const setVideoLikeStatus = async (
+  videoId: string,
+  currentLikeStatus: std.LikeStatus,
+  likeStatus: std.LikeStatus,
+) => fetchSetVideoLikeStatus(videoId, currentLikeStatus, likeStatus)
 
 export function getVideoType(video: { badges?: MetadataBadge[] }): std.VideoType {
   const isLive = video.badges?.some(isLiveBadge)

@@ -15,7 +15,7 @@ export async function fetchAPIKey() {
 }
 
 export const refreshAPIKey = () =>
-  fetchProxy('https://www.youtube.com', { credentials: 'include' })
+  fetchProxy('https://www.youtube.com/feed/you', { credentials: 'include' })
     .then(res => res.text())
     .then(text => text.split('"INNERTUBE_API_KEY":"')[1].split('"')[0])
     .then(key =>

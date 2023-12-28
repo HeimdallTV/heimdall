@@ -27,7 +27,6 @@ import { PlayerState, usePlayerInstance } from './hooks/usePlayer'
 import { SeekBar } from './controls/SeekBar'
 import { useHover, useIdle } from '@mantine/hooks'
 import { usePlayerState } from './hooks/use'
-import Link from 'next/link'
 
 const ControlsContainer = styled(Column)<{ show: boolean } & FlexProps>`
   background: linear-gradient(transparent 20%, rgba(0, 0, 0, 0.5) 60%, rgba(0, 0, 0, 0.8) 100%);
@@ -86,14 +85,14 @@ const Controls: React.FC<{ playerRoot: RefObject<HTMLElement>; mouseActive: bool
   )
 }
 
-const PlayerContainer = styled.div<{ isFullscreen: boolean; hideMouse: boolean }>`
+const PlayerContainer = styled.div<{ $isFullscreen: boolean; $hideMouse: boolean }>`
   position: relative;
-  ${({ hideMouse }) => hideMouse && `cursor: none;`}
+  ${({ $hideMouse }) => $hideMouse && `cursor: none;`}
 
   video {
     width: 100%;
     height: 100%;
-    max-height: ${({ isFullscreen }) => (isFullscreen ? '100vh' : '87vh')};
+    max-height: ${({ $isFullscreen }) => ($isFullscreen ? '100vh' : '87vh')};
     background-color: black;
   }
 `
@@ -128,7 +127,7 @@ const PlayerSkeleton: React.FC = () => (
 )
 
 const PlayerUI: React.FC<{ player: std.Player }> = ({ player }) => {
-  const playerInstance = usePlayerInstance(player)
+  const playerInstance = useContext(PlayerContext)
   const { state: playerState, togglePlay } = usePlayerState(playerInstance!)
   const isFullscreen = useIsFullscreen()
 
@@ -140,17 +139,15 @@ const PlayerUI: React.FC<{ player: std.Player }> = ({ player }) => {
   }, [idle, hovered])
 
   return (
-    <PlayerContext.Provider value={playerInstance}>
-      <PlayerContainer
-        ref={playerRef}
-        hideMouse={idle && hovered}
-        isFullscreen={isFullscreen}
-        onClick={() => togglePlay(playerState)}
-      >
-        <Video />
-        <Controls key="controls" mouseActive={hovered && !idle} playerRoot={playerRef} />
-        <ClosedCaptions />
-      </PlayerContainer>
-    </PlayerContext.Provider>
+    <PlayerContainer
+      ref={playerRef}
+      $hideMouse={idle && hovered}
+      $isFullscreen={isFullscreen}
+      onClick={() => togglePlay(playerState)}
+    >
+      <Video />
+      <Controls key="controls" mouseActive={hovered && !idle} playerRoot={playerRef} />
+      <ClosedCaptions />
+    </PlayerContainer>
   )
 }
