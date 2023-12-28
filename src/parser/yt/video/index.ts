@@ -8,6 +8,7 @@ import {
   fetchVideoLikeCounts,
   fetchRecommendedContinuation,
 } from './api'
+import { fetchSponsorBlock } from './sponsorblock'
 
 import { isLiveBadge, MetadataBadge } from '../components/badge'
 import { findRenderer, findRendererRaw, isRenderer, Renderer } from '../core/internals'
@@ -84,7 +85,16 @@ export async function getVideo(videoId: string): Promise<std.Video> {
   }
 }
 
-export const getPlayer = (videoId: string) => fetchPlayer(videoId).then(processPlayer)
+export async function getPlayer(videoId: string) {
+  const [player, segments] = await Promise.all([
+    fetchPlayer(videoId).then(processPlayer),
+    fetchSponsorBlock(videoId),
+  ])
+
+  console.log(segments)
+
+  return { ...player, segments }
+}
 
 export const setVideoLikeStatus = async (
   videoId: string,

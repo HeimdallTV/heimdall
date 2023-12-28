@@ -10,6 +10,8 @@ export type Player = {
 
   sources: Source[]
 
+  segments?: PlayerSkipSegments
+
   closedCaptions: ClosedCaption[]
 
   /** The static and primary thumbnail for the video. An array of objects for various sizes */
@@ -23,6 +25,64 @@ export type Player = {
   viewedLength?: number
   /** Date that the video was published or that the live stream started */
   publishDate?: Date
+}
+
+export type PlayerSkipSegments = {
+  fullVideoCategory?: PlayerSkipSegmentCategory
+
+  skipSegments: {
+    UUID: string
+
+    startTimeMs: number
+    endTimeMs: number
+
+    category: PlayerSkipSegmentCategory
+
+    /** if segment is locked */
+    locked: number
+
+    /** votes on segment */
+    votes: number
+
+    /** duration of video when submissions occurred */
+    videoDuration: number
+  }[]
+
+  chapters: {
+    UUID: string
+
+    startTimeMs: number
+    endTimeMs: number
+
+    title: string
+  }[]
+
+  highlights: {
+    UUID: string
+    timestampMs: number
+  }[]
+}
+
+export enum PlayerSkipSegmentCategory {
+  Sponsor = 'sponsor',
+  SelfPromo = 'selfpromo',
+  Interaction = 'interaction',
+  Intro = 'intro',
+  Outro = 'outro',
+  Preview = 'preview',
+  MusicOfftopic = 'music_offtopic',
+  Filler = 'filler',
+  POI = 'poi_highlight',
+  ExclusiveAccess = 'exclusive_access',
+  Chapter = 'chapter',
+}
+
+export enum PlayerSkipSegmentActionType {
+  Skip = 'skip',
+  Mute = 'mute',
+  POI = 'poi',
+  Full = 'full',
+  Chapter = 'chapter',
 }
 
 export enum SourceType {
