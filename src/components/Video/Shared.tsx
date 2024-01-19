@@ -1,8 +1,11 @@
 import React from 'react'
 import { formatDateAgo, formatNumberShort } from '@libs/format'
 import * as std from '@std'
-import { Badge, Text } from '@mantine/core'
+import { Badge, MantineSize, Text } from '@mantine/core'
 import { Row } from 'lese'
+import Link from 'next/link'
+import styled from 'styled-components'
+import { VerifiedBadge } from '../Badges'
 
 export const LiveNow = () => <Badge>LIVE NOW</Badge>
 
@@ -29,3 +32,24 @@ export const VideoSubLine: React.FC<{
     </Text>
   )
 }
+
+const VideoAuthorLink = styled(Link)<{ size?: MantineSize }>`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--mantine-color-dimmed);
+  font-size: var(--mantine-font-size-${({ size }) => size ?? 'md'});
+  &:hover {
+    color: var(--mantine-color-text);
+  }
+`
+
+export const VideoAuthor: React.FC<{
+  author: Pick<std.User, 'name' | 'verified' | 'id'>
+  size?: MantineSize
+}> = ({ author, size }) => (
+  <VideoAuthorLink href={`/c/${author.id}`} size={size}>
+    {author.name}
+    <VerifiedBadge size={size} />
+  </VideoAuthorLink>
+)

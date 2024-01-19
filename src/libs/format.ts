@@ -1,6 +1,6 @@
-import formatDistance from 'date-fns/formatDistance'
-import enGB from 'date-fns/locale/en-GB'
-import formatRelative from 'date-fns/formatRelative'
+import { formatDistance } from 'date-fns/formatDistance'
+import { enGB } from 'date-fns/locale/en-GB'
+import { formatRelative } from 'date-fns/formatRelative'
 
 export const formatDateAgo = (date: Date) =>
   formatDistance(date, new Date(), { addSuffix: true }).replace(/^about\s+/, '')

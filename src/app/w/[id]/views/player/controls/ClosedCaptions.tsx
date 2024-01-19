@@ -35,7 +35,6 @@ export const ClosedCaption: React.FC = () => {
   // probably just a popup when hovering?
   return (
     <ClosedCaptionButton
-      // @ts-expect-error styled-components bug
       $enabled={closedCaptions !== undefined}
       onClick={() =>
         setClosedCaptions(

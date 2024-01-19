@@ -18,7 +18,7 @@ import { RichItem } from '@yt/components/item'
 import { processVideo, Video } from './processors/regular'
 import { processCompactVideo } from './processors/compact'
 import { processPlayer } from './processors/player'
-import { getAppendContinuationItemsResponseItems } from '../components/continuation'
+import { getContinuationResponseItems } from '../components/continuation'
 export * from './types'
 
 export async function* listRecommended(): AsyncGenerator<std.Video[]> {
@@ -29,7 +29,7 @@ export async function* listRecommended(): AsyncGenerator<std.Video[]> {
           response.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.richGridRenderer
             .contents,
       ),
-    token => fetchRecommendedContinuation(token).then(getAppendContinuationItemsResponseItems),
+    token => fetchRecommendedContinuation(token).then(getContinuationResponseItems),
   )
   for await (const recommendedVideos of recommendedVideosIterator) {
     yield recommendedVideos
@@ -69,7 +69,7 @@ export async function getVideo(videoId: string): Promise<std.Video> {
 
   const relatedVideosIterator = makeContinuationIterator(
     async () => relatedVideos,
-    token => fetchCompactVideoContinuation(token).then(getAppendContinuationItemsResponseItems),
+    token => fetchCompactVideoContinuation(token).then(getContinuationResponseItems),
   )
 
   console.log(video)

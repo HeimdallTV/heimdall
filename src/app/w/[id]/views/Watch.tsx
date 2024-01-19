@@ -27,7 +27,7 @@ const Watch: React.FC<{ videoId: string }> = ({ videoId }) => {
   return (
     <PlayerContext.Provider value={playerInstance}>
       <VideoContainer>
-        <Player player={player} />
+        <Player />
         <WatchInfo video={video} />
       </VideoContainer>
     </PlayerContext.Provider>

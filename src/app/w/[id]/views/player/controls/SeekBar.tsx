@@ -4,7 +4,9 @@ import { Row } from 'lese'
 import styled from 'styled-components'
 
 import { PlayerContext } from '../context'
-import { useBufferedMS, useCurrentTimeMS, useDurationMS } from '../hooks/use'
+import { PlayerInstance } from '../hooks/usePlayer'
+import { useBufferedMS, useDurationMS } from '../hooks/use'
+import usePoll from '@/hooks/usePoll'
 
 const SeekBarSectionContainer = styled.div<{ $widthPercent: number }>`
   position: relative;
@@ -114,11 +116,28 @@ const useMove = (onUp: (value: number) => void) => {
   return (elem: HTMLDivElement) => setElem(elem)
 }
 
+/** Polls as infrequntly as possible, while still getting pixel perfect (or close to) updates */
+const usePlayerTimingsMS = (playerContext: PlayerInstance, minDelay = 16) => {
+  const { durationMS } = useDurationMS(playerContext)
+  const [currentTimeMS, setCurrentTimeMS] = useState(playerContext.getCurrentTimeMS())
+  const [bufferedMS, setBufferedMS] = useState(playerContext.getBufferedMS())
+
+  usePoll(() => {
+    setCurrentTimeMS(playerContext.getCurrentTimeMS())
+    setBufferedMS(playerContext.getBufferedMS())
+
+    // Calculate delay until the next pixel would be updated
+    // assuming the video is fullscreen for simplicity
+    const msPerPixel = durationMS / window.innerWidth
+    return Math.max(minDelay, msPerPixel)
+  }, [playerContext, minDelay, durationMS])
+
+  return { currentTimeMS, bufferedMS, durationMS }
+}
+
 export const SeekBar: React.FC = () => {
   const playerContext = useContext(PlayerContext)
-  const { currentTimeMS } = useCurrentTimeMS(playerContext!)
-  const { durationMS } = useDurationMS(playerContext!)
-  const { bufferedMS } = useBufferedMS(playerContext!)
+  const { currentTimeMS, durationMS, bufferedMS } = usePlayerTimingsMS(playerContext!)
 
   const onMoveCallback = useCallback(
     (percent: number) => playerContext!.seek((percent / 100) * playerContext!.getDurationMS()),

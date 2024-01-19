@@ -31,11 +31,11 @@ export enum Endpoint {
   /** Used for removing like or dislike from a video. ~300ms */
   RemoveLike = 'like/removelike',
   /** Used for commenting on a video. ~600ms */
-  CreateComment = 'create_comment',
+  CreateComment = 'comment/create_comment',
   /** Used for replying to a comment. ~600ms */
-  CreateCommentReply = 'create_comment_reply',
+  CreateCommentReply = 'comment/create_comment_reply',
   /** Used for liking/disliking a comment and likely others. ~400ms */
-  PerformCommentAction = 'perform_comment_action',
+  PerformCommentAction = 'comment/perform_comment_action',
 }
 
 export enum BrowseId {

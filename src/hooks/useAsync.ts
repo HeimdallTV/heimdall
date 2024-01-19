@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 export type UseAsyncResponse<T> = { data: T | undefined; error: any; isLoading: boolean }
+// todo: use export default
 export function useAsync<T>(fn: () => Promise<T>, deps: any[]): UseAsyncResponse<T> {
   const [data, setData] = useState<T | undefined>()
   const [isLoading, setLoading] = useState(true)

@@ -73,7 +73,7 @@ export const NavBar = () => {
   return (
     <NavBarContainer $expanded={expanded}>
       {/* Ensures that the tooltip delays are synced with each other */}
-      <Tooltip.Group openDelay={500} closeDelay={500}>
+      <Tooltip.Group openDelay={1000} closeDelay={500}>
         <NavBarItem
           as="button"
           onClick={toggle}

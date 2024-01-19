@@ -1,6 +1,6 @@
 import { fetchProxy } from '@libs/extension'
 import { endpoints } from '@libs/extension'
-import addDays from 'date-fns/addDays'
+import { addDays } from 'date-fns/addDays'
 
 export async function fetchAPIKey() {
   const { retrievalDate, value } = await endpoints.storage.local.get('apiKey').then(_ => _.apiKey ?? {})

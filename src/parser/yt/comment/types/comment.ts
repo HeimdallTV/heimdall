@@ -16,14 +16,14 @@ import {
 } from '../../core/internals'
 import { AuthorCommentBadge, PinnedCommentBadge } from './badge'
 
-type PerformCommentActionCommand = Command<
+type PerformCommentActionEndpoint = Endpoint<
   'performCommentAction',
   { action: string; clientActions: { TODO: true } }
 >
 
 type CommentLikeToggleButton = ToggleButton<
-  Command<'', {}, PerformCommentActionCommand & CommandMetadata>,
-  Command<'', {}, PerformCommentActionCommand & CommandMetadata>
+  Command<'', {}, PerformCommentActionEndpoint & CommandMetadata>,
+  Command<'', {}, PerformCommentActionEndpoint & CommandMetadata>
 >
 
 type CreateCommentReply = Command<'createCommentReply', { createReplyParams: string }>
@@ -68,7 +68,7 @@ export type Comment = Renderer<
     contentText: CommentContent
 
     actionMenu: any // todo:
-    actionButtons: CommentActionButtons // todo:
+    actionButtons: CommentActionButtons
 
     authorCommentBadge: AuthorCommentBadge
     /** Name of the author */

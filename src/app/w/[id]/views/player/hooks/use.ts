@@ -16,18 +16,6 @@ export const usePlayerState = (player: PlayerInstance) => {
   }
 }
 
-export const useCurrentTimeMS = (player: PlayerInstance) => {
-  const [currentTimeMS, setCurrentTimeMS] = useState(player.getCurrentTimeMS)
-  useEffect(() => player.onCurrentTimeMSChange(setCurrentTimeMS), [player])
-  useEffect(() => {
-    setCurrentTimeMS(player.getCurrentTimeMS)
-  }, [player])
-  return {
-    currentTimeMS,
-    setCurrentTimeMS: player.setCurrentTimeMS,
-  }
-}
-
 export const useDurationMS = (player: PlayerInstance) => {
   const [durationMS, setDurationMS] = useState(player.getDurationMS)
   useEffect(() => player.onDurationMSChange(setDurationMS), [player])
@@ -86,7 +74,7 @@ export const useSource = (player: PlayerInstance) => {
   }, [player])
   return {
     source,
-    sources: player.player.sources,
+    sources: player.player!.sources,
     setSource: player.setSource,
   }
 }
@@ -111,7 +99,7 @@ export const useClosedCaptions = (player: PlayerInstance) => {
   }, [player])
   return {
     closedCaptions,
-    allClosedCaptions: player.player.closedCaptions,
+    allClosedCaptions: player.player!.closedCaptions,
     setClosedCaptions: player.setClosedCaptions,
   }
 }

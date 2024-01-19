@@ -7,6 +7,28 @@ export enum LikeStatus {
   Like = 'like',
   Dislike = 'dislike',
 }
+export const matchLikeStatus = <ReturnType extends string | number | boolean | object>(
+  likeStatus: LikeStatus,
+  onLike: ReturnType | (() => ReturnType),
+  onIndifferent: ReturnType | (() => ReturnType),
+  onDislike: ReturnType | (() => ReturnType),
+) => {
+  if (likeStatus === LikeStatus.Like) return typeof onLike === 'function' ? onLike() : onLike
+  if (likeStatus === LikeStatus.Dislike) return typeof onDislike === 'function' ? onDislike() : onDislike
+  if (likeStatus === LikeStatus.Indifferent) {
+    return typeof onIndifferent === 'function' ? onIndifferent() : onIndifferent
+  }
+  throw new Error(`Unknown like status: ${likeStatus}`)
+}
+export const toggleLikeStatus = (enabledStatus: LikeStatus, currentStatus: LikeStatus) =>
+  matchLikeStatus(
+    enabledStatus,
+    matchLikeStatus(currentStatus, LikeStatus.Indifferent, LikeStatus.Like, LikeStatus.Like),
+    () => {
+      throw Error('Enabled status cannot be indifferent')
+    },
+    matchLikeStatus(currentStatus, LikeStatus.Dislike, LikeStatus.Dislike, LikeStatus.Indifferent),
+  )
 
 export enum ProviderName {
   YT = 'yt',

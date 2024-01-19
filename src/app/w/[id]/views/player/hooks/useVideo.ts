@@ -4,7 +4,7 @@ import { useEffect, useMemo } from 'react'
 import { usePlaybackRate, usePlayerState, useSource, useVolume, useWaiting } from './use'
 import { PlayerInstance, PlayerState } from './usePlayer'
 
-const onInterval = (callback: () => void, intervalMS = 20) => {
+const onInterval = (callback: () => void, intervalMS = 100) => {
   const intervalId = setInterval(callback, intervalMS)
   return () => clearInterval(intervalId)
 }
@@ -21,8 +21,14 @@ export const useVideoInstance = (playerInstance: PlayerInstance) => {
   const { state } = usePlayerState(playerInstance)
   useEffect(() => {
     if (state === PlayerState.Playing) {
-      video.play()
-      audio.play()
+      video.play().catch(err => {
+        if (err.name !== 'NotAllowedError') throw err
+        playerInstance.setState(PlayerState.Paused)
+      })
+      audio.play().catch(err => {
+        if (err.name !== 'NotAllowedError') throw err
+        playerInstance.setState(PlayerState.Paused)
+      })
     } else if (state === PlayerState.Paused) {
       video.pause()
       audio.pause()
@@ -145,6 +151,15 @@ export const useVideoInstance = (playerInstance: PlayerInstance) => {
       playerInstance.setBufferedMS(bufferedRange.end - playerInstance.getCurrentTimeMS())
     }),
     [video, audio, playerInstance],
+  )
+
+  /// Cleanup
+  useEffect(
+    () => () => {
+      video.pause()
+      audio.pause()
+    },
+    [video, audio],
   )
 
   return video

@@ -76,9 +76,16 @@ const createValueListener = <Value>(initialValue: Value) => {
   }
 }
 
-export const usePlayerInstance = (player: std.Player | undefined): PlayerInstance =>
+export const usePlayerInstance = (
+  player: std.Player | undefined,
+  autoplay: boolean = process.env.NEXT_PUBLIC_ENV !== 'development',
+): PlayerInstance =>
   useMemo(() => {
-    const { get: getState, set: setState, onChange: onStateChange } = createValueListener(PlayerState.Paused)
+    const {
+      get: getState,
+      set: setState,
+      onChange: onStateChange,
+    } = createValueListener(autoplay ? PlayerState.Playing : PlayerState.Paused)
     const { set: seek, onChange: onSeek } = createValueListener<number>(0)
     const { get: getWaiting, set: setWaiting, onChange: onWaitingChange } = createValueListener(true)
     const {
@@ -158,4 +165,4 @@ export const usePlayerInstance = (player: std.Player | undefined): PlayerInstanc
       setClosedCaptions,
       onClosedCaptionsChange,
     }
-  }, [player])
+  }, [player, autoplay])

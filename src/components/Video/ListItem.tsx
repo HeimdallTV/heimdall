@@ -3,8 +3,7 @@ import Link from 'next/link'
 
 import * as std from '@std'
 
-import { ChannelIconWithName, CompactChannelLink } from '../Channel/Link'
-import { VideoSubLine } from './Shared'
+import { VideoAuthor, VideoSubLine } from './Shared'
 import { VideoThumbnail } from './Thumbnail'
 import { Text } from '@mantine/core'
 
@@ -21,7 +20,7 @@ export const VideoListItem: React.FC<{
           <Text lineClamp={2}>{video.title}</Text>
           <VideoSubLine video={video} short />
 
-          {video.author && <ChannelIconWithName size={24} channel={video.author} />}
+          {video.author && <VideoAuthor author={video.author} />}
           <Text c="dimmed">{video.shortDescription}</Text>
         </Column>
       </Grid>
@@ -42,7 +41,7 @@ export const CompactVideoListItem: React.FC<{ video: std.Video }> = ({ video }) 
       <Text fw={600} lineClamp={2}>
         {video.title}
       </Text>
-      {video.author && <CompactChannelLink channel={video.author} />}
+      {video.author && <VideoAuthor author={video.author} size="sm" />}
       <VideoSubLine size="sm" video={video} />
     </Column>
   </Grid>

@@ -16,8 +16,8 @@ const DescriptionContainer = styled(Column)<{ $canExpanded: boolean }>`
     margin-top: 8px;
   }
 
-  ${({ $canExpanded: isExpanded }) =>
-    !isExpanded &&
+  ${({ $canExpanded }) =>
+    !$canExpanded &&
     `
   &:hover {
     background-color: var(--mantine-color-default-hover);
@@ -39,11 +39,9 @@ export const Description: React.FC<{
     if (descriptionText) {
       setRequiresExpansion(descriptionText.scrollHeight > descriptionText.clientHeight)
     }
-    // todo: why is this necessary?
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [descriptionRef.current])
+  }, [description])
 
-  // TODO Get a better key for the description list rendering
+  // todo: Get a better key for the description list rendering
   return (
     <DescriptionContainer
       ref={descriptionRef}
@@ -70,7 +68,7 @@ const DescriptionHeader: React.FC<{ viewCount?: number; publishDate?: Date }> = 
   const text = []
   if (viewCount !== undefined) text.push(`${formatNumberShort(viewCount)} views`)
   if (publishDate !== undefined) text.push(formatDateAgo(publishDate))
-  return <Text fw={500}>{text.join(' ')}</Text>
+  return <Text fw={500}>{text.join(' • ')}</Text>
 }
 
 const ShowMoreLessButton: React.FC<{

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 function throttleAndDebounce(fn: (...args: any[]) => void, delay: number): (...args: any[]) => void {
   let lastCallTime: number | null = null
-  let timeoutId: NodeJS.Timeout | null = null
+  let timeoutId: number | null = null
 
   return function debouncedThrottledFn(...args: any[]): void {
     const currentTime = Date.now()
@@ -21,7 +21,7 @@ function throttleAndDebounce(fn: (...args: any[]) => void, delay: number): (...a
       lastCallTime = currentTime
     } else {
       // Schedule the function call after the debounce delay
-      timeoutId = setTimeout(() => {
+      timeoutId = window.setTimeout(() => {
         fn(...args)
         lastCallTime = Date.now()
         timeoutId = null

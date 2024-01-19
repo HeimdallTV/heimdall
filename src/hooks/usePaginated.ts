@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 import pLimit from 'p-limit'
 
+// todo: use export default
 export const usePaginated = <T>(iterator: () => AsyncGenerator<T>) => {
   const [errors, setErrors] = useState<any[]>([])
   const [done, setDone] = useState(false)

@@ -57,7 +57,6 @@ const getLikeButtonParams = async (
     button.toggleButtonViewModel.toggleButtonViewModel[subButtonViewModel].buttonViewModel.onTap.serialCommand
       .commands
   const command = commands.find(isCommand('innertube'))
-  console.log(command, command?.innertubeCommand.likeEndpoint[paramName], paramName)
   return command?.innertubeCommand.likeEndpoint[paramName]
 }
 const getLikeEndpoint = (likeStatus: std.LikeStatus) =>

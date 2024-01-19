@@ -6,6 +6,7 @@ import { getNavigationUrl } from '../components/utility/navigation'
 import { relativeToAbsoluteDate } from '../video/processors/helpers'
 import { Endpoint, fetchYt } from '../core/api'
 import { listCommentReplies } from '.'
+import { shortHumanReadableToNumber } from '../core/helpers'
 
 export function processComment({ commentRenderer: comment }: Comment, replies?: CommentReplies): std.Comment {
   const repliesContinuation =
@@ -16,13 +17,14 @@ export function processComment({ commentRenderer: comment }: Comment, replies?: 
     id: comment.commentId,
     author: {
       id: combineSomeText(comment.authorText),
-      name: combineSomeText(comment.authorText),
+      // slice to remove the @
+      name: combineSomeText(comment.authorText).slice(1),
       avatar: comment.authorThumbnail.thumbnails,
       verified: std.verifiedFrom(comment.authorCommentBadge && isVerifiedBadge(comment.authorCommentBadge)),
     },
     content: processCommentContent(comment.contentText),
     publishedAt: relativeToAbsoluteDate(combineSomeText(comment.publishedTimeText)),
-    likes: comment.voteCount ? Number(combineSomeText(comment.voteCount)) : 0,
+    likes: comment.voteCount ? shortHumanReadableToNumber(combineSomeText(comment.voteCount)) : 0,
     likeStatus:
       comment.voteStatus === 'LIKE'
         ? std.LikeStatus.Like
@@ -41,28 +43,37 @@ export function processComment({ commentRenderer: comment }: Comment, replies?: 
             .serviceEndpoint.createCommentReplyCommand.createReplyParams,
       })
     },
-    setLikeStatus: async (currentLikeStatus: std.LikeStatus, likeStatus: std.LikeStatus) => {
+    setLikeStatus: async (currentLikeStatus: std.LikeStatus, desiredLikeStatus: std.LikeStatus) => {
+      if (currentLikeStatus === desiredLikeStatus) return
+
       const likeButton = comment.actionButtons.commentActionButtonsRenderer.likeButton.toggleButtonRenderer
       const dislikeButton =
         comment.actionButtons.commentActionButtonsRenderer.dislikeButton.toggleButtonRenderer
 
-      const likeParams = likeButton.defaultServiceEndpoint.performCommentActionCommand.action
-      const removeLikeParams = likeButton.toggledServiceEndpoint.performCommentActionCommand.action
-      const dislikeParams = dislikeButton.defaultServiceEndpoint.performCommentActionCommand.action
-      const removeDislikeParams = dislikeButton.toggledServiceEndpoint.performCommentActionCommand.action
+      const likeParams = likeButton.defaultServiceEndpoint.performCommentActionEndpoint.action
+      const removeLikeParams = likeButton.toggledServiceEndpoint.performCommentActionEndpoint.action
+      const dislikeParams = dislikeButton.defaultServiceEndpoint.performCommentActionEndpoint.action
+      const removeDislikeParams = dislikeButton.toggledServiceEndpoint.performCommentActionEndpoint.action
 
-      const params =
-        likeStatus === std.LikeStatus.Like
-          ? likeParams
-          : likeStatus === std.LikeStatus.Dislike
-            ? dislikeParams
-            : currentLikeStatus === std.LikeStatus.Like
-              ? removeLikeParams
-              : removeDislikeParams
+      const params = std.matchLikeStatus(
+        desiredLikeStatus,
+        likeParams,
+        () =>
+          std.matchLikeStatus(
+            currentLikeStatus,
+            removeLikeParams,
+            () => {
+              throw Error('Unreachable')
+            },
+            removeDislikeParams,
+          ),
+        dislikeParams,
+      )
 
       // TODO: Check status from the response
+      // FIXME: Bypass cache
       await fetchYt(Endpoint.PerformCommentAction, {
-        action: [params],
+        actions: [params],
       })
     },
   }

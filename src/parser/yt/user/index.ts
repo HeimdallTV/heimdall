@@ -14,7 +14,7 @@ import { processVideo } from '../video/processors/regular'
 import { makeContinuationIterator } from '../core/api'
 import { parse, subDays } from 'date-fns'
 import { combineSomeText } from '../components/text'
-import { getAppendContinuationItemsResponseItems } from '../components/continuation'
+import { getContinuationResponseItems } from '../components/continuation'
 
 export const getUser = (userId: string) => getChannel(userId).then(channel => channel.user)
 
@@ -43,7 +43,7 @@ export const listHistory = async function* () {
           response.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer
             .contents,
       ),
-    token => fetchHistoryContinuation(token).then(getAppendContinuationItemsResponseItems),
+    token => fetchHistoryContinuation(token).then(getContinuationResponseItems),
   )
   for await (const section of historyIterator) {
     yield section
@@ -84,7 +84,7 @@ export const listFollowedUsersVideos = async function* () {
           response.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.richGridRenderer
             .contents,
       ),
-    token => fetchSubscriptionsContinuation(token).then(getAppendContinuationItemsResponseItems),
+    token => fetchSubscriptionsContinuation(token).then(getContinuationResponseItems),
   )
   for await (const videos of subscriptionsIterator) {
     yield videos
@@ -95,5 +95,7 @@ export const listFollowedUsersVideos = async function* () {
   }
 }
 
-export const setUserFollowed = (id: string) => (isFollowing: boolean) =>
-  (isFollowing ? fetchSubscribe : fetchUnsubscribe)(id).then(() => {})
+export async function setUserFollowed(userId: string, isFollowing: boolean) {
+  if (isFollowing) await fetchSubscribe(userId)
+  else await fetchUnsubscribe(userId)
+}

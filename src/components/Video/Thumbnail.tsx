@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { formatNumberDuration } from '@libs/format'
 import { when } from '@libs/utils'
 import * as std from '@std'
-import { Badge } from '@mantine/core'
+import { Badge, BadgeProps } from '@mantine/core'
 
 const TRANSITION = 'opacity 250ms ease 250ms'
 
@@ -29,7 +29,7 @@ const ThumbnailContainer = styled(Flex)`
   }
 `
 
-const AbsoluteBadge = styled(Badge)`
+const AbsoluteBadge = styled(Badge)<BadgeProps>`
   position: absolute;
   bottom: 0;
   right: 0;

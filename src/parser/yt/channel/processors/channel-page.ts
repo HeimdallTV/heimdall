@@ -42,8 +42,8 @@ export const processChannelPage = async (channelId: string): Promise<std.Channel
 
     featuredVideo: getFeaturedVideo(home),
     listLiveVideos: () => listLiveVideos(channelId),
-    listShelves: () => listShelves(channelId),
-    listLinks: () => listFeaturedLinks(channelId),
+    // listShelves: () => listShelves(channelId),
+    // listLinks: () => listFeaturedLinks(channelId),
   }
 }
 
@@ -68,14 +68,14 @@ const listLiveVideos = async (channelId: string): Promise<std.Video[]> =>
       live.richGridRenderer.contents.flatMap(grid => grid.richItemRenderer.content).map(processVideo),
     )
 
-const listShelves = async (channelId: string): Promise<std.Shelf[]> =>
-  fetchChannelHome(channelId)
-    .then(getSelectedChannelTab)
-    .then(getTabContent)
-    .then(home =>
-      home.sectionListRenderer.contents
-        .filter(isRenderer('itemSection'))
-        .map(section => section.itemSectionRenderer.contents)
-        .flat()
-        .map(processShelf),
-    )
+// const listShelves = async (channelId: string): Promise<std.Shelf[]> =>
+//   fetchChannelHome(channelId)
+//     .then(getSelectedChannelTab)
+//     .then(getTabContent)
+//     .then(home =>
+//       home.sectionListRenderer.contents
+//         .filter(isRenderer('itemSection'))
+//         .map(section => section.itemSectionRenderer.contents)
+//         .flat()
+//         .map(processShelf),
+//     )

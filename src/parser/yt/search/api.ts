@@ -1,5 +1,5 @@
 import { fetchProxy } from '@libs/extension'
-import { getAppendContinuationItemsResponseItems } from '@yt/components/continuation'
+import { getContinuationResponseItems } from '@yt/components/continuation'
 import { Endpoint, fetchYt, fetchEndpointContinuation, makeContinuationIterator } from '@yt/core/api'
 import { SearchResponse, SearchResponseContinuation, SearchSuggestions } from './types'
 
@@ -12,7 +12,7 @@ export const fetchSearchIterator = (query: string) =>
       fetchSearch(query).then(
         res => res.contents.twoColumnSearchResultsRenderer.primaryContents.sectionListRenderer.contents,
       ),
-    token => fetchSearchContinuation(token).then(getAppendContinuationItemsResponseItems),
+    token => fetchSearchContinuation(token).then(getContinuationResponseItems),
   )
 
 /** TODO: Youtube includes video_id when on a video. What else do they include? How does this affect results? */

@@ -1,11 +1,11 @@
-import { Flex, Row } from 'lese'
+import { Row } from 'lese'
 import Link from 'next/link'
 import styled from 'styled-components'
 
-import { IconCircleCheckFilled } from '@tabler/icons-react'
 import * as std from '@std'
 
 import { Skeleton, Text } from '@mantine/core'
+import { VerifiedBadge } from '../Badges'
 
 // Channel Icon
 type ChannelIconProps = {
@@ -27,30 +27,6 @@ export const ChannelIcon: React.FC<Partial<ChannelIconProps>> = props => {
   return <ChannelIconImage size={props.size ?? 36} src={props.channel.avatar[0].url} />
 }
 
-export const ChannelIconWithName: React.FC<ChannelIconProps> = props => (
-  <Flex as={Link} href={`/c/${props.channel.id}`} yAlign separation="8px">
-    <ChannelIconImage size={props.size ?? 36} src={props.channel.avatar![0].url} />
-    <Text c="dimmed" fw="medium">
-      {props.channel.name}
-    </Text>
-  </Flex>
-)
-
-/** @deprecated */
-export const ChannelLink: React.FC<Omit<ChannelIconProps, 'size'>> = ({ channel }) => (
-  <Text c="dimmed" fw={500} component={Link} href={`/c/${channel.id}`}>
-    {channel.name}
-  </Text>
-)
-
-// todo: can't make this a link because it gets nested in other links...
-/** @deprecated */
-export const CompactChannelLink: React.FC<Omit<ChannelIconProps, 'size'>> = ({ channel }) => (
-  <Text size="sm" c="dimmed">
-    {channel.name}
-  </Text>
-)
-
 export const ChannelName: React.FC<{ author?: Pick<std.User, 'name' | 'verified' | 'id'> }> = ({
   author,
 }) => {
@@ -60,7 +36,7 @@ export const ChannelName: React.FC<{ author?: Pick<std.User, 'name' | 'verified'
       <Text c="dark.0" fw={500}>
         {author.name}
       </Text>
-      {author.verified && <IconCircleCheckFilled size={18} />}
+      {author.verified && <VerifiedBadge size="md" />}
     </Row>
   )
 }

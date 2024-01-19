@@ -1,6 +1,6 @@
 import type { SWRResponse } from 'swr'
 
-import { Endpoints, Sockets } from '@extension/src/main'
+import { Endpoints, Sockets } from '@extension/src/service-worker'
 import {
   requestInitToTransferableRequestInit,
   transferableResponseToResponse,

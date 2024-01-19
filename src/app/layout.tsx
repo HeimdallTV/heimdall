@@ -1,13 +1,12 @@
 'use client'
 import { Roboto } from 'next/font/google'
-
-import StyledComponentsRegistry from './StyledComponentRegistry'
-
 import { ColorSchemeScript, MantineProvider, createTheme } from '@mantine/core'
-import { NavBar } from '@/components/NavBar'
 import '@mantine/core/styles.css'
 import './layout.css'
+import '../dev'
 import styled from 'styled-components'
+import StyledComponentsRegistry from './StyledComponentRegistry'
+import { NavBar } from '@/components/NavBar'
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -17,6 +16,7 @@ const roboto = Roboto({
 })
 
 const theme = createTheme({
+  fontFamily: roboto.style.fontFamily,
   colors: {
     dark: [
       '#C9C9C9',
@@ -51,7 +51,6 @@ const Shell = styled.div`
   }
 `
 
-// todo: swap appshell out for just a regular grid?
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -64,12 +63,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ColorSchemeScript />
       </head>
       <body>
-        <noscript>
-          <p>Heimdall requires JavaScript to function</p>
-        </noscript>
+        <noscript>Heimdall requires JavaScript to function</noscript>
         <StyledComponentsRegistry>
           <MantineProvider theme={theme} defaultColorScheme="dark">
-            <Shell className={roboto.className}>
+            <Shell>
               <NavBar />
               {children}
             </Shell>

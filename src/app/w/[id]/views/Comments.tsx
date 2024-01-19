@@ -1,12 +1,13 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { usePaginated } from '@/hooks/usePaginated'
 import yt from '@/parser/yt'
 import * as std from '@/parser/std'
-import { Avatar, Text } from '@mantine/core'
+import { Avatar, Text, UnstyledButton } from '@mantine/core'
 import { Column, Row } from 'lese'
 import { formatDateAgo } from '@/libs/format'
-import { IconThumbDown, IconThumbDownFilled, IconThumbUp, IconThumbUpFilled } from '@tabler/icons-react'
 import { RichTextChunk } from '@/components/RichText'
+import { toShortHumanReadable } from '@/parser/yt/core/helpers'
+import { DislikeIcon, LikeIcon } from '@/components/Badges'
 
 export const Comments: React.FC<{ videoId: string }> = ({ videoId }) => {
   const [commentPages, errors, next, done] = usePaginated(
@@ -28,39 +29,87 @@ const Comment: React.FC<{ comment: std.Comment }> = ({ comment }) => {
   return (
     <Row separation="16px">
       <Avatar radius="xl" src={comment.author.avatar![0].url} alt={comment.author.name} />
-      <Column separation="4px">
+      <Column separation="6px">
         <Row yAlign separation="4px">
           <Text component="h3" size="sm" fw={600}>
             {comment.author.name}
           </Text>
-          <Text c="dimmed" size="xs">
+          <Text c="dimmed" size="sm">
             {formatDateAgo(comment.publishedAt)}
           </Text>
         </Row>
-        <Text size="sm" lh="lg">
+        <Text size="md" lh="lg">
           {comment.content.map((chunk, i) => (
             <RichTextChunk key={i} chunk={chunk} />
           ))}
         </Text>
-        <Row yAlign separation="16px 8px 10px">
-          <Text fw="bold" size="xs">
-            REPLY
-          </Text>
-          {comment.likeStatus === std.LikeStatus.Like ? (
-            <IconThumbUpFilled size={20} />
-          ) : (
-            <IconThumbUp size={20} />
-          )}
-          <Text fw="bold" size="xs">
-            {comment.likes}
-          </Text>
-          {comment.likeStatus === std.LikeStatus.Dislike ? (
-            <IconThumbDownFilled size={20} />
-          ) : (
-            <IconThumbDown size={20} />
-          )}
-        </Row>
+        <CommentMetadata comment={comment} />
       </Column>
     </Row>
+  )
+}
+
+const CommentMetadata: React.FC<{ comment: std.Comment }> = ({ comment }) => {
+  return (
+    <Row yAlign separation="16px 8px 10px">
+      <Text fw="bold" size="sm">
+        REPLY
+      </Text>
+      {comment.likeStatus && comment.likes !== undefined && comment.setLikeStatus && (
+        <CommentLikeButtons
+          likeStatus={comment.likeStatus}
+          likeCount={comment.likes}
+          setLikeStatus={comment.setLikeStatus}
+        />
+      )}
+    </Row>
+  )
+}
+
+const CommentLikeButtons = ({
+  likeStatus: initialLikeStatus,
+  likeCount,
+  setLikeStatus: externalSetLikeStatus,
+}: {
+  likeStatus: std.LikeStatus
+  likeCount: number
+  setLikeStatus: (currentLikeStatus: std.LikeStatus, desiredLikeStatus: std.LikeStatus) => Promise<void>
+}) => {
+  const [currentLikeStatus, setCurrentLikeStatus] = useState<std.LikeStatus>(initialLikeStatus)
+  // fixme: should use a queue for the user actions and run this serially on the latest user action
+  const setLikeStatus = useCallback(
+    async (newLikeStatus: std.LikeStatus) => {
+      setCurrentLikeStatus(newLikeStatus)
+      await externalSetLikeStatus(currentLikeStatus, newLikeStatus).catch(err => {
+        setCurrentLikeStatus(currentLikeStatus)
+        throw err
+      })
+    },
+    [externalSetLikeStatus, currentLikeStatus],
+  )
+
+  return (
+    <>
+      <UnstyledButton
+        onClick={() => setLikeStatus(std.toggleLikeStatus(std.LikeStatus.Like, currentLikeStatus))}
+      >
+        <LikeIcon likeStatus={currentLikeStatus} size="lg" />
+      </UnstyledButton>
+      <Text fw="bold" size="sm">
+        {toShortHumanReadable(
+          Math.max(
+            0,
+            likeCount +
+              std.matchLikeStatus(currentLikeStatus, 1, 0, -1) +
+              std.matchLikeStatus(initialLikeStatus, -1, 0, 1),
+          ),
+        )}
+      </Text>
+      <UnstyledButton
+        onClick={() => setLikeStatus(std.toggleLikeStatus(std.LikeStatus.Dislike, currentLikeStatus))}
+      >
+        <DislikeIcon likeStatus={currentLikeStatus} size="lg" />
+      </UnstyledButton>
+    </>
   )
 }

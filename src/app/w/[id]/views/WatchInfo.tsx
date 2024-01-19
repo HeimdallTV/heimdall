@@ -2,26 +2,17 @@ import { Grid, Column, Row } from 'lese'
 import { Button, Skeleton, Text, Tooltip } from '@mantine/core'
 import { ChannelIcon, ChannelName } from '@/components/Channel/Link'
 import { toShortHumanReadable } from '@/parser/yt/core/helpers'
-import {
-  IconCheck,
-  IconClipboard,
-  IconClock,
-  IconHeart,
-  IconHeartFilled,
-  IconThumbDown,
-  IconThumbDownFilled,
-  IconThumbUp,
-  IconThumbUpFilled,
-} from '@tabler/icons-react'
+import { IconCheck, IconClipboard, IconClock, IconHeart, IconHeartFilled } from '@tabler/icons-react'
 import { Description } from './Description'
 import { Video } from '@/parser/std'
 import { RelatedVideos } from './RelatedVideos'
 import * as std from '@/parser/std'
 import styled from 'styled-components'
 import { Comments } from './Comments'
-import { useContext, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import { PlayerContext } from './player/context'
 import yt from '@yt'
+import { DislikeIcon, LikeIcon } from '@/components/Badges'
 
 const WatchGrid = styled(Grid)`
   max-width: 1280px;
@@ -81,7 +72,7 @@ const VideoInteractions: React.FC<{ video?: Video }> = ({ video }) => {
         videoId={video.id}
         likeCount={video.likeCount}
         dislikeCount={video.dislikeCount}
-        likeStatus={video.likeStatus}
+        likeStatus={video.likeStatus!}
       />
       <CopyLinkButton videoId={video.id} provider={video.provider} />
     </Row>
@@ -100,13 +91,13 @@ export const VideoInfo: React.FC<{ video?: Video }> = ({ video }) => (
       viewCount={video?.viewCount!}
       publishDate={video?.publishDate!}
     />
-    <Comments videoId={video?.id!} />
+    {video?.id && <Comments videoId={video?.id!} />}
   </Column>
 )
 
 // todo: better name
 export const ChannelInfo: React.FC<{ author?: std.User }> = ({ author }) => (
-  <Column separation="4px">
+  <Column>
     <ChannelName author={author} />
     {(!author || author.followerCount !== undefined) && (
       <SubscriberCount followerCount={author?.followerCount} />
@@ -142,35 +133,41 @@ export const FollowButton: React.FC<{
 
 export const LikeButtons: React.FC<{
   videoId: string
-  likeStatus?: std.LikeStatus
+  likeStatus: std.LikeStatus
   likeCount?: number
   dislikeCount?: number
 }> = ({ videoId, likeStatus: initialLikeStatus, likeCount, dislikeCount }) => {
-  const [likeStatus, setLikeStatus] = useState(initialLikeStatus)
-  const LikeIcon = likeStatus === std.LikeStatus.Like ? IconThumbUpFilled : IconThumbUp
-  const DislikeIcon = likeStatus === std.LikeStatus.Dislike ? IconThumbDownFilled : IconThumbDown
-  // todo: handle provider not supporing like counts
+  const [currentLikeStatus, setCurrentLikeStatus] = useState(initialLikeStatus)
+  // fixme: should use a queue for the user actions and run this serially on the latest user action
+  const setLikeStatus = useCallback(
+    async (desiredLikeStatus: std.LikeStatus) => {
+      if (currentLikeStatus === desiredLikeStatus) return
+      setCurrentLikeStatus(desiredLikeStatus)
+      await yt.setVideoLikeStatus!(videoId, currentLikeStatus, desiredLikeStatus).catch(err => {
+        // todo: error handling
+        setCurrentLikeStatus(currentLikeStatus)
+        throw err
+      })
+    },
+    [currentLikeStatus],
+  )
+
+  // todo: handle provider not supporting like counts, or not supporting setting like status
   return (
     <Button.Group>
       <Button
         variant="default"
-        leftSection={<LikeIcon fontSize="large" />}
-        onClick={async () => {
-          const desiredLikeStatus =
-            likeStatus === std.LikeStatus.Like ? std.LikeStatus.Indifferent : std.LikeStatus.Like
-          // todo: send notification on error
-          await yt.setVideoLikeStatus!(
-            videoId,
-            likeStatus ?? std.LikeStatus.Indifferent,
-            desiredLikeStatus,
-          ).catch(console.error)
-          setLikeStatus(desiredLikeStatus)
-        }}
+        leftSection={<LikeIcon likeStatus={currentLikeStatus} size="xl" />}
+        onClick={() => setLikeStatus(std.toggleLikeStatus(std.LikeStatus.Like, currentLikeStatus))}
       >
-        {toShortHumanReadable(likeCount ?? 0)}
+        {toShortHumanReadable(likeCount!)}
       </Button>
-      <Button variant="default" leftSection={<DislikeIcon fontSize="large" />}>
-        {toShortHumanReadable(dislikeCount ?? 0)}
+      <Button
+        variant="default"
+        leftSection={<DislikeIcon likeStatus={currentLikeStatus} size="xl" />}
+        onClick={() => setLikeStatus(std.toggleLikeStatus(std.LikeStatus.Dislike, currentLikeStatus))}
+      >
+        {toShortHumanReadable(dislikeCount!)}
       </Button>
     </Button.Group>
   )

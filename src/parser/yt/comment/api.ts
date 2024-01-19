@@ -1,6 +1,7 @@
 import {
-  ReloadContinuationItemsResponse,
-  getReloadContinuationItemsResponseItems,
+  AppendContinuationItemsResponse,
+  ContinuationItem,
+  getContinuationResponseItems,
 } from '@yt/components/continuation'
 import { BaseResponse, Endpoint, fetchYt, makeContinuationIterator } from '@yt/core/api'
 import { fetchVideo } from '@yt/video/api'
@@ -8,19 +9,24 @@ import { CommentThread } from './types'
 import { Text } from '../components/text'
 import { Some, isRenderer } from '../core/internals'
 import { CommentsHeader } from './types/comments-header'
+import { ItemSectionWithIdentifier } from '../components/core'
 
 /** Entry point for fetching comments since we can't retrieve them directly from the video */
 export const fetchVideoCommentsContinuationToken = (videoId: string) =>
   fetchVideo(videoId).then(
     video =>
-      video.contents.twoColumnWatchNextResults.results.results.contents[3].itemSectionRenderer.contents[0]
-        .continuationItemRenderer.continuationEndpoint.continuationCommand.token,
+      video.contents.twoColumnWatchNextResults.results.results.contents.find(
+        (renderer): renderer is ItemSectionWithIdentifier<ContinuationItem, 'comment-item-section'> =>
+          isRenderer('itemSection')(renderer) &&
+          renderer.itemSectionRenderer.sectionIdentifier === 'comment-item-section',
+      )!.itemSectionRenderer.contents[0].continuationItemRenderer.continuationEndpoint.continuationCommand
+        .token,
   )
 
 // List comments
-type FetchCommentsResponse = ReloadContinuationItemsResponse<CommentThread | CommentsHeader>
+type FetchCommentsResponse = AppendContinuationItemsResponse<CommentThread | CommentsHeader>
 const getCommentThreadsFromResponse = (res: FetchCommentsResponse) =>
-  getReloadContinuationItemsResponseItems(res, isRenderer('commentThread'))
+  getContinuationResponseItems(res, isRenderer('commentThread'))
 const fetchCommentThreadsContinuation = (continuation: string) =>
   fetchYt<FetchCommentsResponse>(Endpoint.Next, { continuation }).then(getCommentThreadsFromResponse)
 
@@ -44,7 +50,7 @@ type CreateCommentResponse = BaseResponse & {
 }
 
 const getCommentsHeaderFromResponse = (res: FetchCommentsResponse) =>
-  getReloadContinuationItemsResponseItems(res, isRenderer('commentsHeader'))[0] as CommentsHeader
+  getContinuationResponseItems(res, isRenderer('commentsHeader'))[0] as CommentsHeader
 const fetchCommentsHeader = (continuation: string) =>
   fetchYt<FetchCommentsResponse>(Endpoint.Next, { continuation }).then(getCommentsHeaderFromResponse)
 
