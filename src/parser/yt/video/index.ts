@@ -90,7 +90,6 @@ export async function getPlayer(videoId: string) {
     fetchPlayer(videoId).then(processPlayer),
     fetchSponsorBlock(videoId),
   ])
-
   return { ...player, segments }
 }
 
