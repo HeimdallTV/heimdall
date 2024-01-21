@@ -199,6 +199,8 @@ const segmentCategoryColor = {
   [std.PlayerSegmentCategory.Preview]: 'var(--mantine-color-cyan-5)',
   [std.PlayerSegmentCategory.Filler]: 'var(--mantine-color-violet-5)',
   [std.PlayerSegmentCategory.MusicOfftopic]: 'var(--mantine-color-orange-5)',
+  [std.PlayerSegmentCategory.Chapter]: 'never',
+  [std.PlayerSegmentCategory.ExclusiveAccess]: 'never',
 }
 const SegmentOverlays: React.FC = () => {
   const playerContext = useContext(PlayerContext)!

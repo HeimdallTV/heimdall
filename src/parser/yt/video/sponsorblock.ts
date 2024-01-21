@@ -11,7 +11,7 @@ type SponsorBlockResponse = {
   description: string
 }[]
 
-export const fetchSponsorBlock = async (videoID: string) => {
+export const fetchSponsorBlock = async (videoID: string): Promise<std.PlayerSegments> => {
   const query = new URLSearchParams({
     videoID,
     categories: JSON.stringify([
@@ -42,17 +42,15 @@ export const fetchSponsorBlock = async (videoID: string) => {
 
   if (resp.status !== 200) {
     return {
-      skipSegments: [],
+      categories: [],
       chapters: [],
       highlights: [],
     }
   }
 
   const data: SponsorBlockResponse = await resp.json()
-
   // TODO: handle mute action types ??
-
-  const segments: std.PlayerSegments = {
+  return {
     categories: data
       .filter(segment => segment.actionType === std.PlayerSegmentActionType.Skip)
       .map(segment => ({
@@ -79,6 +77,4 @@ export const fetchSponsorBlock = async (videoID: string) => {
         timestampMS: segment.segment[0] * 1000,
       })),
   }
-
-  return segments
 }

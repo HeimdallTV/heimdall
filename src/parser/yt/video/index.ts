@@ -91,8 +91,6 @@ export async function getPlayer(videoId: string) {
     fetchSponsorBlock(videoId),
   ])
 
-  console.log(segments)
-
   return { ...player, segments }
 }
 

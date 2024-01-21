@@ -1,5 +1,6 @@
-import { useIntersection } from '@mantine/hooks'
-import { useEffect } from 'react'
+'use client'
+import { useIntersection } from '@/hooks/useIntersection'
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 const InfiniteScrollDetectionBox = styled.div`
@@ -12,7 +13,8 @@ const InfiniteScrollDetectionBox = styled.div`
 `
 
 export const InfiniteScrollDetector: React.FC<{ onLoad?: () => any }> = ({ onLoad }) => {
-  const { ref, entry } = useIntersection({ root: document.body, threshold: 0 })
+  const ref = useRef<HTMLDivElement>(null)
+  const entry = useIntersection(ref, { threshold: 0 })
   useEffect(() => {
     if (entry?.isIntersecting) onLoad?.()
   }, [entry?.isIntersecting, onLoad])
