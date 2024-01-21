@@ -31,7 +31,7 @@ const getQualityOptions = (sources: std.Source<std.SourceType>[]) => {
     height: source.height,
     frameRate: source.frameRate,
     bitRate: source.videoBitrate!,
-    source,
+    source: { video: source, audio: source },
   }))
   return (
     [...combinedQualityOptions, ...videoQualityOptions]
@@ -49,11 +49,7 @@ const getQualityOptions = (sources: std.Source<std.SourceType>[]) => {
 export const Quality: React.FC = () => {
   const playerInstance = useContext(PlayerContext)
   const { source: selectedSource, sources, setSource } = useSource(playerInstance!)
-  const selectedSourceHeight = !selectedSource
-    ? 0
-    : 'video' in selectedSource
-      ? selectedSource.video.height
-      : selectedSource.height
+  const selectedSourceHeight = selectedSource?.video.height ?? 0
   const qualityOptions: QualityOption[] = useMemo(() => getQualityOptions(sources), [sources])
 
   return (

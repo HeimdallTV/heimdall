@@ -12,6 +12,7 @@ import { useHover, useIdle } from '@mantine/hooks'
 import { useBuffering, usePlayerState } from './hooks/use'
 import useDoubleClick from '@/hooks/useDoubleClick'
 import { useDelayedToggle } from '@/hooks/useDelayed'
+import { PlayerState } from './hooks/usePlayerInstance'
 
 export const Player: FC = () => {
   const playerInstance = useContext(PlayerContext)
@@ -41,7 +42,7 @@ const PlayerUI: FC = () => {
   const playerInstance = useContext(PlayerContext)
   const { state: playerState, togglePlay } = usePlayerState(playerInstance!)
   const { buffering } = useBuffering(playerInstance!)
-  const showBuffering = useDelayedToggle(buffering, 400)
+  const showBuffering = useDelayedToggle(buffering, 400) && playerState === PlayerState.Playing
   const isFullscreen = useIsFullscreen()
 
   const idle = useIdle(1000, { events: ['mousemove'] })

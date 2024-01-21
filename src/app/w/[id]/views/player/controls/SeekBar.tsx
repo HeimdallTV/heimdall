@@ -148,7 +148,6 @@ const usePlayerTimingsMS = (playerContext: PlayerInstance, minDelay = 16) => {
 export const SeekBar: React.FC = () => {
   const playerContext = useContext(PlayerContext)
   const { currentTimeMS, durationMS } = usePlayerTimingsMS(playerContext!)
-  const { segments } = useSegments(playerContext!)
 
   const onMoveCallback = useCallback(
     (percent: number) => playerContext!.seekMS.set((percent / 100) * playerContext!.durationMS.get()),

@@ -11,9 +11,10 @@ export enum PlayerState {
 }
 
 // TODO: Better name
-export type CombinedSource =
-  | std.Source<std.SourceType.AudioVideo>
-  | { audio: std.Source<std.SourceType.Audio>; video: std.Source<std.SourceType.Video> }
+export type CombinedSource = {
+  audio: std.Source<std.SourceType.Audio | std.SourceType.AudioVideo>
+  video: std.Source<std.SourceType.Video | std.SourceType.AudioVideo>
+}
 export type PlayerInstance = {
   video: HTMLVideoElement
   audio: HTMLAudioElement
@@ -65,10 +66,20 @@ const createValueListener = <Value>(initialValue: Value) => {
   }
 }
 
+async function canPlay() {
+  const audio = new Audio()
+  audio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA'
+  return audio
+    .play()
+    .then(() => true)
+    .catch(() => false)
+}
+
 // todo: should play video first and then audio after it loads
 export const createPlayerInstance = (player: std.Player): PlayerInstance => {
   const video = document.createElement('video')
   const audio = new Audio()
+  const isReady = () => video.readyState > 0 && audio.readyState > 0
 
   const state = createValueListener(PlayerState.Playing)
   const seekMS = createValueListener<number | undefined>(undefined)
@@ -84,58 +95,53 @@ export const createPlayerInstance = (player: std.Player): PlayerInstance => {
   const closedCaptions = createValueListener<std.ClosedCaption | undefined>(undefined)
   const durationMS = createValueListener(0)
 
+  const play = async () => {
+    if (!(await canPlay())) return state.set(PlayerState.Paused)
+    return video
+      .play()
+      .then(() => audio.play())
+      .catch(console.error)
+  }
+  const pause = () => {
+    video.pause()
+    audio.pause()
+  }
+
+  // Source
+  // todo: maintain position
+  // todo: handle video with seperate audio
+  video.src = source.get().video.url
+  audio.src = source.get().audio.url
+  video.style.setProperty('aspect-ratio', `${source.get().video.width} / ${source.get().video.height}`)
+  source.onChange(source => {
+    video.src = source.video.url
+    audio.src = source.audio.url
+    video.style.setProperty('aspect-ratio', `${source.video.width} / ${source.video.height}`)
+  })
+  if (state.get() === PlayerState.Playing) play()
+
   // State
   state.onChange(newState => {
     if (newState === PlayerState.Playing && !buffering.get()) {
-      video.play().catch(err => {
-        console.error(err)
-        // state.set(PlayerState.Error)
-      })
-      audio.play().catch(err => {
-        console.error(err)
-        // state.set(PlayerState.Error)
-      })
+      play()
     } else if (newState === PlayerState.Paused) {
-      video.pause()
-      audio.pause()
+      pause()
     } else if (newState === PlayerState.Ended || newState === PlayerState.Error) {
-      video.pause()
+      pause()
       video.currentTime = Infinity
-      audio.pause()
       audio.currentTime = Infinity
     }
   })
 
   // Buffering
-  let videoBuffering = true
-  let audioBuffering = true
-  video.addEventListener('waiting', () => {
-    videoBuffering = true
-    buffering.set(true)
-  })
-  video.addEventListener('canplaythrough', () => {
-    console.log('video canplay')
-    videoBuffering = false
-    buffering.set(videoBuffering || audioBuffering)
-  })
-  audio.addEventListener('waiting', () => {
-    audioBuffering = true
-    buffering.set(true)
-  })
-  audio.addEventListener('canplaythrough', () => {
-    console.log('audio canplay')
-    audioBuffering = false
-    buffering.set(videoBuffering || audioBuffering)
-  })
+  const bufferingIntervalId = setInterval(
+    () => buffering.set(video.readyState < 3 || audio.readyState < 3),
+    10,
+  )
   buffering.onChange(buffering => {
     console.log('buffering', buffering)
-    if (buffering) {
-      video.pause()
-      audio.pause()
-    } else if (state.get() === PlayerState.Playing) {
-      video.play().catch(() => state.set(PlayerState.Error))
-      audio.play().catch(() => state.set(PlayerState.Error))
-    }
+    if (buffering) pause()
+    else if (state.get() === PlayerState.Playing) play()
   })
 
   // Volume
@@ -155,8 +161,8 @@ export const createPlayerInstance = (player: std.Player): PlayerInstance => {
   })
 
   // Synchronize audio and video
-  setInterval(() => {
-    if (!video.currentTime || !audio.currentTime) return
+  const syncronizeIntervalId = setInterval(() => {
+    if (!isReady()) return
 
     const rate = playbackRate.get()
     const currentTime = audio.currentTime
@@ -175,43 +181,29 @@ export const createPlayerInstance = (player: std.Player): PlayerInstance => {
     else if (video.currentTime - currentTime < -0.01) video.playbackRate = rate + synchronizationFactor
     // Video in sync
     else video.playbackRate = rate
-  }, 50)
+  }, 100)
 
+  // Duration
+  // todo: handle duration = nan
   video.addEventListener('durationchange', () =>
     durationMS.set(Math.min(video.duration * 1000, audio.duration * 1000)),
   )
   audio.addEventListener('durationchange', () =>
     durationMS.set(Math.min(video.duration * 1000, audio.duration * 1000)),
   )
-  setInterval(() => {
+
+  // Buffered
+  video.addEventListener('progress', () => {
     const bufferedRanges = new Array(video.buffered.length)
       .fill(0)
       .map<[number, number]>((_, i) => [video.buffered.start(i) * 1000, video.buffered.end(i) * 1000])
     if (bufferedRanges.length === 0) return
     bufferedRangesMS.set(bufferedRanges)
-  }, 500)
-
-  // Source
-  // todo: maintain position
-  // todo: handle video with seperate audio
-  // @ts-ignore
-  video.src = source.get().video.url
-  // @ts-ignore
-  audio.src = source.get().audio.url
-  // @ts-ignore
-  video.style.setProperty('aspect-ratio', `${source.get().video.width} / ${source.get().video.height}`)
-  source.onChange(source => {
-    // @ts-ignore
-    video.src = source.video.url
-    // @ts-ignore
-    audio.src = source.audio.url
-    // @ts-ignore
-    video.style.setProperty('aspect-ratio', `${source.video.width} / ${source.video.height}`)
   })
 
   // Seeking
   seekMS.onChange(seekMS => {
-    if (seekMS === undefined) return
+    if (seekMS === undefined || !isReady()) return
     video.currentTime = seekMS / 1000
     audio.currentTime = seekMS / 1000
   })
@@ -223,6 +215,8 @@ export const createPlayerInstance = (player: std.Player): PlayerInstance => {
     play: () => state.set(PlayerState.Playing),
     pause: () => state.set(PlayerState.Paused),
     destroy: () => {
+      clearInterval(bufferingIntervalId)
+      clearInterval(syncronizeIntervalId)
       video.pause()
       video.src = ''
       audio.pause()
@@ -247,11 +241,13 @@ export const createPlayerInstance = (player: std.Player): PlayerInstance => {
 
 export const usePlayerInstance = (player?: std.Player) => {
   const [instance, setInstance] = useState<PlayerInstance | undefined>(undefined)
+
   useEffect(() => {
     if (!player) return
     const instance = createPlayerInstance(player)
     setInstance(instance)
     return () => instance.destroy()
   }, [player])
+
   return instance
 }
