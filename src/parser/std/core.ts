@@ -12,7 +12,7 @@ export const matchLikeStatus = <ReturnType extends string | number | boolean | o
   onLike: ReturnType | (() => ReturnType),
   onIndifferent: ReturnType | (() => ReturnType),
   onDislike: ReturnType | (() => ReturnType),
-) => {
+): ReturnType => {
   if (likeStatus === LikeStatus.Like) return typeof onLike === 'function' ? onLike() : onLike
   if (likeStatus === LikeStatus.Dislike) return typeof onDislike === 'function' ? onDislike() : onDislike
   if (likeStatus === LikeStatus.Indifferent) {

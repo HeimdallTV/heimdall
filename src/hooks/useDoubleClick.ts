@@ -23,7 +23,7 @@ type DoubleClickOptions = {
   onDoubleClick?: (triggeredEager: boolean) => void
 }
 export default function useDoubleClick({
-  eagerDelayMS = 100,
+  eagerDelayMS = 200,
   delayMS = 500,
   onEagerSingleClick = () => {},
   onDoubleClick = () => {},
@@ -45,6 +45,6 @@ export default function useDoubleClick({
         onEagerSingleClick()
       }, eagerDelayMS)
     }
-  }, [onEagerSingleClick, onDoubleClick, delayMS])
+  }, [onEagerSingleClick, onDoubleClick, delayMS, eagerDelayMS])
   return onClick
 }

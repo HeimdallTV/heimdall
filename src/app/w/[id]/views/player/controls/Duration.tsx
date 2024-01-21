@@ -8,9 +8,9 @@ import usePoll from '@/hooks/usePoll'
 export const Duration: React.FC = () => {
   const playerInstance = useContext(PlayerContext)
   const { durationMS } = useDurationMS(playerInstance!)
-  const [currentTimeMS, setCurrentTimeMS] = useState(playerInstance!.getCurrentTimeMS())
+  const [currentTimeMS, setCurrentTimeMS] = useState(playerInstance!.currentTimeMS.get())
   usePoll(() => {
-    setCurrentTimeMS(playerInstance!.getCurrentTimeMS())
+    setCurrentTimeMS(playerInstance!.currentTimeMS.get())
     return 1000 - (currentTimeMS % 1000)
   }, [playerInstance])
 

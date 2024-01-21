@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { formatNumberDuration } from '@libs/format'
 import { when } from '@libs/utils'
 import * as std from '@std'
-import { Badge, BadgeProps } from '@mantine/core'
+import { Badge, BadgeProps, DefaultMantineColor, Skeleton } from '@mantine/core'
 
 const TRANSITION = 'opacity 250ms ease 250ms'
 
@@ -43,6 +43,7 @@ const ThumbnailContext = createContext({
 
 export type ThumbnailProps = PropsWithChildren<Pick<std.Video, 'staticThumbnail' | 'animatedThumbnail'>>
 export const Thumbnail: React.FC<ThumbnailProps> = ({ staticThumbnail, animatedThumbnail, children }) => {
+  const [loaded, setLoaded] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [willShowAnimated, setWillShowAnimated] = useState(false)
 
@@ -59,7 +60,8 @@ export const Thumbnail: React.FC<ThumbnailProps> = ({ staticThumbnail, animatedT
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <img src={staticThumbnail[0].url} alt="thumbnail" />
+        {!loaded && <Skeleton style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }} />}
+        <img src={staticThumbnail[0].url} alt="thumbnail" onLoad={() => setLoaded(true)} />
         {animatedThumbnail !== undefined && (
           <img
             src={animatedThumbnail[0].url}
@@ -76,24 +78,29 @@ export const Thumbnail: React.FC<ThumbnailProps> = ({ staticThumbnail, animatedT
   )
 }
 
-export type LengthBadgeProps = Pick<std.Video, 'length' | 'type'>
-export const LengthBadge: React.FC<LengthBadgeProps> = ({ type, length }) => {
+export type ThumbnailBadgeProps = {
+  text: string
+  color?: DefaultMantineColor
+}
+export const ThumbnailBadge: React.FC<ThumbnailBadgeProps> = ({ text, color }) => {
   const { isHovered, willShowAnimated } = useContext(ThumbnailContext)
   const styles = {
     opacity: willShowAnimated && isHovered ? 0 : 1,
     transition: when(isHovered)(TRANSITION),
   }
-  if (type !== std.VideoType.Static || length === undefined) return
   return (
-    <AbsoluteBadge color="dark" styles={{ root: styles }}>
-      {formatNumberDuration(length)}
+    <AbsoluteBadge color={color} styles={{ root: styles }}>
+      {text}
     </AbsoluteBadge>
   )
 }
 
-export type VideoThumbnailProps = Partial<ThumbnailProps & LengthBadgeProps>
-export const VideoThumbnail: React.FC<ThumbnailProps & LengthBadgeProps> = props => (
+export type VideoThumbnailProps = ThumbnailProps & Pick<std.Video, 'type' | 'length'>
+export const VideoThumbnail: React.FC<VideoThumbnailProps> = props => (
   <Thumbnail {...props}>
-    <LengthBadge {...props} />
+    {props.type === std.VideoType.Live && <ThumbnailBadge text="LIVE" />}
+    {props.type !== std.VideoType.Live && props.length !== undefined && (
+      <ThumbnailBadge color="dark" text={formatNumberDuration(props.length!)} />
+    )}
   </Thumbnail>
 )

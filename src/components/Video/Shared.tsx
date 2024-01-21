@@ -1,13 +1,11 @@
 import React from 'react'
 import { formatDateAgo, formatNumberShort } from '@libs/format'
 import * as std from '@std'
-import { Badge, MantineSize, Text } from '@mantine/core'
+import { MantineSize, Text } from '@mantine/core'
 import { Row } from 'lese'
 import Link from 'next/link'
 import styled from 'styled-components'
 import { VerifiedBadge } from '../Badges'
-
-export const LiveNow = () => <Badge>LIVE NOW</Badge>
 
 export const VideoSubLine: React.FC<{
   video: Pick<std.Video, 'type' | 'viewCount' | 'publishDate'>
@@ -20,7 +18,6 @@ export const VideoSubLine: React.FC<{
         <Text c="dimmed" size={size}>
           {formatNumberShort(video.viewCount!)} watching
         </Text>
-        <LiveNow />
       </Row>
     )
   }

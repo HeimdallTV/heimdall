@@ -5,8 +5,9 @@ import { formatDayRelative } from '@/libs/format'
 
 import yt from '@yt'
 
-export default function Following() {
+export default function History() {
   const [historyVideoPages, errors, getNextPage] = usePaginated(yt.listHistory!)
+  console.log(historyVideoPages, errors)
   if (errors.length) return <div>{errors.map(e => e.message).join('\n')}</div>
   return (
     <main>

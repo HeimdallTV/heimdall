@@ -25,6 +25,7 @@ const DescriptionContainer = styled(Column)<{ $canExpanded: boolean }>`
   }`}
 `
 
+// todo: handle no rich text chunks
 export const Description: React.FC<{
   description?: std.RichText
   viewCount?: number

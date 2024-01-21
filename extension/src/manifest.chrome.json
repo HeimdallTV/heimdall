@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
+  "action": {},
   "background": {
     "service_worker": "service-worker.js"
   },
-  "permissions": ["cookies", "storage", "declarativeNetRequest", "declarativeNetRequestFeedback"],
-  "host_permissions": ["https://*/*", "http://*/*"]
+  "permissions": ["cookies", "storage", "declarativeNetRequest"],
+  "host_permissions": ["https://*.youtube.com/*", "https://returnyoutubedislikeapi.com/*"]
 }

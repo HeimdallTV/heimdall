@@ -6,7 +6,7 @@ import { ControlButton } from '../components/ControlButton'
 
 import { Menu } from '@mantine/core'
 
-const PLAYBACK_RATES = [2, 1.75, 1.5, 1.25, 1, 0.75, 0.5, 0.25]
+const PLAYBACK_RATES = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
 
 export const PlaybackRate: React.FC = () => {
   const playerInstance = useContext(PlayerContext)

@@ -19,7 +19,7 @@ import { PlaybackRate } from './controls/PlaybackRate'
 import { PlayButton } from './controls/PlayButton'
 import { Quality } from './controls/Quality'
 import { Volume } from './controls/Volume'
-import { PlayerState } from './hooks/usePlayer'
+import { PlayerState } from './hooks/usePlayerInstance'
 import { SeekBar } from './controls/SeekBar'
 import { useHover } from '@mantine/hooks'
 import { usePlayerState } from './hooks/use'
@@ -32,6 +32,7 @@ const ControlsContainer = styled(Column)<{ show: boolean } & FlexProps>`
   right: 0;
   padding: 0.8rem;
   padding-top: 1.2rem;
+  z-index: 1000;
 
   transition: 0.2s opacity;
   opacity: ${({ show }) => String(Number(show))};
@@ -66,12 +67,12 @@ export const Controls: React.FC<{ playerRoot: RefObject<HTMLElement>; mouseActiv
           <PlayButton />
           <IconChevronsRight size={24} />
           <IconPlayerSkipForward size={24} />
+          <Volume />
           <Duration />
         </Row>
         <Row separation="20px" yAlign>
           <EndsAt />
           <ClosedCaption />
-          <Volume />
           <PlaybackRate />
           <Quality />
           <FullscreenButton playerRoot={playerRoot} />

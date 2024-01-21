@@ -11,22 +11,8 @@ export const toShortHumanReadable = (num: number) => {
   return divideByAndConcat(1_000_000_000, 'B')(num)
 }
 
-/**
- * Text must be in the form "123,345 views"
- */
-export function humanReadableToNumber(text: string): number {
-  return Number(
-    text
-      .split(/([\d,]+)/)
-      .filter(Boolean)[0]
-      .replaceAll(',', ''),
-  )
-}
-
-/**
- * Text must be in the form "123,345 views", "123k views", "1.5M views", etc.
- */
-export function shortHumanReadableToNumber(text: string): number {
+/** Text must be in the form "123,345 views", "123k views", "1.5M views", etc. */
+export function fromShortHumanReadable(text: string): number {
   const relativeNumber = text
     .split(/([\d\.,KMBT]+)/gi)
     .filter(Boolean)[0]
@@ -58,6 +44,7 @@ export function durationTextToSeconds(simpleText: string): number {
     .reduce((a, b) => a + b, 0) // Add seconds together
 }
 
+/** Text must be in the form "123,345 views" */
 export const parseViewCount = (viewCount: string) =>
   Number(
     viewCount

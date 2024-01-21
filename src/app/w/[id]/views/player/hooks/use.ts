@@ -1,105 +1,101 @@
 import { useEffect, useState } from 'react'
-import { PlayerInstance, PlayerState } from './usePlayer'
+import { PlayerInstance, PlayerState } from './usePlayerInstance'
 
 export const usePlayerState = (player: PlayerInstance) => {
-  const [state, setState] = useState(player.getState)
-  useEffect(() => player.onStateChange(setState), [player])
+  const [state, setState] = useState(player.state.get)
+  useEffect(() => player.state.onChange(setState), [player])
   useEffect(() => {
-    setState(player.getState)
+    setState(player.state.get)
   }, [player])
   return {
     state,
     togglePlay: (state: PlayerState) =>
-      player.setState(state === PlayerState.Playing ? PlayerState.Paused : PlayerState.Playing),
-    play: () => player.setState(PlayerState.Playing),
-    pause: () => player.setState(PlayerState.Paused),
+      player.state.set(state === PlayerState.Playing ? PlayerState.Paused : PlayerState.Playing),
+    play: () => player.state.set(PlayerState.Playing),
+    pause: () => player.state.set(PlayerState.Paused),
   }
 }
 
-export const useDurationMS = (player: PlayerInstance) => {
-  const [durationMS, setDurationMS] = useState(player.getDurationMS)
-  useEffect(() => player.onDurationMSChange(setDurationMS), [player])
+export const useSeekMS = (player: PlayerInstance) => {
+  const [seekMS, setSeekMS] = useState(player.seekMS.get)
+  useEffect(() => player.seekMS.onChange(setSeekMS), [player])
   useEffect(() => {
-    setDurationMS(player.getDurationMS)
+    setSeekMS(player.seekMS.get)
   }, [player])
+  return { seekMS, setSeekMS: player.seekMS.set }
+}
+
+export const useSource = (player: PlayerInstance) => {
+  const [source, setSource] = useState(player.source.get)
+  useEffect(() => player.source.onChange(setSource), [player])
+  useEffect(() => setSource(player.source.get), [player])
   return {
-    durationMS,
-    setDurationMS: player.setDurationMS,
+    source,
+    sources: player.sources,
+    setSource: player.source.set,
   }
 }
 
-export const useBufferedMS = (player: PlayerInstance) => {
-  const [bufferedMS, setBufferedMS] = useState(player.getBufferedMS)
-  useEffect(() => player.onBufferedMSChange(setBufferedMS), [player])
-  useEffect(() => {
-    setBufferedMS(player.getBufferedMS)
-  }, [player])
-  return {
-    bufferedMS,
-    setBufferedMS: player.setBufferedMS,
-  }
+export const useSegments = (player: PlayerInstance) => {
+  const [segments, setSegments] = useState(player.segments)
+  useEffect(() => setSegments(player.segments), [player])
+  return { segments }
+}
+
+export const useBuffering = (player: PlayerInstance) => {
+  const [buffering, setBuffering] = useState(player.buffering.get)
+  useEffect(() => player.buffering.onChange(setBuffering), [player])
+  useEffect(() => setBuffering(player.buffering.get), [player])
+  return { buffering }
+}
+
+export const useBufferedRangesMS = (player: PlayerInstance) => {
+  const [bufferedRangesMS, setBufferedRangesMS] = useState(player.bufferedRangesMS.get)
+  useEffect(() => player.bufferedRangesMS.onChange(setBufferedRangesMS), [player])
+  useEffect(() => setBufferedRangesMS(player.bufferedRangesMS.get), [player])
+  return { bufferedRangesMS }
 }
 
 export const useVolume = (player: PlayerInstance) => {
-  const [volume, setVolume] = useState(player.getVolume)
-  useEffect(() => player.onVolumeChange(setVolume), [player])
-  useEffect(() => {
-    setVolume(player.getVolume)
-  }, [player])
+  const [volume, setVolume] = useState(player.volume.get)
+  useEffect(() => player.volume.onChange(setVolume), [player])
+  useEffect(() => setVolume(player.volume.get), [player])
   return {
     volume,
-    volumeLog: Math.log10(volume),
-    setVolume: player.setVolume,
-    setVolumeLog: (volume: number) => player.setVolume(Math.log10(volume)),
+    volumeLog: Math.sqrt(volume),
+    setVolume: player.volume.set,
+    setVolumeLog: (volume: number) => player.volume.set(volume ** 2),
   }
 }
 
 export const usePlaybackRate = (player: PlayerInstance) => {
-  const [playbackRate, setPlaybackRate] = useState(player.getPlaybackRate)
-  useEffect(() => player.onPlaybackRateChange(setPlaybackRate), [player])
-  useEffect(() => {
-    setPlaybackRate(player.getPlaybackRate)
-  }, [player])
+  const [playbackRate, setPlaybackRate] = useState(player.playbackRate.get)
+  useEffect(() => player.playbackRate.onChange(setPlaybackRate), [player])
+  useEffect(() => setPlaybackRate(player.playbackRate.get), [player])
   return {
     playbackRate,
-    setPlaybackRate: player.setPlaybackRate,
-  }
-}
-
-export const useSource = (player: PlayerInstance) => {
-  const [source, setSource] = useState(player.getSource)
-  useEffect(() => player.onSourceChange(setSource), [player])
-  useEffect(() => {
-    setSource(player.getSource)
-  }, [player])
-  return {
-    source,
-    sources: player.player!.sources,
-    setSource: player.setSource,
-  }
-}
-
-export const useWaiting = (player: PlayerInstance) => {
-  const [waiting, setWaiting] = useState(player.getWaiting)
-  useEffect(() => player.onWaitingChange(setWaiting), [player])
-  useEffect(() => {
-    setWaiting(player.getWaiting)
-  }, [player])
-  return {
-    waiting,
-    setWaiting: player.setWaiting,
+    setPlaybackRate: player.playbackRate.set,
   }
 }
 
 export const useClosedCaptions = (player: PlayerInstance) => {
-  const [closedCaptions, setClosedCaptions] = useState(player.getClosedCaptions)
-  useEffect(() => player.onClosedCaptionsChange(setClosedCaptions), [player])
+  const [closedCaptions, setClosedCaptions] = useState(player.closedCaptions.get)
+  useEffect(() => player.closedCaptions.onChange(setClosedCaptions), [player])
   useEffect(() => {
-    setClosedCaptions(player.getClosedCaptions)
+    setClosedCaptions(player.closedCaptions.get)
   }, [player])
   return {
     closedCaptions,
-    allClosedCaptions: player.player!.closedCaptions,
-    setClosedCaptions: player.setClosedCaptions,
+    allClosedCaptions: player.allClosedCaptions,
+    setClosedCaptions: player.closedCaptions.set,
   }
+}
+
+export const useDurationMS = (player: PlayerInstance) => {
+  const [durationMS, setDurationMS] = useState(player.durationMS.get)
+  useEffect(() => player.durationMS.onChange(setDurationMS), [player])
+  useEffect(() => {
+    setDurationMS(player.durationMS.get)
+  }, [player])
+  return { durationMS }
 }

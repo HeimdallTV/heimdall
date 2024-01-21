@@ -11,7 +11,7 @@ import {
   ThumbnailOverlayTimeStatus,
 } from '../../components/thumbnail'
 import { Renderer, Some } from '../../core/internals'
-import { humanReadableToNumber } from '../../core/helpers'
+import { parseViewCount } from '../../core/helpers'
 import { Accessibility } from '../../components/utility/accessibility'
 import { getBrowseNavigationId, Navigation, NavigationSome } from '../../components/utility/navigation'
 import { ProviderName } from '@std'
@@ -30,7 +30,7 @@ export function processVideo({ videoRenderer: video }: Video): std.Video {
 
     title: combineSomeText(video.title),
     shortDescription: video.descriptionSnippet && combineSomeText(video.descriptionSnippet),
-    viewCount: humanReadableToNumber(combineSomeText(video.viewCountText)),
+    viewCount: parseViewCount(combineSomeText(video.viewCountText)),
 
     author: {
       name: combineSomeText(video.ownerText),

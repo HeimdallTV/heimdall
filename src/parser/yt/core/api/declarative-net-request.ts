@@ -5,29 +5,58 @@ import { endpoints } from '@libs/extension'
 // FIXME: Should be part of a startup process for the provider
 export const setDeclarativeNetRequestHeaderRule = memoizeAsync(() =>
   endpoints.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: [1000],
+    removeRuleIds: [1000, 1001, 1002],
     addRules: [
       {
         id: 1000,
         condition: {
-          requestDomains: ['www.youtube.com', 'yt3.ggpht.com', 'rr2---sn-gvbxgn-tt1es.googlevideo.com'],
+          requestDomains: ['yt3.ggpht.com', 'i.ytimg.com'],
         },
         action: {
           type: 'modifyHeaders',
           requestHeaders: [
             {
+              header: 'Cookie',
+              operation: 'remove',
+            },
+            {
               header: 'Origin',
-              operation: 'set',
-              value: 'https://www.youtube.com',
+              operation: 'remove',
             },
             {
               header: 'Referer',
-              operation: 'set',
-              value: 'https://www.youtube.com',
+              operation: 'remove',
             },
           ],
         },
       },
+      // TODO: handle embeds
+      // {
+      //   id: 1001,
+      //   condition: {
+      //     regexFilter: 'https://www.youtube.com/watch\\?v=(.*)',
+      //     resourceTypes: ['main_frame'],
+      //   },
+      //   action: {
+      //     type: 'redirect',
+      //     redirect: {
+      //       regexSubstitution: 'http://localhost:3000/w/\\1',
+      //     },
+      //   },
+      // },
+      // {
+      //   id: 1002,
+      //   condition: {
+      //     regexFilter: 'https://www.youtube.com',
+      //     resourceTypes: ['main_frame'],
+      //   },
+      //   action: {
+      //     type: 'redirect',
+      //     redirect: {
+      //       regexSubstitution: 'http://localhost:3000/',
+      //     },
+      //   },
+      // },
     ],
   }),
 )

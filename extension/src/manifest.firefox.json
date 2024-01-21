@@ -1,4 +1,5 @@
 {
+  "action": {},
   "manifest_version": 3,
   "background": {
     "scripts": ["service-worker.js"]
@@ -10,5 +11,5 @@
     "declarativeNetRequest",
     "declarativeNetRequestFeedback"
   ],
-  "host_permissions": ["https://*/*", "http://*/*"]
+  "host_permissions": ["https://*.youtube.com/*", "https://returnyoutubedislikeapi.com/*"]
 }

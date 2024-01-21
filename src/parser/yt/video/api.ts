@@ -41,12 +41,7 @@ const getLikeButtonParams = async (
     currentLikeStatus === std.LikeStatus.Like
   const subButtonViewModel =
     likeStatus === std.LikeStatus.Indifferent ? 'toggledButtonViewModel' : 'defaultButtonViewModel'
-  const paramName =
-    likeStatus === std.LikeStatus.Indifferent
-      ? 'removeLikeParams'
-      : likeStatus === std.LikeStatus.Like
-        ? 'likeParams'
-        : 'dislikeParams'
+  const paramName = std.matchLikeStatus(likeStatus, 'likeParams', 'removeLikeParams', 'dislikeParams')
 
   const video = await fetchVideo(videoId)
   const { likeButtonViewModel: likeButton, dislikeButtonViewModel: dislikeButton } =

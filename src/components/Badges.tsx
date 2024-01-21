@@ -8,9 +8,16 @@ import {
 } from '@tabler/icons-react'
 import * as std from '@std'
 
-// todo: re-use this on all components
-const resolveSize = (size: MantineSize) =>
-  getComputedStyle(document.documentElement).getPropertyValue(`--mantine-font-size-${size}`)
+// todo: get from the --mantine-font-size-* or the theme object
+// todo: move somewhere else
+const sizes = {
+  xs: '0.75rem',
+  sm: '0.875rem',
+  md: '1rem',
+  lg: '1.125rem',
+  xl: '1.25rem',
+}
+export const resolveSize = (size: MantineSize) => sizes[size]
 
 export const VerifiedBadge = ({ size = 'md' }: { size?: MantineSize }) => (
   <IconCircleCheckFilled size={resolveSize(size)} />

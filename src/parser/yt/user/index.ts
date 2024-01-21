@@ -33,7 +33,14 @@ const historyHeaderToDate = (header: string) => {
     if (day < dayOfTheWeek) return subDays(today, 7 - dayOfTheWeek + day)
     return subDays(today, day - dayOfTheWeek)
   }
-  return parse(header, 'MMM d', new Date())
+
+  const monthDate = parse(header, 'MMM d', new Date())
+  if (!isNaN(monthDate.getTime())) return monthDate
+
+  const yearMonthDate = parse(header, 'MMM d, yyyy', new Date())
+  if (!isNaN(yearMonthDate.getTime())) return yearMonthDate
+
+  throw Error(`Unable to parse date from history header: "${header}"`)
 }
 export const listHistory = async function* () {
   const historyIterator = makeContinuationIterator(

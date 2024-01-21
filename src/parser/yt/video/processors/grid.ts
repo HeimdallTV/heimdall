@@ -3,9 +3,7 @@ import * as std from '@std'
 import { findRenderer, Renderer } from '@yt/core/internals'
 import { BaseVideo } from './regular'
 import { combineSomeText } from '@yt/components/text'
-import {
-  humanReadableToNumber,
-} from '@yt/core/helpers'
+import { parseViewCount } from '@yt/core/helpers'
 import { ProviderName } from '@std'
 import { getLength, getViewedLength, relativeToAbsoluteDate } from './helpers'
 
@@ -23,17 +21,15 @@ export function processGridVideoData({ gridVideoRenderer: video }: GridVideo): s
     id: video.videoId,
 
     title: combineSomeText(video.title),
-    viewCount: humanReadableToNumber(combineSomeText(video.viewCountText)),
+    viewCount: parseViewCount(combineSomeText(video.viewCountText)),
 
     staticThumbnail: video.thumbnail.thumbnails,
-    animatedThumbnail:
-      video.richThumbnail?.movingThumbnailRenderer.movingThumbnailDetails?.thumbnails,
+    animatedThumbnail: video.richThumbnail?.movingThumbnailRenderer.movingThumbnailDetails?.thumbnails,
 
     length: getLength(lengthText),
     viewedLength: getViewedLength(video.thumbnailOverlays, getLength(lengthText)),
 
-    publishDate:
-      video.publishedTimeText && relativeToAbsoluteDate(combineSomeText(video.publishedTimeText)),
+    publishDate: video.publishedTimeText && relativeToAbsoluteDate(combineSomeText(video.publishedTimeText)),
   }
 }
 

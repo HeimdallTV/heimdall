@@ -15,24 +15,24 @@ export const fetchSponsorBlock = async (videoID: string) => {
   const query = new URLSearchParams({
     videoID,
     categories: JSON.stringify([
-      std.PlayerSkipSegmentCategory.Sponsor,
-      std.PlayerSkipSegmentCategory.SelfPromo,
-      std.PlayerSkipSegmentCategory.Interaction,
-      std.PlayerSkipSegmentCategory.Intro,
-      std.PlayerSkipSegmentCategory.Outro,
-      std.PlayerSkipSegmentCategory.Preview,
-      std.PlayerSkipSegmentCategory.MusicOfftopic,
-      std.PlayerSkipSegmentCategory.Filler,
-      std.PlayerSkipSegmentCategory.POI,
-      std.PlayerSkipSegmentCategory.ExclusiveAccess,
-      std.PlayerSkipSegmentCategory.Chapter,
+      std.PlayerSegmentCategory.Sponsor,
+      std.PlayerSegmentCategory.SelfPromo,
+      std.PlayerSegmentCategory.Interaction,
+      std.PlayerSegmentCategory.Intro,
+      std.PlayerSegmentCategory.Outro,
+      std.PlayerSegmentCategory.Preview,
+      std.PlayerSegmentCategory.MusicOfftopic,
+      std.PlayerSegmentCategory.Filler,
+      std.PlayerSegmentCategory.Highlight,
+      std.PlayerSegmentCategory.ExclusiveAccess,
+      std.PlayerSegmentCategory.Chapter,
     ]),
     actionTypes: JSON.stringify([
-      std.PlayerSkipSegmentActionType.Skip,
-      std.PlayerSkipSegmentActionType.Mute,
-      std.PlayerSkipSegmentActionType.POI,
-      std.PlayerSkipSegmentActionType.Full,
-      std.PlayerSkipSegmentActionType.Chapter,
+      std.PlayerSegmentActionType.Skip,
+      std.PlayerSegmentActionType.Mute,
+      std.PlayerSegmentActionType.POI,
+      std.PlayerSegmentActionType.Full,
+      std.PlayerSegmentActionType.Chapter,
     ]),
   }).toString()
 
@@ -52,31 +52,31 @@ export const fetchSponsorBlock = async (videoID: string) => {
 
   // TODO: handle mute action types ??
 
-  const segments: std.PlayerSkipSegments = {
-    skipSegments: data
-      .filter(segment => segment.actionType === std.PlayerSkipSegmentActionType.Skip)
+  const segments: std.PlayerSegments = {
+    categories: data
+      .filter(segment => segment.actionType === std.PlayerSegmentActionType.Skip)
       .map(segment => ({
-        UUID: segment.UUID,
-        startTimeMs: segment.segment[0] * 1000,
-        endTimeMs: segment.segment[1] * 1000,
-        category: segment.category as std.PlayerSkipSegmentCategory,
+        id: segment.UUID,
+        startTimeMS: segment.segment[0] * 1000,
+        endTimeMS: segment.segment[1] * 1000,
+        category: segment.category as std.PlayerSegmentCategory,
         locked: segment.locked,
         votes: segment.votes,
-        videoDuration: segment.videoDuration * 1000,
+        videoDurationMS: segment.videoDuration * 1000,
       })),
     chapters: data
-      .filter(segment => segment.actionType === std.PlayerSkipSegmentActionType.Chapter)
+      .filter(segment => segment.actionType === std.PlayerSegmentActionType.Chapter)
       .map(segment => ({
-        UUID: segment.UUID,
-        startTimeMs: segment.segment[0] * 1000,
-        endTimeMs: segment.segment[1] * 1000,
+        id: segment.UUID,
+        startTimeMS: segment.segment[0] * 1000,
+        endTimeMS: segment.segment[1] * 1000,
         title: segment.description,
       })),
     highlights: data
-      .filter(segment => segment.actionType === std.PlayerSkipSegmentActionType.POI)
+      .filter(segment => segment.actionType === std.PlayerSegmentActionType.POI)
       .map(segment => ({
-        UUID: segment.UUID,
-        timestampMs: segment.segment[0] * 1000,
+        id: segment.UUID,
+        timestampMS: segment.segment[0] * 1000,
       })),
   }
 

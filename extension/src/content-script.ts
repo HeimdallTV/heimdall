@@ -4,6 +4,8 @@ import { createSocketClient, createEndpointClient, createRouter, Socket, SocketH
 import { createSocketTransport, createEndpointTransport } from '@saghen/hermes/transports/extension'
 import { listenOnSocket, listenOnEndpoint } from '@saghen/hermes/transports/web'
 
+console.log('Content script loaded')
+
 const transport = createEndpointTransport(browser.runtime, browser.runtime.id)
 const endpointClient = createEndpointClient<Endpoints>(transport)
 const socketClient = createSocketClient<Sockets>(createSocketTransport(browser.runtime, browser.runtime.id))

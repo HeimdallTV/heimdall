@@ -7,7 +7,7 @@ import { AttributedDescription } from '@yt/components/description/types'
 import { combineSomeText, Text } from '@yt/components/text'
 import { UrlEndpoint, WatchEndpoint } from '@yt/components/utility/endpoint'
 import { mapNavigation, NavigationSome } from '@yt/components/utility/navigation'
-import { parseViewCount, shortHumanReadableToNumber } from '@yt/core/helpers'
+import { parseViewCount, fromShortHumanReadable } from '@yt/core/helpers'
 import { Renderer, Some } from '@yt/core/internals'
 
 import { SentimentBar, VideoActions, VideoOwner, VideoViewCount } from '../types'
@@ -51,7 +51,7 @@ export function processFullVideo(
         ? std.VerifiedStatus.Verified
         : std.VerifiedStatus.Unverified,
       followed: subscription.subscribed,
-      followerCount: shortHumanReadableToNumber(combineSomeText(owner.subscriberCountText)),
+      followerCount: fromShortHumanReadable(combineSomeText(owner.subscriberCountText)),
     },
 
     title: combineSomeText(primary.title),
@@ -86,7 +86,7 @@ export type VideoPrimaryInfo = Renderer<
 export type VideoSecondaryInfo = Renderer<
   'videoSecondaryInfo',
   {
-    attributedDescription: AttributedDescription
+    attributedDescription?: AttributedDescription
     description: Some<NavigationSome<UrlEndpoint | WatchEndpoint, Text>>
     descriptionCollapsedLines: number
 

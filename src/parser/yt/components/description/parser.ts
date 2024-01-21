@@ -39,7 +39,8 @@ export const parseAttributedDescriptionCommandRuns = (
  * TODO Only supports parsing the command runs but not attachment, decoration or style runs
  * TODO Map internal YT urls to heimdall urls
  */
-export const parseAttributedDescription = (description: AttributedDescription): RichTextChunk[] => {
+export const parseAttributedDescription = (description?: AttributedDescription): RichTextChunk[] => {
+  if (!description) return []
   if (!description.commandRuns) {
     return [{ type: RichTextChunkType.Text, content: description.content }]
   }

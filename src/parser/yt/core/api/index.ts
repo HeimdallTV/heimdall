@@ -21,9 +21,9 @@ export enum Endpoint {
   /** Used for getting the information needed to play a video. ~200ms */
   Player = 'player',
   /** Used for unsubscribing from a channel. ~500ms */
-  Unsubscribe = 'unsubscribe',
+  Unsubscribe = 'subscription/unsubscribe',
   /** Used for subscribing to a channel. ~500ms */
-  Subscribe = 'subscribe',
+  Subscribe = 'subscription/subscribe',
   /** Used for liking a video. ~300ms */
   Like = 'like/like',
   /** Used for disliking a video. ~300ms */
@@ -37,6 +37,13 @@ export enum Endpoint {
   /** Used for liking/disliking a comment and likely others. ~400ms */
   PerformCommentAction = 'comment/perform_comment_action',
 }
+const cacheableEndpoints = new Set([
+  Endpoint.Browse,
+  Endpoint.Search,
+  Endpoint.Guide,
+  Endpoint.Next,
+  Endpoint.Player,
+])
 
 export enum BrowseId {
   // Should be unneeded because of guide
@@ -62,12 +69,14 @@ export enum BrowseParams {
 
 export const fetchYt = memoizeAsync(
   async <T = any>(endpoint: Endpoint, body: Record<string, any>): Promise<T> => {
-    console.log('fetchYt', endpoint, body)
     await setDeclarativeNetRequestHeaderRule()
     const [sapisid, apiKey] = await Promise.all([fetchSAPISID(), fetchAPIKey()])
+
+    console.log('fetchYt', { endpoint, body, sapisid, apiKey })
+
     const res = await fetchProxy(`https://www.youtube.com/youtubei/v1/${endpoint}?key=${apiKey}`, {
       headers: {
-        authorization: `SAPISIDHASH ${sapisid}`,
+        Authorization: `SAPISIDHASH ${sapisid}`,
         'content-type': 'application/json',
       },
       body: JSON.stringify({
@@ -81,7 +90,10 @@ export const fetchYt = memoizeAsync(
     const errorText = await res.text()
     throw Error(`YT ${endpoint} request failed with status code ${res.status}:\n${errorText}`)
   },
-  { argsToKey: (endpoint, body) => `${endpoint}|${JSON.stringify(body)}` },
+  {
+    argsToKey: (endpoint, body) =>
+      `${cacheableEndpoints.has(endpoint) ? endpoint : Math.random()}|${JSON.stringify(body)}`,
+  },
 )
 
 const getContext = () =>

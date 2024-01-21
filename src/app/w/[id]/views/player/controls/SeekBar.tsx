@@ -1,11 +1,12 @@
-import { PropsWithChildren, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { PropsWithChildren, useCallback, useContext, useEffect, useState } from 'react'
+import * as std from '@std'
 
 import { Row } from 'lese'
 import styled from 'styled-components'
 
 import { PlayerContext } from '../context'
-import { PlayerInstance } from '../hooks/usePlayer'
-import { useBufferedMS, useDurationMS } from '../hooks/use'
+import { PlayerInstance, PlayerState } from '../hooks/usePlayerInstance'
+import { useBufferedRangesMS, useDurationMS, usePlayerState, useSeekMS, useSegments } from '../hooks/use'
 import usePoll from '@/hooks/usePoll'
 
 const SeekBarSectionContainer = styled.div<{ $widthPercent: number }>`
@@ -18,7 +19,7 @@ const SeekBarSectionContainer = styled.div<{ $widthPercent: number }>`
   transition: transform 0.2s ease;
   transform: scaleY(1);
   &:hover {
-    transform: scaleY(2);
+    transform: scaleY(3);
   }
 `
 
@@ -40,13 +41,16 @@ const SeekBarSection: React.FC<PropsWithChildren<{ widthPercent: number }>> = ({
   </SeekBarSectionContainer>
 )
 
-const SeekBarOverlay = styled.div<{ $cssVar: string; $color: string }>`
+const SeekBarOverlay = styled.div<{ $color: string }>`
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 0;
-  right: calc(100% - var(--${_ => _.$cssVar}-override, var(--${_ => _.$cssVar})));
   background-color: ${_ => _.$color};
+`
+
+const SeekBarOverlayVar = styled(SeekBarOverlay)<{ $cssVar: string; $color: string }>`
+  left: var(--${_ => _.$cssVar}-start-override, var(--${_ => _.$cssVar}-start));
+  right: calc(100% - var(--${_ => _.$cssVar}-end-override, var(--${_ => _.$cssVar}-end)));
 `
 
 const SeekBarThumbStyled = styled.div`
@@ -57,12 +61,14 @@ const SeekBarThumbStyled = styled.div`
   border-radius: 50%;
   transform: translate(50%, -50%) scale(0);
   transition: transform 0.1s ease;
-  background-color: var(--mantine-primary-color-filled);
+  background-color: var(--mantine-primary-color-5);
   pointer-events: none;
 `
 
 const SeekBarThumb: React.FC = () => (
-  <SeekBarThumbStyled style={{ right: `calc(100% - var(--current-time-override, var(--current-time)))` }} />
+  <SeekBarThumbStyled
+    style={{ right: `calc(100% - var(--current-time-end-override, var(--current-time-end)))` }}
+  />
 )
 
 const SeekBarContainer = styled(Row)`
@@ -90,20 +96,20 @@ const useMove = (onUp: (value: number) => void) => {
     const onMouseMove = (e: MouseEvent) => {
       e.preventDefault()
       e.stopPropagation()
-      elem.style.setProperty('--current-time-override', `${calculateValue(e.clientX)}%`)
+      elem.style.setProperty('--current-time-end-override', `${calculateValue(e.clientX)}%`)
     }
 
     const onMouseUp = (e: MouseEvent) => {
       window.removeEventListener('mousemove', onMouseMove, true)
       onUp(calculateValue(e.clientX))
       // fixme: sweet mother of god. @aaditya told me to
-      setTimeout(() => elem!.style.removeProperty('--current-time-override'), 100)
+      setTimeout(() => elem!.style.removeProperty('--current-time-end-override'), 100)
     }
 
     const onMouseDown = (e: MouseEvent) => {
       window.addEventListener('mousemove', onMouseMove, true)
       elem.addEventListener('mouseup', onMouseUp)
-      elem.style.setProperty('--current-time-override', `${calculateValue(e.clientX)}%`)
+      elem.style.setProperty('--current-time-end-override', `${calculateValue(e.clientX)}%`)
     }
     elem.addEventListener('mousedown', onMouseDown)
 
@@ -118,47 +124,94 @@ const useMove = (onUp: (value: number) => void) => {
 
 /** Polls as infrequntly as possible, while still getting pixel perfect (or close to) updates */
 const usePlayerTimingsMS = (playerContext: PlayerInstance, minDelay = 16) => {
+  const { seekMS } = useSeekMS(playerContext)
   const { durationMS } = useDurationMS(playerContext)
-  const [currentTimeMS, setCurrentTimeMS] = useState(playerContext.getCurrentTimeMS())
-  const [bufferedMS, setBufferedMS] = useState(playerContext.getBufferedMS())
+  const [currentTimeMS, setCurrentTimeMS] = useState(playerContext.currentTimeMS.get())
+  const { state } = usePlayerState(playerContext)
 
   usePoll(() => {
-    setCurrentTimeMS(playerContext.getCurrentTimeMS())
-    setBufferedMS(playerContext.getBufferedMS())
+    setCurrentTimeMS(playerContext.currentTimeMS.get())
+    if (state !== PlayerState.Playing) return Infinity
 
     // Calculate delay until the next pixel would be updated
     // assuming the video is fullscreen for simplicity
     const msPerPixel = durationMS / window.innerWidth
     return Math.max(minDelay, msPerPixel)
-  }, [playerContext, minDelay, durationMS])
+  }, [playerContext, minDelay, durationMS, seekMS, state])
 
-  return { currentTimeMS, bufferedMS, durationMS }
+  return {
+    currentTimeMS,
+    durationMS,
+  }
 }
 
 export const SeekBar: React.FC = () => {
   const playerContext = useContext(PlayerContext)
-  const { currentTimeMS, durationMS, bufferedMS } = usePlayerTimingsMS(playerContext!)
+  const { currentTimeMS, durationMS } = usePlayerTimingsMS(playerContext!)
+  const { segments } = useSegments(playerContext!)
 
   const onMoveCallback = useCallback(
-    (percent: number) => playerContext!.seek((percent / 100) * playerContext!.getDurationMS()),
+    (percent: number) => playerContext!.seekMS.set((percent / 100) * playerContext!.durationMS.get()),
     [playerContext],
   )
   const ref = useMove(onMoveCallback)
 
+  const { bufferedRangesMS } = useBufferedRangesMS(playerContext!)
+  const bufferedRangeCSSVars = bufferedRangesMS.reduce(
+    (curr, range, i) => ({
+      ...curr,
+      [`--buffered-${i}-start`]: `${(range[0] / durationMS) * 100}%`,
+      [`--buffered-${i}-end`]: `${(range[1] / durationMS) * 100}%`,
+    }),
+    {},
+  )
+
+  // todo: better way to handle duration = 0
   return (
     <SeekBarContainer
       ref={ref}
       style={{
         // @ts-expect-error styled-components bug
-        '--current-time': `${(currentTimeMS / durationMS) * 100}%`,
-        '--buffered': `${((currentTimeMS + bufferedMS) / durationMS) * 100}%`,
+        '--current-time-start': '0',
+        '--current-time-end': `${(currentTimeMS / Math.max(durationMS, 1)) * 100}%`,
+        ...bufferedRangeCSSVars,
       }}
     >
       <SeekBarSection widthPercent={100}>
-        <SeekBarOverlay $cssVar="buffered" $color="rgba(255, 255, 255, 0.2)" />
-        <SeekBarOverlay $cssVar="current-time" $color="var(--mantine-primary-color-filled)" />
+        <SegmentOverlays />
+        {bufferedRangesMS.map((_, i) => (
+          <SeekBarOverlayVar key={i} $cssVar={`buffered-${i}`} $color="rgba(255, 255, 255, 0.2)" />
+        ))}
+        <SeekBarOverlayVar $cssVar="current-time" $color="var(--mantine-primary-color-5)" />
       </SeekBarSection>
       <SeekBarThumb />
     </SeekBarContainer>
   )
+}
+
+const segmentCategoryColor = {
+  [std.PlayerSegmentCategory.Sponsor]: 'var(--mantine-color-green-5)',
+  [std.PlayerSegmentCategory.SelfPromo]: 'var(--mantine-color-yellow-5)',
+  [std.PlayerSegmentCategory.Interaction]: 'var(--mantine-color-pink-5)',
+  [std.PlayerSegmentCategory.Highlight]: 'var(--mantine-color-grape-5)',
+  [std.PlayerSegmentCategory.Intro]: 'var(--mantine-color-teal-5)',
+  [std.PlayerSegmentCategory.Outro]: 'var(--mantine-color-indigo-5)',
+  [std.PlayerSegmentCategory.Preview]: 'var(--mantine-color-cyan-5)',
+  [std.PlayerSegmentCategory.Filler]: 'var(--mantine-color-violet-5)',
+  [std.PlayerSegmentCategory.MusicOfftopic]: 'var(--mantine-color-orange-5)',
+}
+const SegmentOverlays: React.FC = () => {
+  const playerContext = useContext(PlayerContext)!
+  const { segments } = useSegments(playerContext)
+  const { durationMS } = useDurationMS(playerContext)
+  return segments?.categories.map(segment => (
+    <SeekBarOverlay
+      key={segment.id}
+      $color={segmentCategoryColor[segment.category]}
+      style={{
+        left: `${(segment.startTimeMS / durationMS) * 100}%`,
+        right: `calc(100% - ${(segment.endTimeMS / durationMS) * 100}%)`,
+      }}
+    />
+  ))
 }

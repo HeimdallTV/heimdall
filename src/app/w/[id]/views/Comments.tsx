@@ -8,6 +8,7 @@ import { formatDateAgo } from '@/libs/format'
 import { RichTextChunk } from '@/components/RichText'
 import { toShortHumanReadable } from '@/parser/yt/core/helpers'
 import { DislikeIcon, LikeIcon } from '@/components/Badges'
+import { useEagerMutation } from '@/hooks/useEagerMutation'
 
 export const Comments: React.FC<{ videoId: string }> = ({ videoId }) => {
   const [commentPages, errors, next, done] = usePaginated(
@@ -75,40 +76,30 @@ const CommentLikeButtons = ({
   likeCount: number
   setLikeStatus: (currentLikeStatus: std.LikeStatus, desiredLikeStatus: std.LikeStatus) => Promise<void>
 }) => {
-  const [currentLikeStatus, setCurrentLikeStatus] = useState<std.LikeStatus>(initialLikeStatus)
-  // fixme: should use a queue for the user actions and run this serially on the latest user action
-  const setLikeStatus = useCallback(
-    async (newLikeStatus: std.LikeStatus) => {
-      setCurrentLikeStatus(newLikeStatus)
-      await externalSetLikeStatus(currentLikeStatus, newLikeStatus).catch(err => {
-        setCurrentLikeStatus(currentLikeStatus)
-        throw err
-      })
-    },
-    [externalSetLikeStatus, currentLikeStatus],
+  const [, likeStatus, setLikeStatus] = useEagerMutation(
+    initialLikeStatus,
+    externalSetLikeStatus,
+    // todo: error notification
+    console.error,
   )
 
   return (
     <>
-      <UnstyledButton
-        onClick={() => setLikeStatus(std.toggleLikeStatus(std.LikeStatus.Like, currentLikeStatus))}
-      >
-        <LikeIcon likeStatus={currentLikeStatus} size="lg" />
+      <UnstyledButton onClick={() => setLikeStatus(std.toggleLikeStatus(std.LikeStatus.Like, likeStatus))}>
+        <LikeIcon likeStatus={likeStatus} size="lg" />
       </UnstyledButton>
       <Text fw="bold" size="sm">
         {toShortHumanReadable(
           Math.max(
             0,
             likeCount +
-              std.matchLikeStatus(currentLikeStatus, 1, 0, -1) +
+              std.matchLikeStatus(likeStatus, 1, 0, -1) +
               std.matchLikeStatus(initialLikeStatus, -1, 0, 1),
           ),
         )}
       </Text>
-      <UnstyledButton
-        onClick={() => setLikeStatus(std.toggleLikeStatus(std.LikeStatus.Dislike, currentLikeStatus))}
-      >
-        <DislikeIcon likeStatus={currentLikeStatus} size="lg" />
+      <UnstyledButton onClick={() => setLikeStatus(std.toggleLikeStatus(std.LikeStatus.Dislike, likeStatus))}>
+        <DislikeIcon likeStatus={likeStatus} size="lg" />
       </UnstyledButton>
     </>
   )

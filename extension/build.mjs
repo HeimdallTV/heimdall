@@ -1,11 +1,11 @@
 import esbuild from 'esbuild'
-import { readFile, watch, writeFile } from 'node:fs/promises'
+import { copyFile, readFile, watch, writeFile } from 'node:fs/promises'
 import { parseArgs } from 'node:util'
 const { values: args } = parseArgs({ args: process.argv.slice(2), strict: false })
 
 const buildContext = (outdir) =>
   esbuild.context({
-    entryPoints: ['src/service-worker.ts', 'src/content-script.ts'],
+    entryPoints: ['src/service-worker.ts', 'src/content-script.ts', 'src/permissions.ts'],
     outdir,
     bundle: true,
     sourcemap: true,
@@ -14,13 +14,15 @@ const buildContext = (outdir) =>
 async function buildManifest(inFile, outFile) {
   const inManifest = await readFile(inFile, 'utf-8').then(JSON.parse)
   const packageJson = await readFile('package.json', 'utf-8').then(JSON.parse)
+  const contentScriptMatch = args.mode === 'release' ? 'https://heimdall.tv/*' : 'http://localhost/*'
   const outManifest = {
     ...inManifest,
-    name: packageJson.name,
+    name: 'Heimdall',
     version: packageJson.version,
+    host_permissions: [...inManifest.host_permissions, contentScriptMatch],
     content_scripts: [
       {
-        matches: [args.mode === 'release' ? 'https://heimdall.tv/*' : 'http://localhost:3000/*'],
+        matches: [contentScriptMatch],
         js: ['content-script.js'],
         run_at: 'document_start',
       },
@@ -34,10 +36,14 @@ const chromeCtx = await buildContext('build/chrome')
 const firefoxCtx = await buildContext('build/firefox')
 const build = () =>
   Promise.all([
-    chromeCtx.rebuild().then(() => buildManifest('src/manifest.chrome.json', 'build/chrome/manifest.json')),
+    chromeCtx
+      .rebuild()
+      .then(() => buildManifest('src/manifest.chrome.json', 'build/chrome/manifest.json'))
+      .then(() => copyFile('src/permissions.html', 'build/chrome/permissions.html')),
     firefoxCtx
       .rebuild()
-      .then(() => buildManifest('src/manifest.firefox.json', 'build/firefox/manifest.json')),
+      .then(() => buildManifest('src/manifest.firefox.json', 'build/firefox/manifest.json'))
+      .then(() => copyFile('src/permissions.html', 'build/firefox/permissions.html')),
   ])
 await build()
 

@@ -9,10 +9,11 @@ import { RelatedVideos } from './RelatedVideos'
 import * as std from '@/parser/std'
 import styled from 'styled-components'
 import { Comments } from './Comments'
-import { useCallback, useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { PlayerContext } from './player/context'
 import yt from '@yt'
-import { DislikeIcon, LikeIcon } from '@/components/Badges'
+import { DislikeIcon, LikeIcon, resolveSize } from '@/components/Badges'
+import { useEagerMutation } from '@/hooks/useEagerMutation'
 
 const WatchGrid = styled(Grid)`
   max-width: 1280px;
@@ -46,7 +47,7 @@ const VideoAuthor: React.FC<{ author?: std.User }> = ({ author }) => {
           <Skeleton width="120px" height="1em" />
           <Skeleton width="80px" height="1em" />
         </Column>
-        <Skeleton width="110px" height="36px" />
+        <Skeleton width="130px" height="36px" />
       </Row>
     )
   }
@@ -54,12 +55,7 @@ const VideoAuthor: React.FC<{ author?: std.User }> = ({ author }) => {
     <Row separation="16px 32px" yAlign>
       <ChannelIcon size={40} channel={author} />
       <ChannelInfo author={author} />
-      <FollowButton
-        followed={author.followed}
-        setFollowed={() => {
-          throw Error('not implemented')
-        }}
-      />
+      <FollowButton followed={Boolean(author.followed)} userId={author.id} />
     </Row>
   )
 }
@@ -114,19 +110,31 @@ const SubscriberCount: React.FC<{ followerCount?: number }> = ({ followerCount }
   )
 }
 
-export const FollowButton: React.FC<{
-  followed?: boolean
-  setFollowed: (cb: (followed: boolean) => boolean) => void
-}> = ({ followed, setFollowed }) => {
-  if (followed === undefined) return <Skeleton width="110px" height="36px" />
+const FollowButton: React.FC<{ followed: boolean; userId: string }> = ({
+  followed: initialFollowed,
+  userId,
+}) => {
+  const [, followed, setFollowed] = useEagerMutation(
+    initialFollowed,
+    (_, desired) => yt.setUserFollowed(userId, desired),
+    // todo: error notification
+    console.error,
+  )
+  const [areYouSure, setAreYouSure] = useState(false)
+
+  const Icon = followed ? IconHeartFilled : IconHeart
+  const text = followed ? (areYouSure ? 'Are you sure?' : 'Following') : 'Follow'
   return (
-    <Button onClick={() => setFollowed(followed => !followed)} variant={followed ? 'light' : 'filled'}>
-      {followed ? (
-        <IconHeartFilled size={24} style={{ marginRight: '6px' }} />
-      ) : (
-        <IconHeart size={24} style={{ marginRight: '6px' }} />
-      )}
-      {followed ? 'Following' : 'Follow'}
+    <Button
+      onClick={() => {
+        if (followed && !areYouSure) return setAreYouSure(true)
+        setFollowed(!followed)
+        setAreYouSure(false)
+      }}
+      variant={followed ? 'light' : 'filled'}
+    >
+      <Icon size={24} style={{ marginRight: '6px' }} />
+      {text}
     </Button>
   )
 }
@@ -137,19 +145,12 @@ export const LikeButtons: React.FC<{
   likeCount?: number
   dislikeCount?: number
 }> = ({ videoId, likeStatus: initialLikeStatus, likeCount, dislikeCount }) => {
-  const [currentLikeStatus, setCurrentLikeStatus] = useState(initialLikeStatus)
-  // fixme: should use a queue for the user actions and run this serially on the latest user action
-  const setLikeStatus = useCallback(
-    async (desiredLikeStatus: std.LikeStatus) => {
-      if (currentLikeStatus === desiredLikeStatus) return
-      setCurrentLikeStatus(desiredLikeStatus)
-      await yt.setVideoLikeStatus!(videoId, currentLikeStatus, desiredLikeStatus).catch(err => {
-        // todo: error handling
-        setCurrentLikeStatus(currentLikeStatus)
-        throw err
-      })
-    },
-    [currentLikeStatus],
+  const [, likeStatus, setLikeStatus] = useEagerMutation(
+    initialLikeStatus,
+    (currentLikeStatus, desiredLikeStatus) =>
+      yt.setVideoLikeStatus!(videoId, currentLikeStatus, desiredLikeStatus),
+    // todo: error notification
+    console.error,
   )
 
   // todo: handle provider not supporting like counts, or not supporting setting like status
@@ -157,15 +158,15 @@ export const LikeButtons: React.FC<{
     <Button.Group>
       <Button
         variant="default"
-        leftSection={<LikeIcon likeStatus={currentLikeStatus} size="xl" />}
-        onClick={() => setLikeStatus(std.toggleLikeStatus(std.LikeStatus.Like, currentLikeStatus))}
+        leftSection={<LikeIcon likeStatus={likeStatus} size="xl" />}
+        onClick={() => setLikeStatus(std.toggleLikeStatus(std.LikeStatus.Like, likeStatus))}
       >
         {toShortHumanReadable(likeCount!)}
       </Button>
       <Button
         variant="default"
-        leftSection={<DislikeIcon likeStatus={currentLikeStatus} size="xl" />}
-        onClick={() => setLikeStatus(std.toggleLikeStatus(std.LikeStatus.Dislike, currentLikeStatus))}
+        leftSection={<DislikeIcon likeStatus={likeStatus} size="xl" />}
+        onClick={() => setLikeStatus(std.toggleLikeStatus(std.LikeStatus.Dislike, likeStatus))}
       >
         {toShortHumanReadable(dislikeCount!)}
       </Button>
@@ -184,7 +185,9 @@ export const CopyLinkButton: FC<{ provider: std.ProviderName; videoId: string }>
     <Button.Group>
       <Button
         variant="default"
-        leftSection={copied ? <IconCheck fontSize="large" /> : <IconClipboard fontSize="large" />}
+        leftSection={
+          copied ? <IconCheck size={resolveSize('xl')} /> : <IconClipboard size={resolveSize('xl')} />
+        }
         onClick={() => {
           // TODO: use provider
           navigator.clipboard.writeText(`https://youtube.com/watch?v=${videoId}`)
@@ -198,13 +201,13 @@ export const CopyLinkButton: FC<{ provider: std.ProviderName; videoId: string }>
           variant="default"
           onClick={() => {
             // TODO: use provider
-            const currentTimeSeconds = Math.floor(playerInstance.getCurrentTimeMS() / 1000)
+            const currentTimeSeconds = Math.floor(playerInstance.currentTimeMS.get() / 1000)
             navigator.clipboard.writeText(`https://youtube.com/watch?v=${videoId}&t=${currentTimeSeconds}`)
             setCopiedAt(true)
           }}
         >
-          {copiedAt && <IconCheck fontSize="large" />}
-          {!copiedAt && <IconClock fontSize="large" />}
+          {copiedAt && <IconCheck size={resolveSize('xl')} />}
+          {!copiedAt && <IconClock size={resolveSize('xl')} />}
         </Button>
       </Tooltip>
     </Button.Group>

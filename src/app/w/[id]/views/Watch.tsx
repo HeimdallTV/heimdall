@@ -8,7 +8,7 @@ import { getPlayer as fetchPlayer, getVideo as fetchVideo } from '@yt/video'
 import { Player } from './player/Player'
 import { WatchInfo } from './WatchInfo'
 import { PlayerContext } from './player/context'
-import { usePlayerInstance } from './player/hooks/usePlayer'
+import { usePlayerInstance } from './player/hooks/usePlayerInstance'
 
 const VideoContainer = styled('section')`
   > * + * {

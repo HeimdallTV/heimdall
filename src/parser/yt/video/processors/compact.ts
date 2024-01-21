@@ -5,7 +5,7 @@ import { combineSomeText } from '@yt/components/text'
 import { Thumbnail } from '@yt/components/thumbnail'
 import { Accessibility } from '@yt/components/utility/accessibility'
 import { getBrowseNavigationId, Navigation } from '@yt/components/utility/navigation'
-import { humanReadableToNumber } from '@yt/core/helpers'
+import { parseViewCount } from '@yt/core/helpers'
 import { Renderer } from '@yt/core/internals'
 import { getVideoType } from '..'
 import { BaseVideo } from './regular'
@@ -21,24 +21,22 @@ export function processCompactVideo({ compactVideoRenderer: video }: CompactVide
     id: video.videoId,
 
     title: combineSomeText(video.title),
-    viewCount: humanReadableToNumber(combineSomeText(video.viewCountText)),
+    viewCount: parseViewCount(combineSomeText(video.viewCountText)),
 
     author: {
       name: combineSomeText(video.longBylineText),
       id: getBrowseNavigationId(video.longBylineText),
       avatar: video.channelThumbnail.thumbnails,
-      verified: std.verifiedFrom(video.ownerBadges?.some(isVerifiedBadge))
+      verified: std.verifiedFrom(video.ownerBadges?.some(isVerifiedBadge)),
     },
 
     staticThumbnail: video.thumbnail.thumbnails,
-    animatedThumbnail:
-      video.richThumbnail?.movingThumbnailRenderer.movingThumbnailDetails?.thumbnails,
+    animatedThumbnail: video.richThumbnail?.movingThumbnailRenderer.movingThumbnailDetails?.thumbnails,
 
     length: getLength(video.lengthText),
     viewedLength: getViewedLength(video.thumbnailOverlays, getLength(video.lengthText)),
 
-    publishDate:
-      video.publishedTimeText && relativeToAbsoluteDate(combineSomeText(video.publishedTimeText)),
+    publishDate: video.publishedTimeText && relativeToAbsoluteDate(combineSomeText(video.publishedTimeText)),
   }
 }
 

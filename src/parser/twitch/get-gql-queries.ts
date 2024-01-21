@@ -6,6 +6,7 @@
  * https://github.com/FrankerFaceZ/FrankerFaceZ/blob/e8bb25f982ca7d8babef73550c414c7c8c6105fc/src/utilities/compat/apollo.js#L89
  * So we implement a simple version of this
  */
+// @ts-nocheck
 const getReactRoot = () => document.querySelector('#root')._reactRootContainer._internalRoot.current
 
 function findInReactTree(predicate, node) {

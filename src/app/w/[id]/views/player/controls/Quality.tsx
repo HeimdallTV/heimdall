@@ -2,7 +2,7 @@ import { IconCheck, IconSettingsFilled } from '@tabler/icons-react'
 import { useContext, useMemo } from 'react'
 import { PlayerContext } from '../context'
 import { useSource } from '../hooks/use'
-import { CombinedSource } from '../hooks/usePlayer'
+import { CombinedSource } from '../hooks/usePlayerInstance'
 import * as std from '@std'
 import { Menu } from '@mantine/core'
 import { ControlButton } from '../components/ControlButton'
@@ -52,8 +52,8 @@ export const Quality: React.FC = () => {
   const selectedSourceHeight = !selectedSource
     ? 0
     : 'video' in selectedSource
-    ? selectedSource.video.height
-    : selectedSource.height
+      ? selectedSource.video.height
+      : selectedSource.height
   const qualityOptions: QualityOption[] = useMemo(() => getQualityOptions(sources), [sources])
 
   return (

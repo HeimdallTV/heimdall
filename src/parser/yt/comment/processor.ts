@@ -6,7 +6,7 @@ import { getNavigationUrl } from '../components/utility/navigation'
 import { relativeToAbsoluteDate } from '../video/processors/helpers'
 import { Endpoint, fetchYt } from '../core/api'
 import { listCommentReplies } from '.'
-import { shortHumanReadableToNumber } from '../core/helpers'
+import { fromShortHumanReadable } from '../core/helpers'
 
 export function processComment({ commentRenderer: comment }: Comment, replies?: CommentReplies): std.Comment {
   const repliesContinuation =
@@ -24,7 +24,7 @@ export function processComment({ commentRenderer: comment }: Comment, replies?: 
     },
     content: processCommentContent(comment.contentText),
     publishedAt: relativeToAbsoluteDate(combineSomeText(comment.publishedTimeText)),
-    likes: comment.voteCount ? shortHumanReadableToNumber(combineSomeText(comment.voteCount)) : 0,
+    likes: comment.voteCount ? fromShortHumanReadable(combineSomeText(comment.voteCount)) : 0,
     likeStatus:
       comment.voteStatus === 'LIKE'
         ? std.LikeStatus.Like

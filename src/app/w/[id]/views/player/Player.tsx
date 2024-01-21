@@ -2,20 +2,20 @@ import React, { memo, useContext, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { Row } from 'lese'
-import { Skeleton } from '@mantine/core'
+import { LoadingOverlay, Skeleton } from '@mantine/core'
 import { PlayerContext } from './context'
 import { ClosedCaptions } from './ClosedCaptions'
 import { Controls } from './Controls'
 
-import { useVideoInstance } from './hooks/useVideo'
 import { toggleFullscreen, useIsFullscreen } from './controls/FullscreenButton'
 import { useHover, useIdle } from '@mantine/hooks'
-import { usePlayerState } from './hooks/use'
+import { useBuffering, usePlayerState } from './hooks/use'
 import useDoubleClick from '@/hooks/useDoubleClick'
+import { useDelayedToggle } from '@/hooks/useDelayed'
 
 export const Player: FC = () => {
   const playerInstance = useContext(PlayerContext)
-  if (!playerInstance?.player) return <PlayerSkeleton />
+  if (!playerInstance) return <PlayerSkeleton />
   return <PlayerUI />
 }
 
@@ -32,7 +32,7 @@ const PlayerContainer = styled.div<{ $isFullscreen: boolean; $hideMouse: boolean
   video {
     width: 100%;
     height: 100%;
-    max-height: ${({ $isFullscreen }) => ($isFullscreen ? '100vh' : '87vh')};
+    max-height: ${({ $isFullscreen }) => ($isFullscreen ? '100vh' : '90vh')};
     background-color: black;
   }
 `
@@ -40,6 +40,8 @@ const PlayerContainer = styled.div<{ $isFullscreen: boolean; $hideMouse: boolean
 const PlayerUI: FC = () => {
   const playerInstance = useContext(PlayerContext)
   const { state: playerState, togglePlay } = usePlayerState(playerInstance!)
+  const { buffering } = useBuffering(playerInstance!)
+  const showBuffering = useDelayedToggle(buffering, 400)
   const isFullscreen = useIsFullscreen()
 
   const idle = useIdle(1000, { events: ['mousemove'] })
@@ -60,24 +62,25 @@ const PlayerUI: FC = () => {
     >
       <Video />
       <Controls key="controls" mouseActive={hovered && !idle} playerRoot={playerRef} />
+      <LoadingOverlay zIndex={1} loaderProps={{ color: 'white', size: 48 }} visible={showBuffering} />
       <ClosedCaptions />
     </PlayerContainer>
   )
 }
 
-const Video: React.FC = () => {
+const Video: React.FC = memo(() => {
   const playerInstance = useContext(PlayerContext)
   const videoContainerRef = useRef<HTMLDivElement>(null)
-  const videoInstance = useVideoInstance(playerInstance!)
 
   useEffect(() => {
     const videoContainer = videoContainerRef.current
     if (!videoContainer) return
-    videoContainer.appendChild(videoInstance)
+    videoContainer.appendChild(playerInstance!.video)
     return () => {
-      videoContainer.removeChild(videoInstance)
+      videoContainer.removeChild(playerInstance!.video)
     }
-  }, [videoInstance])
+  }, [playerInstance])
 
   return <Row style={{ height: '100%' }} ref={videoContainerRef} />
-}
+})
+Video.displayName = 'Video'

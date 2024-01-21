@@ -3,15 +3,12 @@ import { Image } from './components/image'
 
 export type Player = {
   provider: ProviderName
-
   type: VideoType
   id: string
   title: string
 
   sources: Source[]
-
-  segments?: PlayerSkipSegments
-
+  segments?: PlayerSegments
   closedCaptions: ClosedCaption[]
 
   /** The static and primary thumbnail for the video. An array of objects for various sizes */
@@ -27,43 +24,36 @@ export type Player = {
   publishDate?: Date
 }
 
-export type PlayerSkipSegments = {
-  fullVideoCategory?: PlayerSkipSegmentCategory
+export type PlayerSegments = {
+  fullVideoCategory?: PlayerSegmentCategory
 
-  skipSegments: {
-    UUID: string
-
-    startTimeMs: number
-    endTimeMs: number
-
-    category: PlayerSkipSegmentCategory
-
+  categories: {
+    id: string
+    startTimeMS: number
+    endTimeMS: number
+    category: PlayerSegmentCategory
     /** if segment is locked */
     locked: number
-
     /** votes on segment */
     votes: number
-
-    /** duration of video when submissions occurred */
-    videoDuration: number
+    /** duration of video when submission for this category occurred */
+    videoDurationMS: number
   }[]
 
   chapters: {
-    UUID: string
-
-    startTimeMs: number
-    endTimeMs: number
-
+    id: string
     title: string
+    startTimeMS: number
+    endTimeMS: number
   }[]
 
   highlights: {
-    UUID: string
-    timestampMs: number
+    id: string
+    timestampMS: number
   }[]
 }
 
-export enum PlayerSkipSegmentCategory {
+export enum PlayerSegmentCategory {
   Sponsor = 'sponsor',
   SelfPromo = 'selfpromo',
   Interaction = 'interaction',
@@ -72,12 +62,12 @@ export enum PlayerSkipSegmentCategory {
   Preview = 'preview',
   MusicOfftopic = 'music_offtopic',
   Filler = 'filler',
-  POI = 'poi_highlight',
+  Highlight = 'poi_highlight',
   ExclusiveAccess = 'exclusive_access',
   Chapter = 'chapter',
 }
 
-export enum PlayerSkipSegmentActionType {
+export enum PlayerSegmentActionType {
   Skip = 'skip',
   Mute = 'mute',
   POI = 'poi',

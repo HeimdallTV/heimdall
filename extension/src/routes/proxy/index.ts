@@ -10,15 +10,56 @@ const deserializeCookies = (cookies: string) =>
   Object.fromEntries(
     cookies
       .split(';')
+      .filter(Boolean)
       .map((cookie) => [
         cookie.slice(0, cookie.indexOf('=')).trim(),
-        decodeURIComponent(cookie.slice(cookie.indexOf('=') + 1).trim()),
+        cookie.slice(cookie.indexOf('=') + 1).trim(),
       ]),
   )
 const serializeCookies = (cookies: Record<string, string>) =>
   Object.entries(cookies)
-    .map((cookie) => `${cookie[0]}=${encodeURIComponent(cookie[1])}`)
-    .join(';')
+    .map((cookie) => `${cookie[0]}=${cookie[1]}`)
+    .join('; ')
+
+const createHeaderRule = async (url: string, cookies: Record<string, string>) => {
+  const serializedCookies = serializeCookies(cookies)
+  if (serializedCookies === '') return () => {}
+
+  const randomId = Math.floor(Math.random() * 1000000000)
+  await browser.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: [randomId],
+    addRules: [
+      {
+        id: randomId,
+        priority: 1,
+        action: {
+          type: 'modifyHeaders',
+          requestHeaders: [
+            {
+              header: 'Cookie',
+              operation: 'set',
+              value: serializedCookies,
+            },
+            {
+              header: 'Origin',
+              operation: 'set',
+              value: new URL(url).origin,
+            },
+            {
+              header: 'Referer',
+              operation: 'set',
+              value: new URL(url).origin,
+            },
+          ],
+        },
+        condition: {
+          urlFilter: url /* , initiatorDomains: [new URL(browser.runtime.getURL('/')).hostname] */,
+        },
+      },
+    ],
+  })
+  return () => browser.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [randomId] })
+}
 
 // TODO: Support Request to match default behavior
 export const fetch = async (
@@ -35,9 +76,7 @@ export const fetch = async (
     .getAll({ url, storeId: metadata.sender.tab?.cookieStoreId })
     .then((cookies) => cookies.map((cookie) => [cookie.name, cookie.value]))
     .then(Object.fromEntries)
-  headers.set('cookie', serializeCookies({ ...browserCookies, ...requestCookies }))
+  const removeCookieRule = await createHeaderRule(url, { ...browserCookies, ...requestCookies })
 
-  console.log(url, init, headers)
-
-  return globalThis.fetch(url, { ...init, headers }).then(responseToTransferableResponse)
+  return globalThis.fetch(url, init).then(responseToTransferableResponse).finally(removeCookieRule)
 }

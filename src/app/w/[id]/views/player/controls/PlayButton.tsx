@@ -2,7 +2,7 @@ import { IconPlayerPlayFilled, IconPlayerPauseFilled } from '@tabler/icons-react
 import { useContext } from 'react'
 import { PlayerContext } from '../context'
 import { usePlayerState } from '../hooks/use'
-import { PlayerState } from '../hooks/usePlayer'
+import { PlayerState } from '../hooks/usePlayerInstance'
 import { ControlButton } from '../components/ControlButton'
 
 export const PlayButton: React.FC = () => {
