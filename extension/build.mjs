@@ -1,7 +1,13 @@
 import esbuild from 'esbuild'
 import { copyFile, readFile, watch, writeFile } from 'node:fs/promises'
 import { parseArgs } from 'node:util'
-const { values: args } = parseArgs({ args: process.argv.slice(2), strict: false })
+const { values: args } = parseArgs({
+  args: process.argv.slice(2),
+  options: {
+    mode: { type: 'string', default: 'debug' },
+    watch: { type: 'boolean', default: false },
+  },
+})
 
 const buildContext = (outdir) =>
   esbuild.context({
@@ -14,15 +20,16 @@ const buildContext = (outdir) =>
 async function buildManifest(inFile, outFile) {
   const inManifest = await readFile(inFile, 'utf-8').then(JSON.parse)
   const packageJson = await readFile('package.json', 'utf-8').then(JSON.parse)
-  const contentScriptMatch = args.mode === 'release' ? 'https://heimdall.tv/*' : 'http://localhost/*'
+  const contentScriptMatches =
+    args.mode === 'release' ? ['https://heimdall.tv/*'] : ['http://localhost/*', 'https://heimdall.tv/*']
   const outManifest = {
     ...inManifest,
     name: 'Heimdall',
     version: packageJson.version,
-    host_permissions: [...inManifest.host_permissions, contentScriptMatch],
+    host_permissions: [...inManifest.host_permissions, ...contentScriptMatches],
     content_scripts: [
       {
-        matches: [contentScriptMatch],
+        matches: contentScriptMatches,
         js: ['content-script.js'],
         run_at: 'document_start',
       },

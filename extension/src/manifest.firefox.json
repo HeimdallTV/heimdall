@@ -1,4 +1,9 @@
 {
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "extension@heimdall.tv"
+    }
+  },
   "action": {},
   "manifest_version": 3,
   "background": {
