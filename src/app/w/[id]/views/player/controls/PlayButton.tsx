@@ -6,8 +6,9 @@ import { PlayerState } from '../hooks/usePlayerInstance'
 import { ControlButton } from '../components/ControlButton'
 
 export const PlayButton: React.FC = () => {
-  const playerInstance = useContext(PlayerContext)
-  const { state, togglePlay } = usePlayerState(playerInstance!)
+  const player = useContext(PlayerContext)
+  const { state, togglePlay } = usePlayerState(player!)
+
   const Icon = state === PlayerState.Playing ? IconPlayerPauseFilled : IconPlayerPlayFilled
   return (
     <ControlButton onClick={() => togglePlay(state)}>

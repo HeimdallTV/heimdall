@@ -8,6 +8,7 @@ import { PlayerContext } from '../context'
 import { PlayerInstance, PlayerState } from '../hooks/usePlayerInstance'
 import { useBufferedRangesMS, useDurationMS, usePlayerState, useSeekMS, useSegments } from '../hooks/use'
 import usePoll from '@/hooks/usePoll'
+import { useHotkeys } from '@mantine/hooks'
 
 const SeekBarSectionContainer = styled.div<{ $widthPercent: number }>`
   position: relative;
@@ -82,34 +83,38 @@ const SeekBarContainer = styled(Row)`
   }
 `
 
-const useMove = (onUp: (value: number) => void) => {
+// todo: should be baked into the player so it updates the time on the other controls (ends at, current time)
+const useMove = (player: PlayerInstance, onUp: (value: number) => void) => {
   const [elem, setElem] = useState<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (!elem) return
 
-    const calculateValue = (x: number) => {
+    const calculatePercent = (x: number) => {
       const { left, width } = elem.getBoundingClientRect()
       return ((x - left) / width) * 100
     }
 
     const onMouseMove = (e: MouseEvent) => {
       e.preventDefault()
-      e.stopPropagation()
-      elem.style.setProperty('--current-time-end-override', `${calculateValue(e.clientX)}%`)
+      const percent = calculatePercent(e.clientX)
+      elem.style.setProperty('--current-time-end-override', `${percent}%`)
+      player.currentScrubTimeMS.set((percent / 100) * player.durationMS.get())
     }
 
     const onMouseUp = (e: MouseEvent) => {
       window.removeEventListener('mousemove', onMouseMove, true)
-      onUp(calculateValue(e.clientX))
+      onUp(calculatePercent(e.clientX))
       // fixme: sweet mother of god. @aaditya told me to
       setTimeout(() => elem!.style.removeProperty('--current-time-end-override'), 100)
+      player.currentScrubTimeMS.set(undefined)
     }
 
     const onMouseDown = (e: MouseEvent) => {
+      e.preventDefault()
       window.addEventListener('mousemove', onMouseMove, true)
       elem.addEventListener('mouseup', onMouseUp)
-      elem.style.setProperty('--current-time-end-override', `${calculateValue(e.clientX)}%`)
+      elem.style.setProperty('--current-time-end-override', `${calculatePercent(e.clientX)}%`)
     }
     elem.addEventListener('mousedown', onMouseDown)
 
@@ -146,16 +151,16 @@ const usePlayerTimingsMS = (playerContext: PlayerInstance, minDelay = 16) => {
 }
 
 export const SeekBar: React.FC = () => {
-  const playerContext = useContext(PlayerContext)
-  const { currentTimeMS, durationMS } = usePlayerTimingsMS(playerContext!)
+  const player = useContext(PlayerContext)!
+  const { currentTimeMS, durationMS } = usePlayerTimingsMS(player)
 
   const onMoveCallback = useCallback(
-    (percent: number) => playerContext!.seekMS.set((percent / 100) * playerContext!.durationMS.get()),
-    [playerContext],
+    (percent: number) => player!.seekMS.set((percent / 100) * player.durationMS.get()),
+    [player],
   )
-  const ref = useMove(onMoveCallback)
+  const ref = useMove(player, onMoveCallback)
 
-  const { bufferedRangesMS } = useBufferedRangesMS(playerContext!)
+  const { bufferedRangesMS } = useBufferedRangesMS(player)
   const bufferedRangeCSSVars = bufferedRangesMS.reduce(
     (curr, range, i) => ({
       ...curr,
@@ -202,9 +207,9 @@ const segmentCategoryColor = {
   [std.PlayerSegmentCategory.ExclusiveAccess]: 'never',
 }
 const SegmentOverlays: React.FC = () => {
-  const playerContext = useContext(PlayerContext)!
-  const { segments } = useSegments(playerContext)
-  const { durationMS } = useDurationMS(playerContext)
+  const player = useContext(PlayerContext)!
+  const { segments } = useSegments(player)
+  const { durationMS } = useDurationMS(player)
   return segments?.categories.map(segment => (
     <SeekBarOverlay
       key={segment.id}

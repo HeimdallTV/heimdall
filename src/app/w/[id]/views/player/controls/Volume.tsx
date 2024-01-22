@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useCallback, useContext } from 'react'
 
 import { useDebounce } from '@/hooks/useDebounce'
 import { IconVolume, IconVolume2, IconVolumeOff } from '@tabler/icons-react'
@@ -8,6 +8,7 @@ import { PlayerContext } from '../context'
 import { useVolume } from '../hooks/use'
 import { Slider } from '@mantine/core'
 import styled from 'styled-components'
+import { useHotkeys } from '@mantine/hooks'
 
 // fixme: disappears when dragging the slider and moving off the element
 const VolumeContainer = styled.div`
@@ -24,18 +25,21 @@ const VolumeContainer = styled.div`
 `
 
 export const Volume: React.FC = () => {
-  const playerInstance = useContext(PlayerContext)
-  const { volumeLog: volume, setVolumeLog: setVolume } = useVolume(playerInstance!)
+  const player = useContext(PlayerContext)!
+  const { volumeLog: volume, setVolumeLog: setVolume } = useVolume(player)
   const Icon = volume > 0.5 ? IconVolume : volume > 0 ? IconVolume2 : IconVolumeOff
   const debouncedNonZeroVolume = useDebounce(volume, 200, value => value === 0)
+
+  // todo: Should pull the default from local storage for when debouncedNonZeroVolume === 0
+  const toggleMute = useCallback(
+    () => setVolume(volume === 0 ? debouncedNonZeroVolume || 1 : 0),
+    [volume, debouncedNonZeroVolume],
+  )
+  useHotkeys([['m', toggleMute]])
+
   return (
     <VolumeContainer>
-      <ControlButton
-        // TODO Should pull the default from local storage for when debouncedNonZeroVolume === 0
-        onClick={() =>
-          setVolume(volume === 0 ? (debouncedNonZeroVolume === 0 ? 1 : debouncedNonZeroVolume) : 0)
-        }
-      >
+      <ControlButton onClick={toggleMute}>
         <Icon />
       </ControlButton>
       <Slider

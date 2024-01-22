@@ -5,7 +5,7 @@ import * as std from '@std'
 
 import { VideoAuthor, VideoSubLine } from './Shared'
 import { VideoThumbnail } from './Thumbnail'
-import { Text } from '@mantine/core'
+import { Skeleton, Text } from '@mantine/core'
 
 export const VideoListItem: React.FC<{
   video: std.Video
@@ -43,6 +43,17 @@ export const CompactVideoListItem: React.FC<{ video: std.Video }> = ({ video }) 
       </Text>
       {video.author && <VideoAuthor author={video.author} size="sm" />}
       <VideoSubLine size="sm" video={video} />
+    </Column>
+  </Grid>
+)
+
+export const CompactVideoListItemSkeleton: React.FC = () => (
+  <Grid columns="calc(94px * 16 / 9) 1fr" gap="8px">
+    <Skeleton width="100%" style={{ aspectRatio: '16 / 9' }} />
+    <Column separation="4px 2px ...0px" style={{ fontSize: '0.9em' }}>
+      <Skeleton width="100%" height="1em" />
+      <Skeleton width="100%" height="1em" />
+      <Skeleton width="100%" height="1em" />
     </Column>
   </Grid>
 )

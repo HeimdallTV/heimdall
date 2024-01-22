@@ -5,6 +5,8 @@ import { usePaginated } from '@/hooks/usePaginated'
 import yt from '@yt'
 
 export default function Home() {
-  const [videoPages, , getNextPage] = usePaginated(yt.listRecommended!)
-  return <VideoGrid as="main" header="Recommended" videos={videoPages.flat()} getNext={getNextPage} />
+  const videoPages = usePaginated(yt.listRecommended!)
+  return (
+    <VideoGrid as="main" header="Recommended" videos={videoPages.data.flat()} getNext={videoPages.next} />
+  )
 }

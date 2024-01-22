@@ -10,8 +10,8 @@ import { WatchInfo } from './WatchInfo'
 import { PlayerContext } from './player/context'
 import { usePlayerInstance } from './player/hooks/usePlayerInstance'
 
-const VideoContainer = styled('section')`
-  > * + * {
+const WatchContainer = styled.main`
+  & > * + * {
     margin-top: 16px;
   }
 `
@@ -26,10 +26,10 @@ const Watch: React.FC<{ videoId: string }> = ({ videoId }) => {
   }, [videoError, playerError])
   return (
     <PlayerContext.Provider value={playerInstance}>
-      <VideoContainer>
+      <WatchContainer>
         <Player />
         <WatchInfo video={video} />
-      </VideoContainer>
+      </WatchContainer>
     </PlayerContext.Provider>
   )
 }

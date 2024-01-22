@@ -25,6 +25,7 @@ export type PlayerInstance = {
 
   state: ValueListener<PlayerState>
   seekMS: ValueListener<number | undefined>
+  currentScrubTimeMS: ValueListener<number | undefined>
   source: ValueListener<CombinedSource>
   sources: std.Source[]
   segments?: std.PlayerSegments
@@ -83,6 +84,7 @@ export const createPlayerInstance = (player: std.Player): PlayerInstance => {
 
   const state = createValueListener(PlayerState.Playing)
   const seekMS = createValueListener<number | undefined>(undefined)
+  const currentScrubTimeMS = createValueListener<number | undefined>(undefined)
   const buffering = createValueListener(true)
   const bufferedRangesMS = createValueListener<[number, number][]>([])
   const volume = createValueListener(1)
@@ -122,11 +124,9 @@ export const createPlayerInstance = (player: std.Player): PlayerInstance => {
 
   // State
   state.onChange(newState => {
-    if (newState === PlayerState.Playing && !buffering.get()) {
-      play()
-    } else if (newState === PlayerState.Paused) {
-      pause()
-    } else if (newState === PlayerState.Ended || newState === PlayerState.Error) {
+    if (newState === PlayerState.Playing && !buffering.get()) play()
+    else if (newState === PlayerState.Paused) pause()
+    else if (newState === PlayerState.Ended || newState === PlayerState.Error) {
       pause()
       video.currentTime = Infinity
       audio.currentTime = Infinity
@@ -225,6 +225,7 @@ export const createPlayerInstance = (player: std.Player): PlayerInstance => {
 
     state,
     seekMS,
+    currentScrubTimeMS,
     source,
     sources: player.sources,
     segments: player.segments,

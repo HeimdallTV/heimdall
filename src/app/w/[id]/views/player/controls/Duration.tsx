@@ -1,18 +1,20 @@
 import { useContext, useState } from 'react'
 import { PlayerContext } from '../context'
-import { useDurationMS } from '../hooks/use'
+import { useCurrentScrubTimeMS, useDurationMS, useSeekMS } from '../hooks/use'
 import { formatNumberDuration } from '@libs/format'
 import { Text } from '@mantine/core'
 import usePoll from '@/hooks/usePoll'
 
 export const Duration: React.FC = () => {
-  const playerInstance = useContext(PlayerContext)
-  const { durationMS } = useDurationMS(playerInstance!)
-  const [currentTimeMS, setCurrentTimeMS] = useState(playerInstance!.currentTimeMS.get())
+  const player = useContext(PlayerContext)!
+  const { durationMS } = useDurationMS(player)
+  const [currentTimeMS, setCurrentTimeMS] = useState(player.currentTimeMS.get())
+  const { currentScrubTimeMS } = useCurrentScrubTimeMS(player)
+  const { seekMS } = useSeekMS(player)
   usePoll(() => {
-    setCurrentTimeMS(playerInstance!.currentTimeMS.get())
+    setCurrentTimeMS(currentScrubTimeMS ?? player.currentTimeMS.get())
     return 1000 - (currentTimeMS % 1000)
-  }, [playerInstance])
+  }, [player, seekMS, currentScrubTimeMS])
 
   return (
     <Text span fw={500}>

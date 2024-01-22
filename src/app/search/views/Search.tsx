@@ -16,14 +16,11 @@ const SearchContainer = styled('div')`
 `
 
 const Search = ({ query }: { query: string }) => {
-  const [videos, , getMoreVideos] = usePaginated(() =>
-    provider.listSearch([std.ResourceType.Video])(query ?? ''),
-  )
-
+  const videos = usePaginated(() => provider.listSearch([std.ResourceType.Video])(query ?? ''))
   return (
     <SearchContainer>
       <Grid autoRows="220px" gap="24px">
-        {videos.flat().map(video => (
+        {videos.data.flat().map(video => (
           <VideoListItem key={video.id} video={video} />
         ))}
       </Grid>

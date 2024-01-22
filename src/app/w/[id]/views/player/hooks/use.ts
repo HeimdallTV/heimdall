@@ -25,6 +25,15 @@ export const useSeekMS = (player: PlayerInstance) => {
   return { seekMS, setSeekMS: player.seekMS.set }
 }
 
+export const useCurrentScrubTimeMS = (player: PlayerInstance) => {
+  const [currentScrubTimeMS, setCurrentScrubTimeMS] = useState(player.currentScrubTimeMS.get)
+  useEffect(() => player.currentScrubTimeMS.onChange(setCurrentScrubTimeMS), [player])
+  useEffect(() => {
+    setCurrentScrubTimeMS(player.currentScrubTimeMS.get)
+  }, [player])
+  return { currentScrubTimeMS }
+}
+
 export const useSource = (player: PlayerInstance) => {
   const [source, setSource] = useState(player.source.get)
   useEffect(() => player.source.onChange(setSource), [player])

@@ -69,7 +69,7 @@ const NavBarContainer = styled.nav<{ $expanded: boolean }>`
 // todo: virtual list for channels
 export const NavBar = () => {
   const [expanded, { toggle }] = useDisclosure(false)
-  const [followedUsers, , getNextPage] = usePaginated(yt.listFollowedUsers!)
+  const followedUsers = usePaginated(yt.listFollowedUsers!)
   return (
     <NavBarContainer $expanded={expanded}>
       {/* Ensures that the tooltip delays are synced with each other */}
@@ -115,7 +115,7 @@ export const NavBar = () => {
           </Text>
         </NavBarItem>
 
-        {followedUsers
+        {followedUsers.data
           .flat()
           .slice(0, 20)
           .map(user => (

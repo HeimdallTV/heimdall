@@ -7,19 +7,17 @@ import { Column, Row } from 'lese'
 import { formatDateAgo } from '@/libs/format'
 import { RichTextChunk } from '@/components/RichText'
 import { toShortHumanReadable } from '@/parser/yt/core/helpers'
-import { DislikeIcon, LikeIcon } from '@/components/Badges'
+import { DislikeIcon, LikeIcon } from '@/components/Icons'
 import { useEagerMutation } from '@/hooks/useEagerMutation'
 
 export const Comments: React.FC<{ videoId: string }> = ({ videoId }) => {
-  const [commentPages, errors, next, done] = usePaginated(
-    useCallback(() => yt.listComments!(videoId), [videoId]),
-  )
+  const commentPages = usePaginated(useCallback(() => yt.listComments!(videoId), [videoId]))
   useEffect(() => {
-    if (errors.length) console.error(errors)
-  }, [errors])
+    if (commentPages.errors.length) console.error(commentPages.errors)
+  }, [commentPages.errors])
   return (
     <Column separation="32px">
-      {commentPages.flat().map(comment => (
+      {commentPages.data.flat().map(comment => (
         <Comment key={comment.id} comment={comment} />
       ))}
     </Column>

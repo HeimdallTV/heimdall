@@ -13,6 +13,7 @@ import { useBuffering, usePlayerState } from './hooks/use'
 import useDoubleClick from '@/hooks/useDoubleClick'
 import { useDelayedToggle } from '@/hooks/useDelayed'
 import { PlayerState } from './hooks/usePlayerInstance'
+import { usePlayerHotkeys } from './hooks/usePlayerHotkeys'
 
 export const Player: FC = () => {
   const playerInstance = useContext(PlayerContext)
@@ -47,6 +48,7 @@ const PlayerUI: FC = () => {
 
   const idle = useIdle(1000, { events: ['mousemove'] })
   const { hovered, ref: playerRef } = useHover<HTMLDivElement>()
+  usePlayerHotkeys(playerRef)
 
   return (
     <PlayerContainer
@@ -63,7 +65,12 @@ const PlayerUI: FC = () => {
     >
       <Video />
       <Controls key="controls" mouseActive={hovered && !idle} playerRoot={playerRef} />
-      <LoadingOverlay zIndex={1} loaderProps={{ color: 'white', size: 48 }} visible={showBuffering} />
+      <LoadingOverlay
+        zIndex={1}
+        loaderProps={{ color: 'white', size: 48 }}
+        style={{ pointerEvents: 'none' }}
+        visible={showBuffering}
+      />
       <ClosedCaptions />
     </PlayerContainer>
   )

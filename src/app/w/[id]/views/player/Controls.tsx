@@ -3,14 +3,7 @@ import React, { RefObject, useContext } from 'react'
 import { Column, FlexProps, Row } from 'lese'
 import styled from 'styled-components'
 
-import {
-  IconChevronsLeft,
-  IconChevronsRight,
-  IconPlayerSkipForward,
-  IconPlayerSkipBack,
-} from '@tabler/icons-react'
 import { PlayerContext } from './context'
-
 import { ClosedCaption } from './controls/ClosedCaptions'
 import { Duration } from './controls/Duration'
 import { EndsAt } from './controls/EndsAt'
@@ -25,7 +18,7 @@ import { useHover } from '@mantine/hooks'
 import { usePlayerState } from './hooks/use'
 
 const ControlsContainer = styled(Column)<{ show: boolean } & FlexProps>`
-  background: linear-gradient(transparent 20%, rgba(0, 0, 0, 0.5) 60%, rgba(0, 0, 0, 0.8) 100%);
+  background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.1) 20%, rgba(0, 0, 0, 0.8) 100%);
   position: absolute;
   bottom: 0;
   left: 0;
@@ -52,8 +45,8 @@ export const Controls: React.FC<{ playerRoot: RefObject<HTMLElement>; mouseActiv
   playerRoot,
   mouseActive,
 }) => {
-  const playerInstance = useContext(PlayerContext)
-  const { state: playerState } = usePlayerState(playerInstance!)
+  const player = useContext(PlayerContext)!
+  const { state: playerState } = usePlayerState(player)
   const { hovered, ref: controlsRef } = useHover<HTMLDivElement>()
   const show = playerState !== PlayerState.Playing || hovered || mouseActive
 
@@ -62,11 +55,7 @@ export const Controls: React.FC<{ playerRoot: RefObject<HTMLElement>; mouseActiv
       <SeekBar />
       <Row xAlign="space-between">
         <Row separation="20px" yAlign>
-          <IconPlayerSkipBack size={24} />
-          <IconChevronsLeft size={24} />
           <PlayButton />
-          <IconChevronsRight size={24} />
-          <IconPlayerSkipForward size={24} />
           <Volume />
           <Duration />
         </Row>
