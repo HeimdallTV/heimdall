@@ -6,10 +6,13 @@
   "packageManager": "pnpm@8.13.0+sha256.fbcf256db6d06bc189e31df34b3ed61220f3ba9f78a2ca8fe7be0fce4670dbd3",
   "scripts": {
     "prepare": "husky install",
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
+    "analyze": "vite-bundle-visualizer",
+    "dev": "vite dev",
+    "build": "vite build",
+    "start": "vite preview",
+    "format": "biome format src",
+    "lint": "biome lint src",
+    "lint:apply": "biome lint --apply src",
     "lint:staged": "lint-staged"
   },
   "dependencies": {
@@ -19,30 +22,31 @@
     "@saghen/hermes": "^2.0.0-alpha.5",
     "@tabler/icons-react": "^2.46.0",
     "date-fns": "^3.3.1",
-    "next": "14.1.0",
     "p-limit": "^4.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router": "^6.21.3",
+    "preact": "^10.19.3",
     "styled-components": "^6.1.8",
-    "swr": "^2.2.4"
+    "vite-tsconfig-paths": "^4.3.1",
+    "wouter": "^2.12.1"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.8.5",
+    "@biomejs/biome": "^1.5.3",
+    "@preact/preset-vite": "^2.8.1",
     "@styled/typescript-styled-plugin": "^1.0.1",
-    "@types/node": "20.11.5",
     "@types/react": "^18.2.48",
-    "@types/react-dom": "^18.2.18",
     "@types/webextension-polyfill": "^0.10.7",
-    "eslint": "^8.56.0",
-    "eslint-config-next": "^14.1.0",
-    "eslint-config-prettier": "^9.1.0",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
     "postcss": "^8.4.33",
     "postcss-preset-mantine": "^1.12.3",
     "postcss-simple-vars": "^7.0.1",
-    "prettier": "^3.2.4",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12",
+    "vite-bundle-visualizer": "^1.0.0",
+    "vite-plugin-preload": "^0.3.1"
+  },
+  "lint-staged": {
+    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+      "biome check --apply --organize-imports-enabled=false --no-errors-on-unmatched"
+    ]
   }
 }

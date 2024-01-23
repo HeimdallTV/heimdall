@@ -12,65 +12,66 @@ import { fetchProxy } from '@libs/extension'
 import { getSigTimestamp } from './processors/player/decoders/signature'
 
 export const fetchRecommended = (): Promise<RecommendedResponse> => {
-  console.log('fetchRecommended')
-  return fetchYt(Endpoint.Browse, { browseId: BrowseId.Recommended })
+	console.log('fetchRecommended')
+	return fetchYt(Endpoint.Browse, { browseId: BrowseId.Recommended })
 }
 export const fetchRecommendedContinuation = (
-  continuation: string,
+	continuation: string,
 ): Promise<AppendContinuationItemsResponse<RichItem<Video | Renderer<'radio'>> | ContinuationItem>> =>
-  fetchYt(Endpoint.Browse, { continuation })
+	fetchYt(Endpoint.Browse, { continuation })
 
 export const fetchPlayer = async (videoId: string) =>
-  fetchYt<PlayerResponse>(Endpoint.Player, {
-    videoId,
-    // required for signature decoding, see processors/player/decoders/signature.ts
-    playbackContext: { contentPlaybackContext: { signatureTimestamp: await getSigTimestamp() } },
-  })
+	fetchYt<PlayerResponse>(Endpoint.Player, {
+		videoId,
+		// required for signature decoding, see processors/player/decoders/signature.ts
+		playbackContext: { contentPlaybackContext: { signatureTimestamp: await getSigTimestamp() } },
+	})
 export const fetchVideo = (videoId: string) => fetchYt<VideoResponse>(Endpoint.Next, { videoId })
 export const fetchCompactVideoContinuation = fetchEndpointContinuation(
-  Endpoint.Next,
+	Endpoint.Next,
 )<CompactContinuationResponse>
 
 const getLikeButtonParams = async (
-  videoId: string,
-  currentLikeStatus: std.LikeStatus,
-  likeStatus: std.LikeStatus,
+	videoId: string,
+	currentLikeStatus: std.LikeStatus,
+	likeStatus: std.LikeStatus,
 ) => {
-  const useLike =
-    (currentLikeStatus === std.LikeStatus.Like && likeStatus === std.LikeStatus.Indifferent) ||
-    currentLikeStatus === std.LikeStatus.Like
-  const subButtonViewModel =
-    likeStatus === std.LikeStatus.Indifferent ? 'toggledButtonViewModel' : 'defaultButtonViewModel'
-  const paramName = std.matchLikeStatus(likeStatus, 'likeParams', 'removeLikeParams', 'dislikeParams')
+	const useLike =
+		(currentLikeStatus === std.LikeStatus.Like && likeStatus === std.LikeStatus.Indifferent) ||
+		currentLikeStatus === std.LikeStatus.Like
+	const subButtonViewModel =
+		likeStatus === std.LikeStatus.Indifferent ? 'toggledButtonViewModel' : 'defaultButtonViewModel'
+	const paramName = std.matchLikeStatus(likeStatus, 'likeParams', 'removeLikeParams', 'dislikeParams')
 
-  const video = await fetchVideo(videoId)
-  const { likeButtonViewModel: likeButton, dislikeButtonViewModel: dislikeButton } =
-    video.contents.twoColumnWatchNextResults.results.results.contents[0].videoPrimaryInfoRenderer.videoActions
-      .menuRenderer.topLevelButtons[0].segmentedLikeDislikeButtonViewModel
-  const button = useLike ? likeButton.likeButtonViewModel : dislikeButton.dislikeButtonViewModel
-  const commands =
-    button.toggleButtonViewModel.toggleButtonViewModel[subButtonViewModel].buttonViewModel.onTap.serialCommand
-      .commands
-  const command = commands.find(isCommand('innertube'))
-  return command?.innertubeCommand.likeEndpoint[paramName]
+	const video = await fetchVideo(videoId)
+	const { likeButtonViewModel: likeButton, dislikeButtonViewModel: dislikeButton } =
+		video.contents.twoColumnWatchNextResults.results.results.contents[0].videoPrimaryInfoRenderer.videoActions
+			.menuRenderer.topLevelButtons[0].segmentedLikeDislikeButtonViewModel
+	const button = useLike ? likeButton.likeButtonViewModel : dislikeButton.dislikeButtonViewModel
+	const commands =
+		button.toggleButtonViewModel.toggleButtonViewModel[subButtonViewModel].buttonViewModel.onTap.serialCommand
+			.commands
+	const command = commands.find(isCommand('innertube'))
+	return command?.innertubeCommand.likeEndpoint[paramName]
 }
 const getLikeEndpoint = (likeStatus: std.LikeStatus) =>
-  likeStatus === std.LikeStatus.Like
-    ? Endpoint.Like
-    : likeStatus === std.LikeStatus.Indifferent
-      ? Endpoint.RemoveLike
-      : Endpoint.Dislike
+	likeStatus === std.LikeStatus.Like
+		? Endpoint.Like
+		: likeStatus === std.LikeStatus.Indifferent
+		  ? Endpoint.RemoveLike
+		  : Endpoint.Dislike
 // todo: support return youtube dislike
+// todo: should check the custom YT status code of the response
 export const fetchSetVideoLikeStatus = (
-  videoId: string,
-  currentLikeStatus: std.LikeStatus,
-  likeStatus: std.LikeStatus,
+	videoId: string,
+	currentLikeStatus: std.LikeStatus,
+	likeStatus: std.LikeStatus,
 ) =>
-  getLikeButtonParams(videoId, currentLikeStatus, likeStatus).then(params =>
-    fetchYt(getLikeEndpoint(likeStatus), { target: { videoId }, params }),
-  )
+	getLikeButtonParams(videoId, currentLikeStatus, likeStatus)
+		.then((params) => fetchYt(getLikeEndpoint(likeStatus), { target: { videoId }, params }))
+		.then(() => {})
 
 export const fetchVideoLikeCounts = (videoId: string) =>
-  fetchProxy(`https://returnyoutubedislikeapi.com/votes?videoId=${videoId}`)
-    .then(res => res.json())
-    .then(res => ({ likes: Number(res.likes), dislikes: Number(res.dislikes) }))
+	fetchProxy(`https://returnyoutubedislikeapi.com/votes?videoId=${videoId}`)
+		.then((res) => res.json())
+		.then((res) => ({ likes: Number(res.likes), dislikes: Number(res.dislikes) }))

@@ -13,38 +13,38 @@
 import { useCallback, useRef, MouseEvent, EventHandler } from 'react'
 
 type DoubleClickOptions = {
-  /** The amount of time (in milliseconds) to wait before triggering the eager single click */
-  eagerDelayMS?: number
-  /** The amount of time (in milliseconds) to wait between clicks */
-  delayMS?: number
-  /** A callback function for eager single click */
-  onEagerSingleClick?: () => void
-  /** A callback function for double click */
-  onDoubleClick?: (triggeredEager: boolean) => void
+	/** The amount of time (in milliseconds) to wait before triggering the eager single click */
+	eagerDelayMS?: number
+	/** The amount of time (in milliseconds) to wait between clicks */
+	delayMS?: number
+	/** A callback function for eager single click */
+	onEagerSingleClick?: () => void
+	/** A callback function for double click */
+	onDoubleClick?: (triggeredEager: boolean) => void
 }
 export default function useDoubleClick({
-  eagerDelayMS = 200,
-  delayMS = 500,
-  onEagerSingleClick = () => {},
-  onDoubleClick = () => {},
+	eagerDelayMS = 200,
+	delayMS = 500,
+	onEagerSingleClick = () => {},
+	onDoubleClick = () => {},
 }: DoubleClickOptions): EventHandler<MouseEvent> {
-  const lastClickTime = useRef(0)
-  const timeoutId = useRef<number | undefined>()
-  const onClick = useCallback(() => {
-    const timeSinceLastClick = Date.now() - lastClickTime.current
-    lastClickTime.current = Date.now()
-    // confirmed double click
-    if (timeSinceLastClick < delayMS) {
-      lastClickTime.current = 0
-      onDoubleClick(timeSinceLastClick > eagerDelayMS)
-      clearTimeout(timeoutId.current)
-    }
-    // first click
-    else {
-      timeoutId.current = window.setTimeout(() => {
-        onEagerSingleClick()
-      }, eagerDelayMS)
-    }
-  }, [onEagerSingleClick, onDoubleClick, delayMS, eagerDelayMS])
-  return onClick
+	const lastClickTime = useRef(0)
+	const timeoutId = useRef<number | undefined>()
+	const onClick = useCallback(() => {
+		const timeSinceLastClick = Date.now() - lastClickTime.current
+		lastClickTime.current = Date.now()
+		// confirmed double click
+		if (timeSinceLastClick < delayMS) {
+			lastClickTime.current = 0
+			onDoubleClick(timeSinceLastClick > eagerDelayMS)
+			clearTimeout(timeoutId.current)
+		}
+		// first click
+		else {
+			timeoutId.current = window.setTimeout(() => {
+				onEagerSingleClick()
+			}, eagerDelayMS)
+		}
+	}, [onEagerSingleClick, onDoubleClick, delayMS, eagerDelayMS])
+	return onClick
 }

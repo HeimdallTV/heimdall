@@ -1,4 +1,3 @@
-'use client'
 import { useIntersection } from '@/hooks/useIntersection'
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
@@ -12,11 +11,11 @@ const InfiniteScrollDetectionBox = styled.div`
   pointer-events: none;
 `
 
-export const InfiniteScrollDetector: React.FC<{ onLoad?: () => any }> = ({ onLoad }) => {
-  const ref = useRef<HTMLDivElement>(null)
-  const entry = useIntersection(ref, { threshold: 0 })
-  useEffect(() => {
-    if (entry?.isIntersecting) onLoad?.()
-  }, [entry?.isIntersecting, onLoad])
-  return <InfiniteScrollDetectionBox ref={ref} />
+export const InfiniteScrollDetector: React.FC<{ onLoad?: () => unknown }> = ({ onLoad }) => {
+	const ref = useRef<HTMLDivElement>(null)
+	const entry = useIntersection(ref, { threshold: 0 })
+	useEffect(() => {
+		if (entry?.isIntersecting) onLoad?.()
+	}, [entry?.isIntersecting, onLoad])
+	return <InfiniteScrollDetectionBox ref={ref} />
 }

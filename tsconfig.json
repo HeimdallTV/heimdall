@@ -1,78 +1,32 @@
 {
   "compilerOptions": {
-    "noErrorTruncation": true,
     "strict": true,
-    "jsx": "preserve",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "esnext"
-    ],
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+
+    "lib": ["DOM", "DOM.Iterable", "esnext"],
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+
     "baseUrl": "src",
     "paths": {
-      "lese": [
-        "./components/lese/index.ts"
-      ],
-      "@/*": [
-        "./*"
-      ],
-      "@constants": [
-        "./constants/index.ts"
-      ],
-      "@components/*": [
-        "./components/*"
-      ],
-      "@extension/*": [
-        "../extension/*"
-      ],
-      "@libs/*": [
-        "./libs/*"
-      ],
-      "@std": [
-        "./parser/std/index.ts"
-      ],
-      "@std/*": [
-        "./parser/std/*"
-      ],
-      "@views/*": [
-        "./views/*"
-      ],
-      "@yt": [
-        "./parser/yt/index.ts"
-      ],
-      "@yt/*": [
-        "./parser/yt/*"
-      ]
+      "lese": ["./components/lese/index.ts"],
+      "@/*": ["./*"],
+      "@constants": ["./constants/index.ts"],
+      "@components/*": ["./components/*"],
+      "@extension/*": ["../extension/*"],
+      "@libs/*": ["./libs/*"],
+      "@pages/*": ["./pages/*"],
+      "@std": ["./parser/std/index.ts"],
+      "@std/*": ["./parser/std/*"],
+      "@yt": ["./parser/yt/index.ts"],
+      "@yt/*": ["./parser/yt/*"],
     },
-    /* required by nextjs */
-    "noEmit": true,
-    "allowJs": true,
-    "skipLibCheck": true,
-    "incremental": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "plugins": [
-      {
-        "name": "next"
-      },
-      {
-        "name": "@styled/typescript-styled-plugin"
-      }
-    ]
+    "plugins": [{ "name": "@styled/typescript-styled-plugin" }]
   },
-  "include": [
-    "next-env.d.ts",
-    "src",
-    "extension/src",
-    "global.d.ts",
-    ".next/types/**/*.ts",
-    "build/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/vite-env.d.ts", "src", "extension/src"]
 }

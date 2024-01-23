@@ -3,85 +3,85 @@ import * as std from '@std'
 import { PlayerResponse } from '@yt/video/types/responses/player'
 
 import {
-  PlayerAdaptiveFormat,
-  PlayerAudioFormat,
-  PlayerFormat,
-  PlayerVideoFormat,
+	PlayerAdaptiveFormat,
+	PlayerAudioFormat,
+	PlayerFormat,
+	PlayerVideoFormat,
 } from '../../types/streaming-data'
 import { processCaptions } from './captions'
 import { decodeVideoPlaybackUrl } from './decoders'
 
 export async function processPlayer({
-  videoDetails,
-  playerConfig,
-  streamingData,
-  captions,
-  ...other
+	videoDetails,
+	playerConfig,
+	streamingData,
+	captions,
 }: PlayerResponse): Promise<std.Player> {
-  return {
-    provider: ProviderName.YT,
-    type: videoDetails.isLiveContent ? std.VideoType.Live : std.VideoType.Static,
-    id: videoDetails.videoId,
-    title: videoDetails.title,
-    staticThumbnail: videoDetails.thumbnail.thumbnails,
-    sources: await Promise.all([
-      ...streamingData.formats.map(processFormat).map(decodeFormatUrl),
-      ...streamingData.adaptiveFormats.map(processAdaptiveFormat).map(decodeFormatUrl),
-    ]),
-    closedCaptions: captions !== undefined ? processCaptions(captions) : [],
-    viewedLength: playerConfig.playbackStartConfig?.startSeconds ?? 0,
-    length: Number(videoDetails.lengthSeconds),
-  }
+	console.log(videoDetails, playerConfig, streamingData, captions)
+	return {
+		provider: ProviderName.YT,
+		type: videoDetails.isLiveContent ? std.VideoType.Live : std.VideoType.Static,
+		id: videoDetails.videoId,
+		title: videoDetails.title,
+		staticThumbnail: videoDetails.thumbnail.thumbnails,
+		sources: await Promise.all([
+			...streamingData.formats.map(processFormat).map(decodeFormatUrl),
+			...streamingData.adaptiveFormats.map(processAdaptiveFormat).map(decodeFormatUrl),
+		]),
+		closedCaptions: captions !== undefined ? processCaptions(captions) : [],
+		viewedLength: playerConfig.playbackStartConfig?.startSeconds ?? 0,
+		length: Number(videoDetails.lengthSeconds),
+	}
 }
 
 export const processFormat = (format: PlayerFormat): std.Source<std.SourceType.AudioVideo> => ({
-  type: std.SourceType.AudioVideo,
-  frameRate: format.fps,
-  width: format.width,
-  height: format.height,
-  url: format.url ? format.url : signatureCipherToUrl(format.signatureCipher!),
-  mimetype: format.mimeType,
+	type: std.SourceType.AudioVideo,
+	frameRate: format.fps,
+	width: format.width,
+	height: format.height,
+	url: format.url ? format.url : signatureCipherToUrl(format.signatureCipher!),
+	mimetype: format.mimeType,
 })
 
 export const processAdaptiveFormat = (format: PlayerAdaptiveFormat): std.Source =>
-  'audioQuality' in format ? processAdaptiveAudioFormat(format) : processAdaptiveVideoFormat(format)
+	'audioQuality' in format ? processAdaptiveAudioFormat(format) : processAdaptiveVideoFormat(format)
 
 export const processAdaptiveVideoFormat = (
-  format: PlayerAdaptiveFormat & PlayerVideoFormat,
+	format: PlayerAdaptiveFormat & PlayerVideoFormat,
 ): std.Source<std.SourceType.Video> => ({
-  type: std.SourceType.Video,
-  frameRate: format.fps,
-  width: format.width,
-  height: format.height,
-  url: format.url ? format.url : signatureCipherToUrl(format.signatureCipher!),
-  mimetype: format.mimeType,
-  videoBitrate: format.bitrate,
+	type: std.SourceType.Video,
+	frameRate: format.fps,
+	width: format.width,
+	height: format.height,
+	url: format.url ? format.url : signatureCipherToUrl(format.signatureCipher!),
+	mimetype: format.mimeType,
+	videoBitrate: format.bitrate,
 })
 
 export const processAdaptiveAudioFormat = (
-  format: PlayerAdaptiveFormat & PlayerAudioFormat,
+	format: PlayerAdaptiveFormat & PlayerAudioFormat,
 ): std.Source<std.SourceType.Audio> => ({
-  type: std.SourceType.Audio,
-  url: format.url ? format.url : signatureCipherToUrl(format.signatureCipher!),
-  mimetype: format.mimeType,
-  audioBitrate: format.bitrate,
+	type: std.SourceType.Audio,
+	url: format.url ? format.url : signatureCipherToUrl(format.signatureCipher!),
+	mimetype: format.mimeType,
+	audioBitrate: format.bitrate,
 })
 
 // todo: docs
 const signatureCipherToUrl = (signatureCipher: string): string => {
-  const params = new URLSearchParams(signatureCipher)
-  const url = new URL(params.get('url')!)
-  const urlParams = new URLSearchParams(url.search)
-  urlParams.set('alr', 'yes')
-  urlParams.set('sig', params.get('s')!)
-  url.search = urlParams.toString()
-  return url.toString()
+	const params = new URLSearchParams(signatureCipher)
+	const url = new URL(params.get('url')!)
+	const urlParams = new URLSearchParams(url.search)
+	urlParams.set('alr', 'yes')
+	urlParams.set('sig', params.get('s')!)
+	url.search = urlParams.toString()
+	return url.toString()
 }
 
 export const decodeFormatUrl = async <Type extends std.SourceType = std.SourceType>(
-  source: std.Source<Type>,
+	source: std.Source<Type>,
 ): Promise<std.Source<Type>> =>
-  decodeVideoPlaybackUrl(new URL(source.url)).then(url => ({ ...source, url: url.toString() }))
+	decodeVideoPlaybackUrl(new URL(source.url)).then((url) => ({ ...source, url: url.toString() }))
 
 /*
 nR = function(a, b, c) {

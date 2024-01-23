@@ -3,31 +3,31 @@ import { formatDateAgo, formatNumberShort } from '@libs/format'
 import * as std from '@std'
 import { MantineSize, Text } from '@mantine/core'
 import { Row } from 'lese'
-import Link from 'next/link'
+import { Link } from 'wouter'
 import styled from 'styled-components'
 import { VerifiedBadge } from '../Badges'
 
 export const VideoSubLine: React.FC<{
-  video: Pick<std.Video, 'type' | 'viewCount' | 'publishDate'>
-  short?: boolean
-  size?: 'sm' | 'md'
+	video: Pick<std.Video, 'type' | 'viewCount' | 'publishDate'>
+	short?: boolean
+	size?: 'sm' | 'md'
 }> = ({ video, short, size = 'md' }) => {
-  if (video.type === std.VideoType.Live) {
-    return (
-      <Row separation="4px">
-        <Text c="dimmed" size={size}>
-          {formatNumberShort(video.viewCount!)} watching
-        </Text>
-      </Row>
-    )
-  }
-  return (
-    <Text c="dimmed" size={size}>
-      {formatNumberShort(video.viewCount!)}
-      {short ? '' : ' views'}
-      {video.publishDate ? ` • ${formatDateAgo(video.publishDate!)}` : ''}
-    </Text>
-  )
+	if (video.type === std.VideoType.Live) {
+		return (
+			<Row separation="4px">
+				<Text c="dimmed" size={size}>
+					{formatNumberShort(video.viewCount!)} watching
+				</Text>
+			</Row>
+		)
+	}
+	return (
+		<Text c="dimmed" size={size}>
+			{formatNumberShort(video.viewCount!)}
+			{short ? '' : ' views'}
+			{video.publishDate ? ` • ${formatDateAgo(video.publishDate!)}` : ''}
+		</Text>
+	)
 }
 
 const VideoAuthorLink = styled(Link)<{ size?: MantineSize }>`
@@ -42,11 +42,11 @@ const VideoAuthorLink = styled(Link)<{ size?: MantineSize }>`
 `
 
 export const VideoAuthor: React.FC<{
-  author: Pick<std.User, 'name' | 'verified' | 'id'>
-  size?: MantineSize
+	author: Pick<std.User, 'name' | 'verified' | 'id'>
+	size?: MantineSize
 }> = ({ author, size }) => (
-  <VideoAuthorLink href={`/c/${author.id}`} size={size}>
-    {author.name}
-    <VerifiedBadge size={size} />
-  </VideoAuthorLink>
+	<VideoAuthorLink href={`/c/${author.id}`} size={size}>
+		{author.name}
+		<VerifiedBadge size={size} />
+	</VideoAuthorLink>
 )

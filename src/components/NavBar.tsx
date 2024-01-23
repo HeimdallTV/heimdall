@@ -1,20 +1,19 @@
-'use client'
-
-import Link from 'next/link'
-import yt from '@yt'
-import { usePaginated } from '@/hooks/usePaginated'
-import { Text, Tooltip } from '@mantine/core'
-import { ChannelIcon } from './Channel/Link'
-import {
-  IconHeart,
-  IconHistory,
-  IconHome,
-  IconLayoutSidebarLeftCollapse,
-  IconLayoutSidebarLeftExpand,
-  IconSearch,
-} from '@tabler/icons-react'
 import styled from 'styled-components'
+import { Link } from 'wouter'
+import yt from '@yt'
+
 import { useDisclosure } from '@mantine/hooks'
+import { Text, Tooltip } from '@mantine/core'
+import {
+	IconHeart,
+	IconHistory,
+	IconHome,
+	IconLayoutSidebarLeftCollapse,
+	IconLayoutSidebarLeftExpand,
+	IconSearch,
+} from '@tabler/icons-react'
+import { usePaginated } from '@/hooks/usePaginated'
+import { ChannelIcon } from './Channel/Link'
 
 const NavBarItemButton = styled.button<{ href?: string }>`
   display: grid;
@@ -36,18 +35,18 @@ const NavBarItemButton = styled.button<{ href?: string }>`
   }
 `
 const NavBarItem: FC<
-  PropsWithChildren<{
-    as?: React.ElementType
-    expanded: boolean
-    tooltip: string
-    onClick?: () => void
-    href?: string
-    style?: React.CSSProperties
-  }>
+	PropsWithChildren<{
+		as?: React.ElementType
+		expanded: boolean
+		tooltip: string
+		onClick?: () => void
+		href?: string
+		style?: React.CSSProperties
+	}>
 > = ({ tooltip, expanded, ...props }) => (
-  <Tooltip label={tooltip} position="right" withArrow arrowSize={6} disabled={expanded}>
-    <NavBarItemButton {...props} />
-  </Tooltip>
+	<Tooltip label={tooltip} position="right" withArrow arrowSize={6} disabled={expanded}>
+		<NavBarItemButton {...props} />
+	</Tooltip>
 )
 
 const NavBarContainer = styled.nav<{ $expanded: boolean }>`
@@ -57,8 +56,8 @@ const NavBarContainer = styled.nav<{ $expanded: boolean }>`
   overflow: ${({ $expanded }) => ($expanded ? 'auto' : 'hidden')} !important;
 
   ${({ $expanded }) =>
-    !$expanded &&
-    `
+		!$expanded &&
+		`
     > * > *:nth-child(2) {
       display: none;
     }
@@ -68,65 +67,65 @@ const NavBarContainer = styled.nav<{ $expanded: boolean }>`
 // todo: custom tooltip for channels
 // todo: virtual list for channels
 export const NavBar = () => {
-  const [expanded, { toggle }] = useDisclosure(false)
-  const followedUsers = usePaginated(yt.listFollowedUsers!)
-  return (
-    <NavBarContainer $expanded={expanded}>
-      {/* Ensures that the tooltip delays are synced with each other */}
-      <Tooltip.Group openDelay={1000} closeDelay={500}>
-        <NavBarItem
-          as="button"
-          onClick={toggle}
-          style={{ background: 'var(--mantine-color-text)', color: 'black' }}
-          expanded={expanded}
-          tooltip="Expand Sidebar"
-        >
-          {expanded ? <IconLayoutSidebarLeftCollapse size={24} /> : <IconLayoutSidebarLeftExpand size={24} />}
-          <Text size="sm" fw={700}>
-            Collapse Sidebar
-          </Text>
-        </NavBarItem>
+	const [expanded, { toggle }] = useDisclosure(false)
+	const followedUsers = usePaginated(yt.listFollowedUsers!)
+	return (
+		<NavBarContainer $expanded={expanded}>
+			{/* Ensures that the tooltip delays are synced with each other */}
+			<Tooltip.Group openDelay={1000} closeDelay={500}>
+				<NavBarItem
+					as="button"
+					onClick={toggle}
+					style={{ background: 'var(--mantine-color-text)', color: 'black' }}
+					expanded={expanded}
+					tooltip="Expand Sidebar"
+				>
+					{expanded ? <IconLayoutSidebarLeftCollapse size={24} /> : <IconLayoutSidebarLeftExpand size={24} />}
+					<Text size="sm" fw={700}>
+						Collapse Sidebar
+					</Text>
+				</NavBarItem>
 
-        <NavBarItem as={Link} href="/" expanded={expanded} tooltip="Home">
-          <IconHome size={24} />
-          <Text size="sm" fw={700}>
-            Home
-          </Text>
-        </NavBarItem>
+				<NavBarItem as={Link} href="/" expanded={expanded} tooltip="Home">
+					<IconHome size={24} />
+					<Text size="sm" fw={700}>
+						Home
+					</Text>
+				</NavBarItem>
 
-        <NavBarItem as={Link} href="/search" expanded={expanded} tooltip="Search">
-          <IconSearch size={24} />
-          <Text size="sm" fw={700}>
-            Search
-          </Text>
-        </NavBarItem>
+				<NavBarItem as={Link} href="/search" expanded={expanded} tooltip="Search">
+					<IconSearch size={24} />
+					<Text size="sm" fw={700}>
+						Search
+					</Text>
+				</NavBarItem>
 
-        <NavBarItem as={Link} href="/history" expanded={expanded} tooltip="History">
-          <IconHistory size={24} />
-          <Text size="sm" fw={700}>
-            History
-          </Text>
-        </NavBarItem>
+				<NavBarItem as={Link} href="/history" expanded={expanded} tooltip="History">
+					<IconHistory size={24} />
+					<Text size="sm" fw={700}>
+						History
+					</Text>
+				</NavBarItem>
 
-        <NavBarItem as={Link} href="/following" expanded={expanded} tooltip="Following">
-          <IconHeart size={24} />
-          <Text size="sm" fw={700}>
-            Following
-          </Text>
-        </NavBarItem>
+				<NavBarItem as={Link} href="/following" expanded={expanded} tooltip="Following">
+					<IconHeart size={24} />
+					<Text size="sm" fw={700}>
+						Following
+					</Text>
+				</NavBarItem>
 
-        {followedUsers.data
-          .flat()
-          .slice(0, 20)
-          .map(user => (
-            <NavBarItemButton as={Link} href={`/c/${user.id}`} key={user.id}>
-              <ChannelIcon size={30} channel={user} />
-              <Text size="sm" fw={700} truncate="end">
-                {user.name}
-              </Text>
-            </NavBarItemButton>
-          ))}
-      </Tooltip.Group>
-    </NavBarContainer>
-  )
+				{followedUsers.data
+					.flat()
+					.slice(0, 20)
+					.map((user) => (
+						<NavBarItemButton as={Link} href={`/c/${user.id}`} key={user.id}>
+							<ChannelIcon size={30} channel={user} />
+							<Text size="sm" fw={700} truncate="end">
+								{user.name}
+							</Text>
+						</NavBarItemButton>
+					))}
+			</Tooltip.Group>
+		</NavBarContainer>
+	)
 }

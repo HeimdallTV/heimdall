@@ -1,14 +1,10 @@
 node_modules
 
-.vscode/*
+.vscode
 .idea
 .DS_Store
 
-/.next/
-/out/
 /build
-/.swc
-/.env
 /tsconfig.tsbuildinfo
 
 # Devenv
@@ -17,7 +13,4 @@ devenv.local.nix
 
 # direnv
 .direnv
-
-# pre-commit
-.pre-commit-config.yaml
 
