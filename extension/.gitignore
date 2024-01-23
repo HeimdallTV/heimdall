@@ -8,7 +8,6 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-build
 
 # Editor directories and files
 .vscode/*
@@ -24,3 +23,7 @@ build
 # Config files
 .webextrc
 .webextrc.*
+
+# Build files
+build
+web-ext-artifacts
