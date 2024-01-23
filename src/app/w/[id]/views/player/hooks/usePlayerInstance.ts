@@ -1,7 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/*
+ * Implementation of a player for youtube which doubles
+ * as the global store for the player UI
+ * todo: switch to Media Source Extensions for live streams and
+ * consistency across browsers
+ */
 
 import * as std from '@std'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export enum PlayerState {
   Playing = 'playing',
@@ -134,6 +140,7 @@ export const createPlayerInstance = (player: std.Player): PlayerInstance => {
   })
 
   // Buffering
+  // todo: buffering is true when video is ended
   const bufferingIntervalId = setInterval(
     () => buffering.set(video.readyState < 3 || audio.readyState < 3),
     10,
