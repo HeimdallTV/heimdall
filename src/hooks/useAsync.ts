@@ -7,12 +7,14 @@ export function useAsync<T>(fn: () => Promise<T>, deps: unknown[]): UseAsyncResp
 	const [isLoading, setLoading] = useState(true)
 	const [error, setError] = useState<Error | undefined>()
 
+	// We need not specify fn since it's expected that dependencies
+	// would inclued its dependencies
+	// biome-ignore lint/correctness/useExhaustiveDependencies:
 	useEffect(() => {
 		fn()
 			.then(setData)
 			.catch(setError)
 			.finally(() => setLoading(false))
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [...deps, fn])
+	}, deps)
 	return { data, error, isLoading }
 }
