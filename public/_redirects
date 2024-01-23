@@ -1,5 +1,5 @@
-/following /
-/history /
-/w/:id /
-/c/:id /
-/s/:query /
+/following / 200
+/history / 200
+/w/:id / 200
+/c/:id / 200
+/s/:query / 200
