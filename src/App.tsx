@@ -60,11 +60,11 @@ export default function App() {
 				<NavBar />
 				<Suspense fallback={null}>
 					<Router>
-						<Route path="/">{lazy(() => import('@pages/Home'))}</Route>
-						<Route path="/following">{lazy(() => import('@pages/Following'))}</Route>
-						<Route path="/history">{lazy(() => import('@pages/History'))}</Route>
-						<Route path="/w/:videoId">{lazy(() => import('@pages/watch/Watch'))}</Route>
-						<Route path="search/:query">{lazy(() => import('@pages/search/Search'))}</Route>
+						<Route path="/">{lazy(() => import('./views/Home'))}</Route>
+						<Route path="/following">{lazy(() => import('./views/Following'))}</Route>
+						<Route path="/history">{lazy(() => import('./views/History'))}</Route>
+						<Route path="/w/:videoId">{lazy(() => import('./views/watch/Watch'))}</Route>
+						<Route path="search/:query">{lazy(() => import('./views/search/Search'))}</Route>
 					</Router>
 				</Suspense>
 			</Shell>

@@ -14,7 +14,6 @@ import { RelatedVideos } from './RelatedVideos'
 import { Comments } from './Comments'
 import { PlayerContext } from './player/context'
 import { CopyLinkButton } from '@/components/button/CopyLinkButton'
-import { usePageLeave } from '@mantine/hooks'
 import { usePaginated } from '@/hooks/usePaginated'
 
 // todo: better way to move related videos inline?

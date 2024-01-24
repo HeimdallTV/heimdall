@@ -11,9 +11,11 @@ import {
 	IconLayoutSidebarLeftCollapse,
 	IconLayoutSidebarLeftExpand,
 	IconSearch,
+	IconSettings,
 } from '@tabler/icons-react'
 import { usePaginated } from '@/hooks/usePaginated'
 import { ChannelIcon } from './Channel/Link'
+import Settings from '@/views/settings/Settings'
 
 const NavBarItemButton = styled.button<{ href?: string }>`
   display: grid;
@@ -68,6 +70,7 @@ const NavBarContainer = styled.nav<{ $expanded: boolean }>`
 // todo: virtual list for channels
 export const NavBar = () => {
 	const [expanded, { toggle }] = useDisclosure(false)
+	const [settingsOpen, { open: openSettings, close: closeSettings }] = useDisclosure(false)
 	const followedUsers = usePaginated(yt.listFollowedUsers!)
 	return (
 		<NavBarContainer $expanded={expanded}>
@@ -104,6 +107,14 @@ export const NavBar = () => {
 					<IconHistory size={24} />
 					<Text size="sm" fw={700}>
 						History
+					</Text>
+				</NavBarItem>
+
+				<NavBarItem expanded={expanded} onClick={openSettings} tooltip="Settings">
+					<Settings opened={settingsOpen} onClose={closeSettings} />
+					<IconSettings size={24} />
+					<Text size="sm" fw={700}>
+						Settings
 					</Text>
 				</NavBarItem>
 

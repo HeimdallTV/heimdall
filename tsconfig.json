@@ -20,11 +20,10 @@
       "@components/*": ["./components/*"],
       "@extension/*": ["../extension/*"],
       "@libs/*": ["./libs/*"],
-      "@pages/*": ["./pages/*"],
       "@std": ["./parser/std/index.ts"],
       "@std/*": ["./parser/std/*"],
       "@yt": ["./parser/yt/index.ts"],
-      "@yt/*": ["./parser/yt/*"],
+      "@yt/*": ["./parser/yt/*"]
     },
     "plugins": [{ "name": "@styled/typescript-styled-plugin" }]
   },

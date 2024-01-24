@@ -14,6 +14,7 @@ import useDoubleClick from '@/hooks/useDoubleClick'
 import { useDelayedToggle } from '@/hooks/useDelayed'
 import { PlayerState } from './hooks/usePlayerInstance'
 import { usePlayerHotkeys } from './hooks/usePlayerHotkeys'
+import { Categories } from './Categories'
 
 export const Player: FC = () => {
 	const playerInstance = useContext(PlayerContext)
@@ -72,6 +73,7 @@ const PlayerUI: FC = () => {
 				visible={showBuffering}
 			/>
 			<ClosedCaptions />
+			<Categories />
 		</PlayerContainer>
 	)
 }

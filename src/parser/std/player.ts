@@ -25,7 +25,11 @@ export type Player = {
 }
 
 export type PlayerSegments = {
-	fullVideoCategory?: PlayerSegmentCategory
+	/**
+	 * Used when a video showcases a product, service, or location that
+	 * they've receieved free or subsidized access to
+	 **/
+	exclusiveAccess: boolean
 
 	categories: {
 		id: string
@@ -62,10 +66,19 @@ export enum PlayerSegmentCategory {
 	Preview = 'preview',
 	MusicOfftopic = 'music_offtopic',
 	Filler = 'filler',
-	Highlight = 'poi_highlight',
-	ExclusiveAccess = 'exclusive_access',
-	Chapter = 'chapter',
 }
+
+export const SourceQualities = [
+	{ name: '240p', width: 426 },
+	{ name: '360p', width: 640 },
+	{ name: '480p', width: 854 },
+	{ name: '720p', width: 1280 },
+	{ name: '1080p', width: 1920 },
+	{ name: '1440p', width: 2560 },
+	{ name: '4k', width: 3840 },
+	{ name: '5k', width: 5120 },
+	{ name: '8k', width: 7680 },
+]
 
 export enum PlayerSegmentActionType {
 	Skip = 'skip',
