@@ -37,70 +37,73 @@ const AbsoluteBadge = styled(Badge)<BadgeProps>`
 `
 
 const ThumbnailContext = createContext({
-  isHovered: false,
-  willShowAnimated: false,
+	isHovered: false,
+	willShowAnimated: false,
 })
 
 export type ThumbnailProps = PropsWithChildren<Pick<std.Video, 'staticThumbnail' | 'animatedThumbnail'>>
 export const Thumbnail: React.FC<ThumbnailProps> = ({ staticThumbnail, animatedThumbnail, children }) => {
-  const [loaded, setLoaded] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
-  const [willShowAnimated, setWillShowAnimated] = useState(false)
+	const [loaded, setLoaded] = useState(false)
+	const [isHovered, setIsHovered] = useState(false)
+	const [willShowAnimated, setWillShowAnimated] = useState(false)
 
-  useEffect(() => {
-    if (!isHovered) return
-    if (!animatedThumbnail || animatedThumbnail.length === 0) return
-    setWillShowAnimated(true)
-  }, [isHovered, animatedThumbnail])
+	useEffect(() => {
+		if (!isHovered) return
+		if (!animatedThumbnail || animatedThumbnail.length === 0) return
+		setWillShowAnimated(true)
+	}, [isHovered, animatedThumbnail])
 
-  return (
-    <ThumbnailContext.Provider value={{ isHovered, willShowAnimated }}>
-      <ThumbnailContainer
-        relative
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {!loaded && <Skeleton style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }} />}
-        <img src={staticThumbnail[0].url} alt="thumbnail" onLoad={() => setLoaded(true)} />
-        {animatedThumbnail !== undefined && (
-          <img
-            src={animatedThumbnail[0].url}
-            alt="animated thumbnail"
-            style={{
-              opacity: willShowAnimated && isHovered ? 1 : 0,
-              ...(isHovered ? { transition: TRANSITION } : {}),
-            }}
-          />
-        )}
-        {children}
-      </ThumbnailContainer>
-    </ThumbnailContext.Provider>
-  )
+	const bestStaticThumbnail = staticThumbnail?.sort((a, b) => b.width - a.width)[0]
+	const bestAnimatedThumbnail = animatedThumbnail?.sort((a, b) => b.width - a.width)[0]
+
+	return (
+		<ThumbnailContext.Provider value={{ isHovered, willShowAnimated }}>
+			<ThumbnailContainer
+				relative
+				onMouseEnter={() => setIsHovered(true)}
+				onMouseLeave={() => setIsHovered(false)}
+			>
+				{!loaded && <Skeleton style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }} />}
+				<img src={bestStaticThumbnail?.url} alt="" onLoad={() => setLoaded(true)} />
+				{bestAnimatedThumbnail !== undefined && (
+					<img
+						src={bestAnimatedThumbnail.url}
+						alt="animated thumbnail"
+						style={{
+							opacity: willShowAnimated && isHovered ? 1 : 0,
+							...(isHovered ? { transition: TRANSITION } : {}),
+						}}
+					/>
+				)}
+				{children}
+			</ThumbnailContainer>
+		</ThumbnailContext.Provider>
+	)
 }
 
 export type ThumbnailBadgeProps = {
-  text: string
-  color?: DefaultMantineColor
+	text: string
+	color?: DefaultMantineColor
 }
 export const ThumbnailBadge: React.FC<ThumbnailBadgeProps> = ({ text, color }) => {
-  const { isHovered, willShowAnimated } = useContext(ThumbnailContext)
-  const styles = {
-    opacity: willShowAnimated && isHovered ? 0 : 1,
-    transition: when(isHovered)(TRANSITION),
-  }
-  return (
-    <AbsoluteBadge color={color} styles={{ root: styles }}>
-      {text}
-    </AbsoluteBadge>
-  )
+	const { isHovered, willShowAnimated } = useContext(ThumbnailContext)
+	const styles = {
+		opacity: willShowAnimated && isHovered ? 0 : 1,
+		transition: when(isHovered)(TRANSITION),
+	}
+	return (
+		<AbsoluteBadge color={color} styles={{ root: styles }}>
+			{text}
+		</AbsoluteBadge>
+	)
 }
 
 export type VideoThumbnailProps = ThumbnailProps & Pick<std.Video, 'type' | 'length'>
-export const VideoThumbnail: React.FC<VideoThumbnailProps> = props => (
-  <Thumbnail {...props}>
-    {props.type === std.VideoType.Live && <ThumbnailBadge text="LIVE" />}
-    {props.type !== std.VideoType.Live && props.length !== undefined && (
-      <ThumbnailBadge color="dark" text={formatNumberDuration(props.length!)} />
-    )}
-  </Thumbnail>
+export const VideoThumbnail: React.FC<VideoThumbnailProps> = (props) => (
+	<Thumbnail {...props}>
+		{props.type === std.VideoType.Live && <ThumbnailBadge text="LIVE" />}
+		{props.type !== std.VideoType.Live && props.length !== undefined && (
+			<ThumbnailBadge color="dark" text={formatNumberDuration(props.length!)} />
+		)}
+	</Thumbnail>
 )

@@ -14,6 +14,7 @@ type ChannelIconProps = {
 }
 
 // Seems to be a bug with types? Removing the ImgHTMLAttributes makes alt and src undefined
+// todo: fix backgroud-color
 const ChannelIconImage = styled('img')<{ size: number } & React.HTMLAttributes<HTMLImageElement>>`
   width: ${({ size }) => `${size ?? 36}px`};
   height: ${({ size }) => `${size ?? 36}px`};

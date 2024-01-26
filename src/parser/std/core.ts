@@ -92,12 +92,19 @@ export type Provider = {
 	listPlaylistVideos?: (playlistId: string) => AsyncGenerator<Video[]>
 
 	getChannel: (channelId: string) => Promise<Channel>
-	listChannelShelves?: (channelId: string) => AsyncGenerator<Shelf[]>
+	/** Ex. Playlists, For You and so on */
+	listChannelShelves?: (channelId: string) => Promise<Shelf[]>
+	/** Videos recommended for the user */
 	listChannelRecommended?: (channelId: string) => AsyncGenerator<(Video | Shelf)[]>
+	/** Videos uploaded by the channel */
 	listChannelVideos: (channelId: string) => AsyncGenerator<Video[]>
-	listChannelLiveVideos?: (channelId: string) => AsyncGenerator<Video[]>
+	/** Currently active live streams if applicable */
+	listChannelLiveVideos?: (channelId: string) => Promise<Video[]>
+	/** Trailers on Youtube */
 	listChannelFeaturedVideo?: (channelId: string) => Promise<Video>
+	/** Playlists created by the channel */
 	listChannelPlaylists?: (channelId: string) => AsyncGenerator<Playlist[]>
+	/** Ex. social media or discord server */
 	listChannelLinks?: (channelId: string) => Promise<string[]>
 
 	/** Going to want this eventually for subscriptions view */

@@ -5,17 +5,17 @@ import { MantineProvider, createTheme } from '@mantine/core'
 import '@mantine/core/styles.css'
 import { NavBar } from '@/components/NavBar'
 
-if (import.meta.env.VITE_MODE === 'development') {
-	const origConsoleError = console.error
-	console.error = (...args: unknown[]) => {
-		const isNestingWarning = (arg: unknown) => typeof arg === 'string' && arg.includes('validateDOMNesting')
-		const [formatString, child, parent] = args
-		if (isNestingWarning(formatString) && child === '<a>' && parent === 'a') {
-			return
-		}
-		origConsoleError(...args)
-	}
-}
+// if (import.meta.env.VITE_MODE === 'development') {
+// 	const origConsoleError = console.error
+// 	console.error = (...args: unknown[]) => {
+// 		const isNestingWarning = (arg: unknown) => typeof arg === 'string' && arg.includes('validateDOMNesting')
+// 		const [formatString, child, parent] = args
+// 		if (isNestingWarning(formatString) && child === '<a>' && parent === 'a') {
+// 			return
+// 		}
+// 		origConsoleError(...args)
+// 	}
+// }
 
 const theme = createTheme({
 	fontFamily: 'Roboto Flex',
@@ -64,7 +64,8 @@ export default function App() {
 						<Route path="/following">{lazy(() => import('./views/Following'))}</Route>
 						<Route path="/history">{lazy(() => import('./views/History'))}</Route>
 						<Route path="/w/:videoId">{lazy(() => import('./views/watch/Watch'))}</Route>
-						<Route path="search/:query">{lazy(() => import('./views/search/Search'))}</Route>
+						<Route path="/c/:channelId">{lazy(() => import('./views/channel/Channel'))}</Route>
+						<Route path="/search/:query">{lazy(() => import('./views/search/Search'))}</Route>
 					</Router>
 				</Suspense>
 			</Shell>

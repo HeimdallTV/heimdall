@@ -63,7 +63,6 @@ export enum BrowseParams {
 	ChannelPlaylists = '\x12\tplaylists',
 	ChannelCommunity = '\x12\tcommunity',
 	ChannelChannels = '\x12\bchannels',
-	ChannelAbout = '\x12\x05about',
 	ChannelLive = '\x12\x04live',
 }
 
@@ -96,6 +95,7 @@ export const fetchYt = memoizeAsync(
 	},
 )
 
+// todo: lock to english since our date parsing relies on it
 const getContext = () =>
 	Object.freeze({
 		client: {

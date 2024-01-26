@@ -96,6 +96,7 @@ export const createPlayerInstance = (player: std.Player): PlayerInstance => {
 	const volume = createValueListener(1)
 	const playbackRate = createValueListener(1)
 	// todo: need to consider user preference, hardware acceleration, etc.
+	// todo: video can expire at which point we need to refresh
 	const source = createValueListener<CombinedSource>({
 		video: player.sources.filter(std.isVideoSource).find((source) => source.mimetype?.includes('vp9'))!,
 		audio: player.sources.find(std.isAudioSource)!,

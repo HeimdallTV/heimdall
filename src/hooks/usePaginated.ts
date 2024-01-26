@@ -4,6 +4,7 @@ import pLimit from 'p-limit'
 
 // todo: use export default
 // fixme: has all kinds of race conditions, error handling issues and doesnt reset when iterator changes
+// fixme: needs dependency array
 export const usePaginated = <T>(iterator?: () => AsyncGenerator<T>) => {
 	const [loading, setLoading] = useState(false)
 	const [errors, setErrors] = useState<unknown[]>([])

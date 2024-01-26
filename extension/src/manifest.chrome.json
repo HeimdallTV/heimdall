@@ -1,9 +1,14 @@
 {
-  "manifest_version": 3,
-  "action": {},
-  "background": {
-    "service_worker": "service-worker.js"
-  },
-  "permissions": ["cookies", "storage", "declarativeNetRequest"],
-  "host_permissions": ["https://*.youtube.com/*", "https://returnyoutubedislikeapi.com/*"]
+	"manifest_version": 3,
+	"action": {},
+	"background": {
+		"service_worker": "service-worker.js"
+	},
+	"permissions": ["cookies", "storage", "declarativeNetRequest"],
+	"host_permissions": [
+		"https://*.youtube.com/*",
+		"https://returnyoutubedislikeapi.com/*",
+		"https://yt3.ggpht.com/*",
+		"https://i.ytimg.com/*"
+	]
 }

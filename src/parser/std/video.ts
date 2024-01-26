@@ -4,42 +4,42 @@ import { Playlist } from './playlist'
 import { RichText } from './components/rich-text'
 
 export enum VideoType {
-  Live = 'live',
-  Static = 'static',
-  Clip = 'clip',
+	Live = 'live',
+	Static = 'static',
+	Clip = 'clip',
 }
 
 export type Video = {
-  provider: ProviderName
+	provider: ProviderName
 
-  type: VideoType
-  id: string
+	type: VideoType
+	id: string
 
-  title: string
-  shortDescription?: string
-  description?: RichText
-  viewCount?: number
+	title: string
+	shortDescription?: string
+	description?: RichText
+	viewCount?: number
 
-  likeStatus?: LikeStatus
-  likeCount?: number
-  dislikeCount?: number
+	likeStatus?: LikeStatus
+	likeCount?: number
+	dislikeCount?: number
 
-  author?: User
+	author?: User
 
-  /** The static and primary thumbnail for the video. An array of objects for various sizes */
-  staticThumbnail: Image[]
-  /** The animated thumbnail for the video. An array of objects for various sizes. Can be used for on-hover for example */
-  animatedThumbnail?: Image[]
+	/** The static and primary thumbnail for the video. An array of objects for various sizes */
+	staticThumbnail: Image[]
+	/** The animated thumbnail for the video. An array of objects for various sizes. Can be used for on-hover for example */
+	animatedThumbnail?: Image[]
 
-  /** Videos related to this video */
-  related?: () => AsyncGenerator<(Video | User | Playlist)[]>
+	/** Videos related to this video */
+	related?: () => AsyncGenerator<(Video | User | Playlist)[]>
 
-  /** Length of the video or uptime of live stream in seconds */
-  length?: number
-  /** Length of the video in seconds that has already been viewed */
-  viewedLength?: number
-  /** Date that the video was uploaded or that the live stream started */
-  publishDate?: Date
+	/** Length of the video or uptime of live stream in seconds */
+	length?: number
+	/** Length of the video in seconds that has already been viewed */
+	viewedLength?: number
+	/** Date that the video was uploaded or that the live stream started */
+	publishDate?: Date
 }
 
 export type HistoryVideos = { date: Date; videos: Video[] }

@@ -42,7 +42,7 @@ export const CompactVideoListItem: React.FC<{ video: std.Video }> = ({ video }) 
 				{video.title}
 			</Text>
 			{video.author && <VideoAuthor author={video.author} size="sm" />}
-			<VideoSubLine size="sm" video={video} />
+			<VideoSubLine video={video} />
 		</Column>
 	</Grid>
 )

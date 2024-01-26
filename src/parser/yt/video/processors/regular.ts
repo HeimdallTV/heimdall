@@ -8,6 +8,7 @@ import {
 	Thumbnail,
 	ThumbnailOverlayNowPlaying,
 	ThumbnailOverlayResumePlayback,
+	ThumbnailOverlays,
 	ThumbnailOverlayTimeStatus,
 } from '../../components/thumbnail'
 import { Renderer, Some } from '../../core/internals'
@@ -32,10 +33,10 @@ export function processVideo({ videoRenderer: video }: Video): std.Video {
 		shortDescription: video.descriptionSnippet && combineSomeText(video.descriptionSnippet),
 		viewCount: parseViewCount(combineSomeText(video.viewCountText)),
 
-		author: {
+		author: video.ownerText && {
 			name: combineSomeText(video.ownerText),
 			id: getBrowseNavigationId(video.ownerText),
-			avatar: video.channelThumbnailSupportedRenderers.channelThumbnailWithLinkRenderer.thumbnail.thumbnails,
+			avatar: video.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer.thumbnail.thumbnails,
 			verified: std.verifiedFrom(video.ownerBadges?.some(isVerifiedBadge)),
 		},
 
@@ -54,7 +55,7 @@ export type BaseVideo = Navigation<WatchEndpoint> & {
 	badges?: MetadataBadge[]
 
 	/** Thumbnails for channel */
-	channelThumbnailSupportedRenderers: ChannelThumbnailWithLink
+	channelThumbnailSupportedRenderers?: ChannelThumbnailWithLink
 
 	/** Short version of description with ellipses. Not provided when description is not defined */
 	descriptionSnippet?: Some<Text>
@@ -74,7 +75,7 @@ export type BaseVideo = Navigation<WatchEndpoint> & {
 	ownerBadges?: MetadataBadge[]
 
 	/** Channel info */
-	ownerText: Some<NavigationSome<BrowseEndpoint, Text>>
+	ownerText?: Some<NavigationSome<BrowseEndpoint, Text>>
 
 	/** How long ago the video was published. Ex. 3 days ago */
 	publishedTimeText: Some<Text>
@@ -92,11 +93,7 @@ export type BaseVideo = Navigation<WatchEndpoint> & {
 	thumbnail: Thumbnail
 
 	/** Renderers that are overlayed on top of the thumbnail such as watch later and length */
-	thumbnailOverlays: (
-		| ThumbnailOverlayNowPlaying
-		| ThumbnailOverlayResumePlayback
-		| ThumbnailOverlayTimeStatus
-	)[]
+	thumbnailOverlays: ThumbnailOverlays[]
 
 	title: Some<Accessibility<Text>>
 

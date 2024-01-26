@@ -10,7 +10,13 @@ export default function History() {
 	return (
 		<main>
 			{history.data.flat().map(({ date, videos }) => (
-				<VideoGrid as="section" key={date.toISOString()} header={formatDayRelative(date)} videos={videos} />
+				<VideoGrid
+					as="section"
+					key={date.toISOString()}
+					header={formatDayRelative(date)}
+					loading={false}
+					videos={videos}
+				/>
 			))}
 		</main>
 	)

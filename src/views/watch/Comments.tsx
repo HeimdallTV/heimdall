@@ -5,7 +5,7 @@ import * as std from '@/parser/std'
 import { Avatar, Text, UnstyledButton } from '@mantine/core'
 import { Column, Row } from 'lese'
 import { formatDateAgo } from '@/libs/format'
-import { RichTextChunk } from '@/components/RichText'
+import { RichText } from '@/components/RichText'
 import { toShortHumanReadable } from '@/parser/yt/core/helpers'
 import { DislikeIcon, LikeIcon } from '@/components/Icons'
 import { useEagerMutation } from '@/hooks/useEagerMutation'
@@ -38,9 +38,7 @@ const Comment: React.FC<{ comment: std.Comment }> = ({ comment }) => {
 					</Text>
 				</Row>
 				<Text size="md" lh="lg">
-					{comment.content.map((chunk, i) => (
-						<RichTextChunk key={i} chunk={chunk} />
-					))}
+					<RichText chunks={comment.content} />
 				</Text>
 				<CommentMetadata comment={comment} />
 			</Column>

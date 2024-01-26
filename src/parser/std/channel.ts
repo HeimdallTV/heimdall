@@ -8,19 +8,13 @@ import { Video, Playlist, User, ProviderName, Shelf } from '.'
  * which should be fetched separately since it contains continuation data.
  */
 export type Channel = {
-  provider: ProviderName
-  user: User
-  id: string
-  banner?: Image[]
-  shortDescription?: string
-  description?: RichText
+	provider: ProviderName
+	user: User
+	id: string
+	banner?: Image[]
+	shortDescription?: string
+	description?: RichText
 
-  /** Ex. trailer or hosted channel */
-  featuredVideo?: Video
-  /** Currently active live stream if applicable */
-  listLiveVideos?: () => Promise<Video[]>
-  /** Ex. Playlists, For You and so on */
-  listShelves?: () => Promise<Shelf[]>
-  /** Ex. social media or discord server */
-  listLinks?: () => Promise<string[]>
+	/** Ex. trailer or hosted channel */
+	featuredVideo?: Video
 }

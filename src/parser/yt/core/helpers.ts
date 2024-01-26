@@ -5,6 +5,10 @@ export const divideByAndConcat = (divisor: number, suffix: string) => (num: numb
 }
 
 export const toShortHumanReadable = (num: number) => {
+	if (Number.isNaN(num)) {
+		console.warn('NaN provided to toShortHumanReadable')
+		return 'NaN'
+	}
 	if (num <= 1_000) return String(num)
 	if (num <= 1_000_000) return divideByAndConcat(1_000, 'K')(num)
 	if (num <= 1_000_000_000) return divideByAndConcat(1_000_000, 'M')(num)

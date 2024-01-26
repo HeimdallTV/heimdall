@@ -2,7 +2,7 @@ import * as std from '@/parser/std'
 import { Anchor, Text } from '@mantine/core'
 import { Link } from 'wouter'
 
-export const RichTextChunk: React.FC<{ chunk: std.RichTextChunk }> = ({ chunk }) => {
+const RichTextChunk: React.FC<{ chunk: std.RichTextChunk }> = ({ chunk }) => {
 	if (chunk.type !== std.RichTextChunkType.Text) return null
 	if (chunk.href !== undefined) {
 		// todo: instead of stopping propagation here, we should instead check the target in the top
@@ -30,5 +30,16 @@ export const RichTextChunk: React.FC<{ chunk: std.RichTextChunk }> = ({ chunk })
 		>
 			{chunk.content}
 		</Text>
+	)
+}
+
+export const RichText: React.FC<{ chunks?: std.RichTextChunk[] }> = ({ chunks }) => {
+	if (chunks === undefined) return null
+	return (
+		<>
+			{chunks.map((chunk, i) => (
+				<RichTextChunk key={i} chunk={chunk} />
+			))}
+		</>
 	)
 }

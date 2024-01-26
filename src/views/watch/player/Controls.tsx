@@ -25,6 +25,7 @@ const ControlsContainer = styled(Column)<{ show: boolean } & FlexProps>`
   right: 0;
   padding: 0.8rem;
   padding-top: 1.2rem;
+  z-index: 10;
 
   transition: 0.2s opacity;
   opacity: ${({ show }) => String(Number(show))};

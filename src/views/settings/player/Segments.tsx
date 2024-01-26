@@ -22,7 +22,7 @@ import { useAtom } from 'jotai'
 import { Column, Row } from 'lese'
 import { Label } from '../components'
 
-export function PlayerSegmentSettings() {
+export default function PlayerSegmentSettings() {
 	const [segments, setSegments] = useAtom(playerSegmentsAtom)
 	return (
 		<>

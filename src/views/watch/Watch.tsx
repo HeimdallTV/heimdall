@@ -16,7 +16,7 @@ const WatchContainer = styled.main`
   }
 `
 
-const Watch: FC<{ videoId: string }> = ({ videoId }) => {
+export default function Watch({ videoId }: { videoId: string }) {
 	const { data: video, error: videoError } = useAsync(() => fetchVideo(videoId), [videoId])
 	const { data: player, error: playerError } = useAsync(() => fetchPlayer(videoId), [videoId])
 	const playerInstance = usePlayerInstance(player)
@@ -33,5 +33,3 @@ const Watch: FC<{ videoId: string }> = ({ videoId }) => {
 		</PlayerContext.Provider>
 	)
 }
-
-export default Watch

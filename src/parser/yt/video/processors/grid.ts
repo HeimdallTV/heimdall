@@ -6,50 +6,56 @@ import { combineSomeText } from '@yt/components/text'
 import { parseViewCount } from '@yt/core/helpers'
 import { ProviderName } from '@std'
 import { getLength, getViewedLength, relativeToAbsoluteDate } from './helpers'
+import { getVideoType } from '..'
 
 /**
  * Currently cannot parse/doesn't handle live streams and upcoming events
+ * todo: unused
  */
-export function processGridVideoData({ gridVideoRenderer: video }: GridVideo): std.Video {
-  const lengthText = findRenderer('thumbnailOverlayTimeStatus')(video.thumbnailOverlays)?.text
-  if (!lengthText) throw Error('Grid video did not contain thumbnail overlay time status') // TODO: Why is this here
+export function processGridVideo({ gridVideoRenderer: video }: GridVideo): std.Video {
+	const lengthText = findRenderer('thumbnailOverlayTimeStatus')(video.thumbnailOverlays)?.text
+	if (!lengthText) throw Error('Grid video did not contain thumbnail overlay time status') // TODO: Why is this here
 
-  return {
-    provider: ProviderName.YT,
+	if (combineSomeText(video.title) === 'NASA Live: Official Stream of NASA TV') {
+		console.log(video)
+	}
 
-    type: std.VideoType.Static,
-    id: video.videoId,
+	return {
+		provider: ProviderName.YT,
 
-    title: combineSomeText(video.title),
-    viewCount: parseViewCount(combineSomeText(video.viewCountText)),
+		type: getVideoType(video),
+		id: video.videoId,
 
-    staticThumbnail: video.thumbnail.thumbnails,
-    animatedThumbnail: video.richThumbnail?.movingThumbnailRenderer.movingThumbnailDetails?.thumbnails,
+		title: combineSomeText(video.title),
+		viewCount: parseViewCount(combineSomeText(video.viewCountText)),
 
-    length: getLength(lengthText),
-    viewedLength: getViewedLength(video.thumbnailOverlays, getLength(lengthText)),
+		staticThumbnail: video.thumbnail.thumbnails,
+		animatedThumbnail: video.richThumbnail?.movingThumbnailRenderer.movingThumbnailDetails?.thumbnails,
 
-    publishDate: video.publishedTimeText && relativeToAbsoluteDate(combineSomeText(video.publishedTimeText)),
-  }
+		length: getLength(lengthText),
+		viewedLength: getViewedLength(video.thumbnailOverlays, getLength(lengthText)),
+
+		publishDate: video.publishedTimeText && relativeToAbsoluteDate(combineSomeText(video.publishedTimeText)),
+	}
 }
 
 export type GridVideo = Renderer<
-  'gridVideo',
-  Pick<
-    BaseVideo,
-    | 'badges'
-    | 'menu'
-    | 'navigationEndpoint'
-    | 'ownerBadges'
-    | 'publishedTimeText'
-    | 'richThumbnail'
-    | 'shortBylineText'
-    | 'shortViewCountText'
-    | 'thumbnail'
-    | 'thumbnailOverlays'
-    | 'title'
-    | 'trackingParams'
-    | 'videoId'
-    | 'viewCountText'
-  >
+	'gridVideo',
+	Pick<
+		BaseVideo,
+		| 'badges'
+		| 'menu'
+		| 'navigationEndpoint'
+		| 'ownerBadges'
+		| 'publishedTimeText'
+		| 'richThumbnail'
+		| 'shortBylineText'
+		| 'shortViewCountText'
+		| 'thumbnail'
+		| 'thumbnailOverlays'
+		| 'title'
+		| 'trackingParams'
+		| 'videoId'
+		| 'viewCountText'
+	>
 >

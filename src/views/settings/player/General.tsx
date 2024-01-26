@@ -4,7 +4,7 @@ import { ComboboxItem, SegmentedControl, Switch } from '@mantine/core'
 import { useAtom } from 'jotai'
 import { Label } from '../components'
 
-export function PlayerGeneralSettings() {
+export default function PlayerGeneralSettings() {
 	const [autoplay, setAutoplay] = useAtom(playerAutoplayAtom)
 	const [defaultQuality, setDefaultQuality] = useAtom(playerDefaultQualityAtom)
 	return (

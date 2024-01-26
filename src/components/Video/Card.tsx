@@ -26,14 +26,14 @@ export const VideoCard: React.FC<{ video: std.Video }> = ({ video }) => {
 			<Card.Section>
 				<VideoThumbnail {...video} />
 			</Card.Section>
-			<Grid columns="auto 1fr" gap="1em" style={{ marginTop: '1em' }}>
-				<ChannelIcon channel={video.author!} />
+			<Grid columns="auto 1fr" gap="1em" style={{ marginTop: '0.75em' }}>
+				{video.author && <ChannelIcon channel={video.author} />}
 				<Stack gap="4px" style={{ overflow: 'hidden' }}>
 					<Text fw="bold" size="lg" lineClamp={2}>
 						{video.title}
 					</Text>
-					<VideoAuthor author={video.author!} />
-					<VideoSubLine video={video} />
+					{video.author && <VideoAuthor author={video.author!} />}
+					<VideoSubLine size="sm" video={video} />
 				</Stack>
 			</Grid>
 		</Card>

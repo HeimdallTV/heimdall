@@ -1,10 +1,11 @@
 import styled from 'styled-components'
 import { Column } from 'lese'
 import * as std from '@/parser/std'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { formatDateAgo, formatNumberShort } from '@/libs/format'
 import { Skeleton, Text, UnstyledButton } from '@mantine/core'
-import { RichTextChunk } from '@/components/RichText'
+import { RichText } from '@/components/RichText'
+import { useResizeObserver } from '@mantine/hooks'
 
 const DescriptionContainer = styled(Column)<{ $canExpanded: boolean }>`
   justify-content: flex-start;
@@ -33,14 +34,15 @@ export const Description: React.FC<{
 }> = ({ viewCount, publishDate, description }) => {
 	const [requiresExpansion, setRequiresExpansion] = useState(false)
 	const [isExpanded, setIsExpanded] = useState(false)
-	const descriptionRef = useRef<HTMLDivElement>(null)
+	const [descriptionRef, size] = useResizeObserver()
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies:
 	useEffect(() => {
 		const descriptionText = descriptionRef.current?.children[1]
 		if (descriptionText) {
-			setRequiresExpansion(descriptionText.scrollHeight > descriptionText.clientHeight)
+			setRequiresExpansion(descriptionText.scrollHeight > descriptionText.clientHeight || isExpanded)
 		}
-	})
+	}, [descriptionRef, size, isExpanded])
 
 	// todo: Get a better key for the description list rendering
 	return (
@@ -106,9 +108,7 @@ const DescriptionChunks: React.FC<{ chunks?: std.RichTextChunk[]; isExpanded: bo
 	}
 	return (
 		<Text lineClamp={isExpanded ? Infinity : 3}>
-			{chunks.map((chunk, i) => (
-				<RichTextChunk key={i} chunk={chunk} />
-			))}
+			<RichText chunks={chunks} />
 		</Text>
 	)
 }

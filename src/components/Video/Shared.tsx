@@ -7,6 +7,8 @@ import { Link } from 'wouter'
 import styled from 'styled-components'
 import { VerifiedBadge } from '../Badges'
 
+// todo: better name
+// todo: is size used?
 export const VideoSubLine: React.FC<{
 	video: Pick<std.Video, 'type' | 'viewCount' | 'publishDate'>
 	short?: boolean
