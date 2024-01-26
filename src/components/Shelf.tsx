@@ -6,6 +6,7 @@ import { VideoGrid } from './Video/Grid'
 import { IconChevronDown, IconChevronUp } from '@tabler/icons-react'
 import { Link } from 'wouter'
 
+// todo: detect when all items are shown and dont show the divider
 type ShelfProps = Pick<std.Shelf, 'name' | 'shortDescription' | 'href'> & {
 	expanded: boolean
 	onExpandedChange: (expanded: true) => void

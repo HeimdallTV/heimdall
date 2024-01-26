@@ -16,6 +16,7 @@ export default function History() {
 					header={formatDayRelative(date)}
 					loading={false}
 					videos={videos}
+					padding="24px"
 				/>
 			))}
 		</main>

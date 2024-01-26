@@ -12,6 +12,7 @@ export default function Home() {
 			loading={videoPages.loading}
 			videos={videoPages.data.flat()}
 			getNext={videoPages.next}
+			padding="24px"
 		/>
 	)
 }

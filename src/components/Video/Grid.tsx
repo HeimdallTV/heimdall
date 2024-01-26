@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { VideoCard, VideoCardSkeleton } from './Card'
 import { Text } from '@mantine/core'
 import { InfiniteScrollDetector } from '../InfiniteScrollDetector'
-import { useResizeObserver } from '@mantine/hooks'
 import { forwardRef } from 'react'
 
 type VideoGridProps = {
@@ -12,6 +11,7 @@ type VideoGridProps = {
 	header?: React.ReactElement | string
 	size?: 'sm' | 'md'
 	collapsed?: boolean
+	padding?: string
 
 	loading?: boolean
 	loadingSkeletonCount?: number
@@ -25,6 +25,7 @@ export const VideoGrid: FC<VideoGridProps> = forwardRef(
 			header,
 			size = 'md',
 			collapsed = false,
+			padding,
 			loading = false,
 			loadingSkeletonCount = 32,
 			videos,
@@ -33,7 +34,7 @@ export const VideoGrid: FC<VideoGridProps> = forwardRef(
 		ref,
 	) => {
 		return (
-			<VideoGridContainer as={as} $hasHeader={Boolean(header)}>
+			<VideoGridContainer as={as} $hasHeader={Boolean(header)} style={{ padding, paddingTop: '0' }}>
 				{header && <VideoGridHeader header={header} />}
 				<Grid $collapsed={collapsed} $size={size} ref={ref}>
 					{videos
