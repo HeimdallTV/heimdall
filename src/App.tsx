@@ -1,9 +1,9 @@
-import { Suspense, lazy } from 'react'
-import styled from 'styled-components'
-import { Route, Router } from 'wouter'
-import { MantineProvider, createTheme } from '@mantine/core'
-import '@mantine/core/styles.css'
-import { NavBar } from '@/components/NavBar'
+import { Suspense, lazy } from "react";
+import styled from "styled-components";
+import { Route, Router } from "wouter";
+import { MantineProvider, createTheme } from "@mantine/core";
+import "@mantine/core/styles.css";
+import { NavBar } from "@/components/NavBar";
 
 // if (import.meta.env.VITE_MODE === 'development') {
 // 	const origConsoleError = console.error
@@ -18,29 +18,29 @@ import { NavBar } from '@/components/NavBar'
 // }
 
 const theme = createTheme({
-	fontFamily: 'Roboto Flex',
+	fontFamily: "Roboto Flex",
 	colors: {
 		dark: [
-			'#C9C9C9',
-			'#b8b8b8',
-			'#828282',
-			'#696969',
-			'#393348',
-			'#332E41',
-			'#2d2939',
-			'#1E1E28',
-			'#1c1a24',
-			'#131019',
+			"#C9C9C9",
+			"#b8b8b8",
+			"#828282",
+			"#696969",
+			"#393348",
+			"#332E41",
+			"#2d2939",
+			"#1E1E28",
+			"#1c1a24",
+			"#131019",
 		],
 	},
 	lineHeights: {
-		xs: '1.3',
-		sm: '1.35',
-		md: '1.45',
-		lg: '1.5',
-		xl: '1.55',
+		xs: "1.3",
+		sm: "1.35",
+		md: "1.45",
+		lg: "1.5",
+		xl: "1.55",
 	},
-})
+});
 
 const Shell = styled.div`
   display: grid;
@@ -51,7 +51,14 @@ const Shell = styled.div`
   > * {
     overflow-y: auto;
   }
-`
+`;
+
+const Home = lazy(() => import("./views/Home"));
+const Following = lazy(() => import("./views/Following"));
+const History = lazy(() => import("./views/History"));
+const Watch = lazy(() => import("./views/watch/Watch"));
+const Channel = lazy(() => import("./views/channel/Channel"));
+const Search = lazy(() => import("./views/search/Search"));
 
 export default function App() {
 	return (
@@ -60,15 +67,21 @@ export default function App() {
 				<NavBar />
 				<Suspense fallback={null}>
 					<Router>
-						<Route path="/">{lazy(() => import('./views/Home'))}</Route>
-						<Route path="/following">{lazy(() => import('./views/Following'))}</Route>
-						<Route path="/history">{lazy(() => import('./views/History'))}</Route>
-						<Route path="/w/:videoId">{lazy(() => import('./views/watch/Watch'))}</Route>
-						<Route path="/c/:channelId">{lazy(() => import('./views/channel/Channel'))}</Route>
-						<Route path="/search/:query">{lazy(() => import('./views/search/Search'))}</Route>
+						<Route path="/">
+							<Home />
+						</Route>
+						<Route path="/following">
+							<Following />
+						</Route>
+						<Route path="/history">
+							<History />
+						</Route>
+						<Route path="/w/:videoId" component={Watch} />
+						<Route path="/c/:channelId" component={Channel} />
+						<Route path="/search/:query" component={Search} />{" "}
 					</Router>
 				</Suspense>
 			</Shell>
 		</MantineProvider>
-	)
+	);
 }

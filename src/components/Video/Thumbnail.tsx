@@ -1,14 +1,25 @@
-import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
+import {
+	createContext,
+	PropsWithChildren,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
 
-import { Flex } from 'lese'
-import styled from 'styled-components'
+import { Flex } from "lese";
+import styled from "styled-components";
 
-import { formatNumberDuration } from '@libs/format'
-import { when } from '@libs/utils'
-import * as std from '@std'
-import { Badge, BadgeProps, DefaultMantineColor, Skeleton } from '@mantine/core'
+import { formatNumberDuration } from "@libs/format";
+import { when } from "@libs/utils";
+import * as std from "@std";
+import {
+	Badge,
+	BadgeProps,
+	DefaultMantineColor,
+	Skeleton,
+} from "@mantine/core";
 
-const TRANSITION = 'opacity 250ms ease 250ms'
+const TRANSITION = "opacity 250ms ease 250ms";
 
 const ThumbnailContainer = styled(Flex)`
   width: 100%;
@@ -27,34 +38,49 @@ const ThumbnailContainer = styled(Flex)`
     width: 100%;
     will-change: transform;
   }
-`
+`;
 
 const AbsoluteBadge = styled(Badge)<BadgeProps>`
   position: absolute;
   bottom: 0;
   right: 0;
   margin: 4px;
-`
+`;
 
 const ThumbnailContext = createContext({
 	isHovered: false,
 	willShowAnimated: false,
-})
+});
 
-export type ThumbnailProps = PropsWithChildren<Pick<std.Video, 'staticThumbnail' | 'animatedThumbnail'>>
-export const Thumbnail: React.FC<ThumbnailProps> = ({ staticThumbnail, animatedThumbnail, children }) => {
-	const [loaded, setLoaded] = useState(false)
-	const [isHovered, setIsHovered] = useState(false)
-	const [willShowAnimated, setWillShowAnimated] = useState(false)
+export type ThumbnailProps = PropsWithChildren<
+	Pick<
+		std.Video,
+		"staticThumbnail" | "animatedThumbnail" | "length" | "viewedLength"
+	>
+>;
+export const Thumbnail: React.FC<ThumbnailProps> = ({
+	staticThumbnail,
+	animatedThumbnail,
+	viewedLength,
+	length,
+	children,
+}) => {
+	const [loaded, setLoaded] = useState(false);
+	const [isHovered, setIsHovered] = useState(false);
+	const [willShowAnimated, setWillShowAnimated] = useState(false);
 
 	useEffect(() => {
-		if (!isHovered) return
-		if (!animatedThumbnail || animatedThumbnail.length === 0) return
-		setWillShowAnimated(true)
-	}, [isHovered, animatedThumbnail])
+		if (!isHovered) return;
+		if (!animatedThumbnail || animatedThumbnail.length === 0) return;
+		setWillShowAnimated(true);
+	}, [isHovered, animatedThumbnail]);
 
-	const bestStaticThumbnail = staticThumbnail?.sort((a, b) => b.width - a.width)[0]
-	const bestAnimatedThumbnail = animatedThumbnail?.sort((a, b) => b.width - a.width)[0]
+	const bestStaticThumbnail = staticThumbnail?.sort(
+		(a, b) => b.width - a.width,
+	)[0];
+	const bestAnimatedThumbnail = animatedThumbnail?.sort(
+		(a, b) => b.width - a.width,
+	)[0];
 
 	return (
 		<ThumbnailContext.Provider value={{ isHovered, willShowAnimated }}>
@@ -63,8 +89,22 @@ export const Thumbnail: React.FC<ThumbnailProps> = ({ staticThumbnail, animatedT
 				onMouseEnter={() => setIsHovered(true)}
 				onMouseLeave={() => setIsHovered(false)}
 			>
-				{!loaded && <Skeleton style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }} />}
-				<img src={bestStaticThumbnail?.url} alt="" onLoad={() => setLoaded(true)} />
+				{!loaded && (
+					<Skeleton
+						style={{
+							position: "absolute",
+							top: 0,
+							bottom: 0,
+							left: 0,
+							right: 0,
+						}}
+					/>
+				)}
+				<img
+					src={bestStaticThumbnail?.url}
+					alt=""
+					onLoad={() => setLoaded(true)}
+				/>
 				{bestAnimatedThumbnail !== undefined && (
 					<img
 						src={bestAnimatedThumbnail.url}
@@ -75,30 +115,49 @@ export const Thumbnail: React.FC<ThumbnailProps> = ({ staticThumbnail, animatedT
 						}}
 					/>
 				)}
+				{viewedLength !== undefined && length && length > 0 && (
+					<ThumbnailWatched percent={(viewedLength / length) * 100} />
+				)}
 				{children}
 			</ThumbnailContainer>
 		</ThumbnailContext.Provider>
-	)
-}
+	);
+};
+
+const ThumbnailWatched = styled.div<{ percent: number }>`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--mantine-primary-color-5);
+  transform-origin: left;
+  transform: scaleX(${(_) => _.percent / 100});
+  transition: transform 250ms ease;
+`;
 
 export type ThumbnailBadgeProps = {
-	text: string
-	color?: DefaultMantineColor
-}
-export const ThumbnailBadge: React.FC<ThumbnailBadgeProps> = ({ text, color }) => {
-	const { isHovered, willShowAnimated } = useContext(ThumbnailContext)
+	text: string;
+	color?: DefaultMantineColor;
+};
+export const ThumbnailBadge: React.FC<ThumbnailBadgeProps> = ({
+	text,
+	color,
+}) => {
+	const { isHovered, willShowAnimated } = useContext(ThumbnailContext);
 	const styles = {
 		opacity: willShowAnimated && isHovered ? 0 : 1,
 		transition: when(isHovered)(TRANSITION),
-	}
+	};
 	return (
 		<AbsoluteBadge color={color} styles={{ root: styles }}>
 			{text}
 		</AbsoluteBadge>
-	)
-}
+	);
+};
 
-export type VideoThumbnailProps = ThumbnailProps & Pick<std.Video, 'type' | 'length'>
+export type VideoThumbnailProps = ThumbnailProps &
+	Pick<std.Video, "type" | "length">;
 export const VideoThumbnail: React.FC<VideoThumbnailProps> = (props) => (
 	<Thumbnail {...props}>
 		{props.type === std.VideoType.Live && <ThumbnailBadge text="LIVE" />}
@@ -106,4 +165,4 @@ export const VideoThumbnail: React.FC<VideoThumbnailProps> = (props) => (
 			<ThumbnailBadge color="dark" text={formatNumberDuration(props.length!)} />
 		)}
 	</Thumbnail>
-)
+);

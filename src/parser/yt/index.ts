@@ -1,13 +1,22 @@
-import { Provider } from 'parser/std'
+import { Provider } from "parser/std";
 import {
 	getChannel,
 	listChannelVideos,
 	listChannelShelves,
 	listChannelLiveVideos,
 	listChannelLinks,
-} from './channel'
-import { listComments } from './comment'
-import { getPlayer, listRecommended, getVideo, setVideoLikeStatus } from './video'
+} from "./channel";
+import { listComments } from "./comment";
+import {
+	getPlayer,
+	listRecommended,
+	getVideo,
+	setVideoLikeStatus,
+} from "./video";
+import {
+	fetchPlaybackTracking as trackVideoView,
+	fetchWatchTimeTracking as trackVideoProgress,
+} from "./video/api";
 import {
 	getUser,
 	listHistory,
@@ -15,9 +24,8 @@ import {
 	listLiveFollowedUsers,
 	listFollowedUsersVideos,
 	setUserFollowed,
-} from './user'
-import { listSearch, listSearchSuggestions } from './search'
-import { endpoints } from '@/libs/extension'
+} from "./user";
+import { listSearch, listSearchSuggestions } from "./search";
 
 const provider: Provider = Object.freeze({
 	// todo: should periodically fetch and return the cached result
@@ -29,6 +37,8 @@ const provider: Provider = Object.freeze({
 	getPlayer,
 	getVideo,
 	setVideoLikeStatus,
+	trackVideoView,
+	trackVideoProgress,
 
 	getUser,
 	listFollowedUsers,
@@ -49,6 +59,6 @@ const provider: Provider = Object.freeze({
 
 	listSearch,
 	listSearchSuggestions,
-})
+});
 
-export default provider
+export default provider;

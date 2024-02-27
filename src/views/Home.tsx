@@ -1,10 +1,10 @@
-import { VideoGrid } from '@/components/Video/Grid'
-import { usePaginated } from '@/hooks/usePaginated'
+import { VideoGrid } from "@/components/Video/Grid";
+import { usePaginated } from "@/hooks/usePaginated";
 
-import yt from '@yt'
+import yt from "@yt";
 
 export default function Home() {
-	const videoPages = usePaginated(yt.listRecommended!)
+	const videoPages = usePaginated(yt.listRecommended!);
 	return (
 		<VideoGrid
 			as="main"
@@ -14,5 +14,5 @@ export default function Home() {
 			getNext={videoPages.next}
 			padding="24px"
 		/>
-	)
+	);
 }

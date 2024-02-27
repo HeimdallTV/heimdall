@@ -1,26 +1,41 @@
 import {
 	AppendContinuationItemsAction,
 	AppendContinuationItemsResponse,
-	ContinuationItemsResponse,
 	getContinuationResponseItems,
-} from '@yt/components/continuation'
-import { MetadataBadge } from '../components/badge'
-import { Button, SubscribeButton } from '../components/button'
-import { Text } from '../components/text'
-import { Thumbnail } from '../components/thumbnail'
-import { Navigation } from '../components/utility/navigation'
-import { BrowseEndpoint, UrlEndpoint } from '../components/utility/endpoint'
-import { BaseResponse, BrowseParams, Endpoint, fetchYt, fetchEndpointContinuation } from '../core/api'
-import { Renderer, Some, ViewModel, isRenderer } from '../core/internals'
-import { FullChannel, ChannelTabName, ChannelTabByName, ChannelTagline } from './types'
-import { Tab } from '../components/tab'
-import { Video } from '../video/processors/regular'
-import { RichItem } from '../components/item'
-import { InnertubeCommand } from '../components/utility/commands'
+} from "@yt/components/continuation";
+import { MetadataBadge } from "../components/badge";
+import { Button, SubscribeButton } from "../components/button";
+import { Text } from "../components/text";
+import { Thumbnail } from "../components/thumbnail";
+import { Navigation } from "../components/utility/navigation";
+import { BrowseEndpoint, UrlEndpoint } from "../components/utility/endpoint";
+import {
+	BaseResponse,
+	BrowseParams,
+	Endpoint,
+	fetchYt,
+	fetchEndpointContinuation,
+} from "../core/api";
+import { Renderer, Some, ViewModel, isRenderer } from "../core/internals";
+import {
+	FullChannel,
+	ChannelTabName,
+	ChannelTabByName,
+	ChannelTagline,
+} from "./types";
+import { Tab } from "../components/tab";
+import { Video } from "../video/processors/regular";
+import { RichItem } from "../components/item";
+import { InnertubeCommand } from "../components/utility/commands";
 
 // Channel
-export const fetchChannelHome = (channelId: string): Promise<ChannelResponse<ChannelTabName.Home>> =>
-	fetchYt(Endpoint.Browse, { browseId: channelId, params: btoa(BrowseParams.ChannelHome) })
+export const fetchChannelHome = (
+	channelId: string,
+): Promise<ChannelResponse<ChannelTabName.Home>> =>
+	fetchYt(Endpoint.Browse, {
+		browseId: channelId,
+		params: btoa(BrowseParams.ChannelHome),
+	});
 
 export const fetchChannelVideos = (
 	channelId: string,
@@ -28,172 +43,191 @@ export const fetchChannelVideos = (
 ): Promise<ChannelResponse<ChannelTabName.Videos>> =>
 	fetchYt(
 		Endpoint.Browse,
-		continuation ? { continuation } : { browseId: channelId, params: btoa(BrowseParams.ChannelVideos) },
-	)
+		continuation
+			? { continuation }
+			: { browseId: channelId, params: btoa(BrowseParams.ChannelVideos) },
+	);
 type ChannelVideosContinuationResponse = BaseResponse & {
-	onResponseReceivedActions: [AppendContinuationItemsAction<RichItem<Video>>]
-}
+	onResponseReceivedActions: [AppendContinuationItemsAction<RichItem<Video>>];
+};
 export const fetchChannelVideosContinuation = (
 	continuationToken: string,
-): Promise<ChannelVideosContinuationResponse> => fetchEndpointContinuation(Endpoint.Browse)(continuationToken)
+): Promise<ChannelVideosContinuationResponse> =>
+	fetchEndpointContinuation(Endpoint.Browse)(continuationToken);
 
 export const fetchChannelPlaylists = (
 	channelId: string,
 ): Promise<ChannelResponse<ChannelTabName.Playlists>> =>
-	fetchYt(Endpoint.Browse, { browseId: channelId, params: btoa(BrowseParams.ChannelPlaylists) })
+	fetchYt(Endpoint.Browse, {
+		browseId: channelId,
+		params: btoa(BrowseParams.ChannelPlaylists),
+	});
 
-export const fetchChannelLive = (channelId: string): Promise<ChannelResponse<ChannelTabName.Live>> =>
-	fetchYt(Endpoint.Browse, { browseId: channelId, params: btoa(BrowseParams.ChannelLive) })
+export const fetchChannelLive = (
+	channelId: string,
+): Promise<ChannelResponse<ChannelTabName.Live>> =>
+	fetchYt(Endpoint.Browse, {
+		browseId: channelId,
+		params: btoa(BrowseParams.ChannelLive),
+	});
 
-export const fetchChannelChannels = (channelId: string): Promise<ChannelResponse<ChannelTabName.Channels>> =>
-	fetchYt(Endpoint.Browse, { browseId: channelId, params: btoa(BrowseParams.ChannelChannels) })
+export const fetchChannelChannels = (
+	channelId: string,
+): Promise<ChannelResponse<ChannelTabName.Channels>> =>
+	fetchYt(Endpoint.Browse, {
+		browseId: channelId,
+		params: btoa(BrowseParams.ChannelChannels),
+	});
 
 export const getSelectedChannelTab = <SelectedTab extends ChannelTabName>(
 	channelResponse: ChannelResponse<SelectedTab>,
 ): ChannelTabByName<SelectedTab> =>
 	channelResponse.contents.twoColumnBrowseResultsRenderer.tabs.find(
-		(tab) => 'tabRenderer' in tab && tab.tabRenderer.selected === true,
-	)! as unknown as ChannelTabByName<SelectedTab>
+		(tab) => "tabRenderer" in tab && tab.tabRenderer.selected === true,
+	)! as unknown as ChannelTabByName<SelectedTab>;
 
-export const getTabContent = <Content extends Renderer>(tab: Tab<string, Content, true>): Content =>
-	tab.tabRenderer.content
+export const getTabContent = <Content extends Renderer>(
+	tab: Tab<string, Content, true>,
+): Content => tab.tabRenderer.content;
 
-export type ChannelResponse<SelectedTab extends ChannelTabName> = BaseResponse & {
-	contents: FullChannel<SelectedTab>
-	metadata: ChannelMetadata
-	microformat: ChannelMicroFormat
-	header: ChannelHeader
-}
+export type ChannelResponse<SelectedTab extends ChannelTabName> =
+	BaseResponse & {
+		contents: FullChannel<SelectedTab>;
+		metadata: ChannelMetadata;
+		microformat: ChannelMicroFormat;
+		header: ChannelHeader;
+	};
 
 type ChannelHeader = Renderer<
-	'c4TabbedHeader',
+	"c4TabbedHeader",
 	{
-		channelId: string
+		channelId: string;
 
-		title: string
-		tagline: ChannelTagline
-		avatar: Thumbnail
-		banner: Thumbnail
-		tvBanner: Thumbnail
-		mobileBanner: Thumbnail
-		badges?: MetadataBadge[]
+		title: string;
+		tagline: ChannelTagline;
+		avatar: Thumbnail;
+		banner: Thumbnail;
+		tvBanner: Thumbnail;
+		mobileBanner: Thumbnail;
+		badges?: MetadataBadge[];
 
-		subscribeButton: SubscribeButton
-		subscriberCountText: Some<Text>
+		subscribeButton: SubscribeButton;
+		subscriberCountText: Some<Text>;
 	} & Navigation<BrowseEndpoint>
->
+>;
 
 type ChannelMetadata = Renderer<
-	'channelMetadata',
+	"channelMetadata",
 	{
-		channelUrl: string
-		vanityChannelUrl: string
-		ownerUrls: string[]
-		externalId: string
+		channelUrl: string;
+		vanityChannelUrl: string;
+		ownerUrls: string[];
+		externalId: string;
 
-		avatar: Thumbnail
-		title: string
-		description: string
-		keywords: string
+		avatar: Thumbnail;
+		title: string;
+		description: string;
+		keywords: string;
 
-		isFamilySafe: boolean
-		availableCountryCodes: string[]
-		androidDeepLink: string
-		androidAppindexingLink: string
-		iosAppindexingLink: string
-		rssUrl: string
+		isFamilySafe: boolean;
+		availableCountryCodes: string[];
+		androidDeepLink: string;
+		androidAppindexingLink: string;
+		iosAppindexingLink: string;
+		rssUrl: string;
 	}
->
+>;
 
 type ChannelMicroFormat = Renderer<
-	'microformatData',
+	"microformatData",
 	{
-		urlCanonical: string
-		title: string
-		description: string
-		thumbnail: Thumbnail
-		noindex: boolean
-		unlisted: boolean
-		familySafe: boolean
+		urlCanonical: string;
+		title: string;
+		description: string;
+		thumbnail: Thumbnail;
+		noindex: boolean;
+		unlisted: boolean;
+		familySafe: boolean;
 
-		availableCountries: string[]
-		siteName: 'YouTube'
-		appName: 'YouTube'
-		androidPackage: string
-		iosAppStoreId: string
-		iosAppArguments: string
-		ogType: string
-		urlApplinksWeb: string
-		urlApplinksIos: string
-		urlApplinksAndroid: string
-		urlTwitterIos: string
-		urlTwitterAndroid: string
-		twitterCardType: string
-		twitterSiteHandle: string
-		schemaDotOrgType: string
-		linkAlternatives: { hrefUrl: string }[]
+		availableCountries: string[];
+		siteName: "YouTube";
+		appName: "YouTube";
+		androidPackage: string;
+		iosAppStoreId: string;
+		iosAppArguments: string;
+		ogType: string;
+		urlApplinksWeb: string;
+		urlApplinksIos: string;
+		urlApplinksAndroid: string;
+		urlTwitterIos: string;
+		urlTwitterAndroid: string;
+		twitterCardType: string;
+		twitterSiteHandle: string;
+		schemaDotOrgType: string;
+		linkAlternatives: { hrefUrl: string }[];
 	}
->
+>;
 
 /// About
 export const fetchChannelAbout = (channelId: string) =>
 	fetchChannelHome(channelId)
 		.then(
 			(res) =>
-				res.header.c4TabbedHeaderRenderer.tagline.channelTaglineRenderer.moreEndpoint
-					.showEngagementPanelEndpoint.engagementPanel.engagementPanelSectionListRenderer.content
-					.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].continuationItemRenderer
+				res.header.c4TabbedHeaderRenderer.tagline.channelTaglineRenderer
+					.moreEndpoint.showEngagementPanelEndpoint.engagementPanel
+					.engagementPanelSectionListRenderer.content.sectionListRenderer
+					.contents[0].itemSectionRenderer.contents[0].continuationItemRenderer
 					.continuationEndpoint.continuationCommand.token,
 		)
 		.then(fetchEndpointContinuation(Endpoint.Browse)<AboutChannelResponse>)
 		.then(getContinuationResponseItems)
-		.then((res) => res.filter(isRenderer('aboutChannel'))[0])
+		.then((res) => res.filter(isRenderer("aboutChannel"))[0]);
 
-type AboutChannelResponse = AppendContinuationItemsResponse<AboutChannel>
+type AboutChannelResponse = AppendContinuationItemsResponse<AboutChannel>;
 
 type AboutChannel = Renderer<
-	'aboutChannel',
+	"aboutChannel",
 	{
-		metadata: AboutChannelVM
+		metadata: AboutChannelVM;
 		/** Action ommitted since we do not use it */
-		flaggingButton: Button
+		flaggingButton: Button;
 		/** Action ommitted since we do not use it */
-		shareChannel: Button
+		shareChannel: Button;
 	}
->
+>;
 
 type AboutChannelVM = ViewModel<
-	'aboutChannel',
+	"aboutChannel",
 	{
-		channelId: string
-		canonicalChannelUrl: string
-		description: string
-		subscriberCountText: string
-		viewCountText: string
-		joinedDateText: { content: string }
-		videoCountText: string
-		links: ChannelExternalLink[]
+		channelId: string;
+		canonicalChannelUrl: string;
+		description: string;
+		subscriberCountText: string;
+		viewCountText: string;
+		joinedDateText: { content: string };
+		videoCountText: string;
+		links: ChannelExternalLink[];
 
-		customUrlOnTap: { TODO: true }
+		customUrlOnTap: { TODO: true };
 		// The following describe the text and how to style the headers
-		additionalInfoLabel: { TODO: true }
-		customLinksLabel: { TODO: true }
-		descriptionLabel: { TODO: true }
+		additionalInfoLabel: { TODO: true };
+		customLinksLabel: { TODO: true };
+		descriptionLabel: { TODO: true };
 	}
->
+>;
 
 type ChannelExternalLink = ViewModel<
-	'channelExternalLink',
+	"channelExternalLink",
 	{
-		title: { content: string }
+		title: { content: string };
 		// todo: commandRuns is shared with the video description on watch pages
 		link: {
-			content: string
+			content: string;
 			commandRuns: {
-				startIndex: number
-				length: number
-				onTap: InnertubeCommand<BrowseEndpoint | UrlEndpoint>
-			}[]
-		}
+				startIndex: number;
+				length: number;
+				onTap: InnertubeCommand<BrowseEndpoint | UrlEndpoint>;
+			}[];
+		};
 	}
->
+>;

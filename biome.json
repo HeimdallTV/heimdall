@@ -1,15 +1,5 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.5.3/schema.json",
-	"formatter": {
-		"enabled": true
-	},
-	"javascript": {
-		"formatter": {
-			"semicolons": "asNeeded",
-			"quoteStyle": "single",
-			"lineWidth": 110
-		}
-	},
 	"linter": {
 		"enabled": true,
 		"rules": {

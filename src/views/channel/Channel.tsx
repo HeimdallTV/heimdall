@@ -1,15 +1,15 @@
 // todo: overall quite scuffed because of the weird styling required to
 // do the tabs with max-width and background
 
-import { useAsync } from '@/hooks/useAsync'
-import { Tabs } from '@mantine/core'
-import yt from '@yt'
-import { lazy, useEffect } from 'react'
-import { ChannelHeader } from './Header'
-import styled from 'styled-components'
+import { useAsync } from "@/hooks/useAsync";
+import { Tabs } from "@mantine/core";
+import yt from "@yt";
+import { useEffect } from "react";
+import { ChannelHeader } from "./Header";
+import styled from "styled-components";
 
-const HomeTab = lazy(() => import('./tabs/Home'))
-const VideosTab = lazy(() => import('./tabs/Videos'))
+import HomeTab from "./tabs/Home";
+import VideosTab from "./tabs/Videos";
 
 const ChannelContainer = styled.main`
   max-height: 100vh;
@@ -30,7 +30,7 @@ const ChannelContainer = styled.main`
   > * + * {
     margin-top: 24px;
   }
-`
+`;
 
 const TabListContainer = styled.div`
   border-bottom: 1px solid var(--mantine-color-dark-4);
@@ -38,17 +38,19 @@ const TabListContainer = styled.div`
   > * {
     margin-bottom: -1px;
   }
-`
+`;
 
-export default function Channel({ channelId }: { channelId: string }) {
-	const channel = useAsync(() => yt.getChannel(channelId), [channelId])
+export default function Channel({
+	params: { channelId },
+}: { params: { channelId: string } }) {
+	const channel = useAsync(() => yt.getChannel(channelId), [channelId]);
 	useEffect(() => {
 		if (channel.error) {
-			console.error(channel.error)
+			console.error(channel.error);
 		}
-	}, [channel.error])
+	}, [channel.error]);
 
-	if (!channel.data) return null
+	if (!channel.data) return null;
 	return (
 		<ChannelContainer>
 			<ChannelHeader channel={channel.data} />
@@ -57,9 +59,14 @@ export default function Channel({ channelId }: { channelId: string }) {
 				defaultValue="home"
 				variant="outline"
 				styles={{
-					panel: { padding: '24px', background: 'var(--mantine-color-dark-filled)' },
-					list: { marginBottom: '-1px' },
-					tabLabel: { fontSize: '1.2em', fontWeight: '500' },
+					root: { height: "100%" },
+					panel: {
+						minHeight: "100%",
+						padding: "24px",
+						background: "var(--mantine-color-dark-filled)",
+					},
+					list: { marginBottom: "-1px" },
+					tabLabel: { fontSize: "1.2em", fontWeight: "500" },
 				}}
 			>
 				<TabListContainer>
@@ -79,5 +86,5 @@ export default function Channel({ channelId }: { channelId: string }) {
 				</Tabs.Panel>
 			</Tabs>
 		</ChannelContainer>
-	)
+	);
 }

@@ -1,32 +1,32 @@
 import * as std from "@std";
-import { VideoCard, VideoCardSkeleton } from "./Card";
+import { ChannelCard, ChannelCardSkeleton } from "./Card";
 import { InfiniteScrollDetector } from "../InfiniteScrollDetector";
 import { forwardRef } from "react";
 import { ItemGrid, ItemGridProps } from "../ItemGrid";
 
-type VideoGridProps = ItemGridProps & {
+type ChannelGridProps = ItemGridProps & {
 	loading?: boolean;
 	loadingSkeletonCount?: number;
-	videos: (std.Video | std.Shelf)[];
+	channels: (std.Channel | std.Shelf)[];
 	getNext?: () => void;
 };
-export const VideoGrid: FC<VideoGridProps> = forwardRef(
+export const ChannelGrid: FC<ChannelGridProps> = forwardRef(
 	(
-		{ loading = false, loadingSkeletonCount = 32, videos, getNext, ...props },
+		{ loading = false, loadingSkeletonCount = 32, channels, getNext, ...props },
 		ref,
 	) => {
 		return (
 			<ItemGrid {...props} ref={ref}>
-				{videos
+				{channels
 					.filter(
-						(shelfOrVideo): shelfOrVideo is std.Video => "id" in shelfOrVideo,
+						(shelfOrVideo): shelfOrVideo is std.Channel => "id" in shelfOrVideo,
 					)
-					.map((video) => (
-						<VideoCard key={video.id} video={video} />
+					.map((channel) => (
+						<ChannelCard key={channel.id} channel={channel} />
 					))}
 				{loading &&
 					Array.from({ length: loadingSkeletonCount }).map((_, i) => (
-						<VideoCardSkeleton key={i} />
+						<ChannelCardSkeleton key={i} />
 					))}
 				<InfiniteScrollDetector onLoad={getNext} />
 			</ItemGrid>
