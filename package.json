@@ -47,6 +47,7 @@
     "postcss": "^8.4.35",
     "postcss-preset-mantine": "^1.13.0",
     "postcss-simple-vars": "^7.0.1",
+    "prettier": "^3.2.5",
     "typescript": "^5.3.3",
     "vite": "^5.1.4",
     "vite-bundle-visualizer": "^1.0.1",
@@ -54,7 +55,8 @@
   },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
-      "biome check --apply --organize-imports-enabled=false --no-errors-on-unmatched"
+      "biome check --apply --organize-imports-enabled=false --no-errors-on-unmatched",
+      "prettier --write"
     ]
   }
 }
