@@ -1,54 +1,34 @@
 import React from 'react'
 import { formatDateAgo, formatNumberShort } from '@libs/format'
 import * as std from '@std'
-import { MantineSize, Text } from '@mantine/core'
+import { Text } from '@mantine/core'
 import { Row } from 'lese'
-import { Link } from 'wouter'
-import styled from 'styled-components'
-import { VerifiedBadge } from '../Badges'
+
+export const getVideoUrl = (video: std.Video) =>
+  `/w/${video.id}${video.viewedLength ? `?t=${video.viewedLength}` : ''}`
 
 // todo: better name
 // todo: is size used?
 export const VideoSubLine: React.FC<{
-	video: Pick<std.Video, 'type' | 'viewCount' | 'publishDate'>
-	short?: boolean
-	size?: 'sm' | 'md'
-}> = ({ video, short, size = 'md' }) => {
-	if (video.type === std.VideoType.Live) {
-		return (
-			<Row separation="4px">
-				<Text c="dimmed" size={size}>
-					{formatNumberShort(video.viewCount!)} watching
-				</Text>
-			</Row>
-		)
-	}
-	return (
-		<Text c="dimmed" size={size}>
-			{formatNumberShort(video.viewCount!)}
-			{short ? '' : ' views'}
-			{video.publishDate ? ` • ${formatDateAgo(video.publishDate!)}` : ''}
-		</Text>
-	)
-}
-
-const VideoAuthorLink = styled(Link)<{ size?: MantineSize }>`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--mantine-color-dimmed);
-  font-size: var(--mantine-font-size-${({ size }) => size ?? 'md'});
-  &:hover {
-    color: var(--mantine-color-text);
+  video: Pick<std.Video, 'type' | 'viewCount' | 'publishDate'>
+  short?: boolean
+  size?: 'sm' | 'md'
+}> = ({ video, short, size = 'sm' }) => {
+  if (video.type === std.VideoType.Live) {
+    return (
+      <Row separation="4px">
+        <Text c="dimmed" size={size}>
+          {formatNumberShort(video.viewCount!)} viewers
+        </Text>
+      </Row>
+    )
   }
-`
 
-export const VideoAuthor: React.FC<{
-	author: Pick<std.User, 'name' | 'verified' | 'id'>
-	size?: MantineSize
-}> = ({ author, size }) => (
-	<VideoAuthorLink href={`/c/${author.id}`} size={size}>
-		{author.name}
-		<VerifiedBadge size={size} />
-	</VideoAuthorLink>
-)
+  return (
+    <Text c="dimmed" size={size}>
+      {formatNumberShort(video.viewCount!)}
+      {short ? '' : ' views'}
+      {video.publishDate ? ` • ${formatDateAgo(video.publishDate!)}` : ''}
+    </Text>
+  )
+}

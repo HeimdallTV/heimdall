@@ -1,64 +1,85 @@
-import { Provider } from "parser/std";
+import { Provider } from 'parser/std'
 import {
-	getChannel,
-	listChannelVideos,
-	listChannelShelves,
-	listChannelLiveVideos,
-	listChannelLinks,
-} from "./channel";
-import { listComments } from "./comment";
+  getChannel,
+  listChannelVideos,
+  listChannelShelves,
+  listChannelLiveVideos,
+  listChannelLinks,
+} from './channel'
+import { listComments } from './comment'
 import {
-	getPlayer,
-	listRecommended,
-	getVideo,
-	setVideoLikeStatus,
-} from "./video";
+  getPlaylist,
+  listPlaylistVideos,
+  listUserPlaylists,
+  createPlaylist,
+  deletePlaylist,
+  addPlaylistVideo,
+  removePlaylistVideo,
+  movePlaylistVideo,
+  setPlaylistTitle,
+  setPlaylistDescription,
+  setPlaylistVisibility,
+  savePlaylist,
+  unsavePlaylist,
+} from './playlist'
+import { listSearch, listSearchSuggestions } from './search'
 import {
-	fetchPlaybackTracking as trackVideoView,
-	fetchWatchTimeTracking as trackVideoProgress,
-} from "./video/api";
+  getUser,
+  listHistory,
+  listFollowedUsers,
+  listLiveFollowedUsers,
+  listFollowedUsersVideos,
+  setUserFollowed,
+} from './user'
+import { getPlayer, listRecommended, getVideo, setVideoLikeStatus } from './video'
 import {
-	getUser,
-	listHistory,
-	listFollowedUsers,
-	listLiveFollowedUsers,
-	listFollowedUsersVideos,
-	setUserFollowed,
-} from "./user";
-import { listSearch, listSearchSuggestions } from "./search";
+  fetchPlaybackTracking as trackVideoView,
+  fetchWatchTimeTracking as trackVideoProgress,
+} from './video/api'
 
 const provider: Provider = Object.freeze({
-	// todo: should periodically fetch and return the cached result
-	listRecommended,
-	listHistory,
+  // todo: should periodically fetch and return the cached result
+  listRecommended,
+  listHistory,
 
-	// todo: all of these should have a way to do pre-caching
+  // todo: all of these should have a way to do pre-caching
 
-	getPlayer,
-	getVideo,
-	setVideoLikeStatus,
-	trackVideoView,
-	trackVideoProgress,
+  getPlayer,
+  getVideo,
+  setVideoLikeStatus,
+  trackVideoView,
+  trackVideoProgress,
 
-	getUser,
-	listFollowedUsers,
-	listLiveFollowedUsers,
-	listFollowedUsersVideos,
-	setUserFollowed,
+  getUser,
+  listFollowedUsers,
+  listLiveFollowedUsers,
+  listFollowedUsersVideos,
+  listUserPlaylists,
+  setUserFollowed,
 
-	// getPlaylist,
-	// listPlaylists,
+  getPlaylist,
+  listPlaylistVideos,
+  createPlaylist,
+  deletePlaylist,
+  addPlaylistVideo,
+  removePlaylistVideo,
+  movePlaylistVideo,
+  setPlaylistTitle,
+  setPlaylistDescription,
+  setPlaylistVisibility,
+  savePlaylist,
+  unsavePlaylist,
 
-	getChannel,
-	listChannelVideos,
-	listChannelShelves,
-	listChannelLiveVideos,
-	listChannelLinks,
+  getChannel,
+  listChannelVideos,
+  listChannelShelves,
+  listChannelLiveVideos,
+  listChannelLinks,
 
-	listComments,
+  listComments,
 
-	listSearch,
-	listSearchSuggestions,
-});
+  listSearch,
+  listSearchSuggestions,
+})
 
-export default provider;
+export default provider
