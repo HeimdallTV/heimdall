@@ -87,7 +87,7 @@ export type BaseVideo = Navigation<WatchEndpoint> & {
   shortViewCountText: Some<Accessibility<Text>>
 
   /** Human readable view count. Ex. 354,434 views */
-  viewCountText: Some<Text>
+  viewCountText?: Some<Text>
 
   showActionMenu: boolean
   thumbnail: Thumbnail

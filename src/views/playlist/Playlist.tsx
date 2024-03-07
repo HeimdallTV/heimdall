@@ -32,7 +32,7 @@ export default function Playlist({ params: { playlistId } }: { params: { playlis
 
   if (!playlist.data) return null
   return (
-    <Column separation="24px" padding="24px">
+    <Column separation="24px">
       <Row separation="16px" yAlign>
         <div>
           <RoundThumbnail src={playlist.data.thumbnail.sort((a, b) => b.height - a.height)[0].url} />

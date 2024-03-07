@@ -18,5 +18,8 @@ export type MetadataBadge = Renderer<
     Tracking
 >
 
-export const isVerifiedBadge = (badge: MetadataBadge) => badge.metadataBadgeRenderer.style === 'BADGE_STYLE_TYPE_VERIFIED'
+export const isVerifiedBadge = (badge: MetadataBadge) =>
+  badge.metadataBadgeRenderer.style === 'BADGE_STYLE_TYPE_VERIFIED'
 export const isLiveBadge = (badge: MetadataBadge) => badge.metadataBadgeRenderer.label === 'LIVE'
+export const isMembersOnlyBadge = (badge: MetadataBadge) =>
+  badge.metadataBadgeRenderer.style === 'BADGE_STYLE_TYPE_MEMBERS_ONLY'

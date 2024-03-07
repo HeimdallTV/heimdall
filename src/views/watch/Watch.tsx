@@ -1,13 +1,15 @@
 import styled from 'styled-components'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { useAsync } from '@/hooks/useAsync'
 import { getPlayer as fetchPlayer, getVideo as fetchVideo } from '@yt/video'
 import { Player } from './player/Player'
 import { WatchInfo } from './WatchInfo'
 import { PlayerContext } from './player/context'
-import { usePlayerInstance } from './player/hooks/usePlayerInstance'
+import { PlayerInstanceOptions, usePlayerInstance } from './player/hooks/usePlayerInstance'
 import { useSearch } from 'wouter'
+import { useAtom } from 'jotai'
+import { playerAtom } from '@/settings'
 
 const WatchContainer = styled.main`
   display: flex;
@@ -25,16 +27,29 @@ const getStartTimeFromQuery = (query: URLSearchParams) => {
 }
 
 export default function Watch({ params: { videoId } }: { params: { videoId: string } }) {
-  const query = new URLSearchParams(useSearch())
+  // Video and player data
   const { data: video, error: videoError } = useAsync(() => fetchVideo(videoId), [videoId])
   const { data: player, error: playerError } = useAsync(() => fetchPlayer(videoId), [videoId])
-  const playerInstance = usePlayerInstance(player, {
-    startTimeMS: getStartTimeFromQuery(query),
-  })
   useEffect(() => {
     if (videoError) console.error(videoError)
     if (playerError) console.error(playerError)
   }, [videoError, playerError])
+
+  // Player init
+  const query = useSearch()
+  const [playerSettings] = useAtom(playerAtom)
+  // Using the playerSettings as a dependency would resule
+  // in re-rendering when the default quality changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies:
+  const playerOptions = useMemo<PlayerInstanceOptions>(
+    () => ({
+      startTimeMS: getStartTimeFromQuery(new URLSearchParams(query)),
+      defaultVideoWidth: playerSettings.defaultQuality,
+    }),
+    [query],
+  )
+  const playerInstance = usePlayerInstance(player, playerOptions)
+
   return (
     <PlayerContext.Provider value={playerInstance}>
       <WatchContainer>

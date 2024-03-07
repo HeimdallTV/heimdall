@@ -10,6 +10,7 @@ import styled from 'styled-components'
 
 import HomeTab from './tabs/Home'
 import VideosTab from './tabs/Videos'
+import PlaylistsTab from './tabs/Playlists'
 
 const ChannelContainer = styled.main`
   max-height: 100vh;
@@ -81,6 +82,9 @@ export default function Channel({ params: { channelId } }: { params: { channelId
         </Tabs.Panel>
         <Tabs.Panel value="videos">
           <VideosTab channelId={channelId} />
+        </Tabs.Panel>
+        <Tabs.Panel value="playlists">
+          <PlaylistsTab channelId={channelId} />
         </Tabs.Panel>
       </Tabs>
     </ChannelContainer>

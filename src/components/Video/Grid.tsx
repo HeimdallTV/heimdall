@@ -11,13 +11,13 @@ type VideoGridProps = ItemGridProps & {
   getNext?: () => void
 }
 export const VideoGrid: FC<VideoGridProps> = forwardRef(
-  ({ loading = false, loadingSkeletonCount = 32, videos, getNext, ...props }, ref) => {
+  ({ loading = false, loadingSkeletonCount = 32, videos, getNext, size, ...props }, ref) => {
     return (
-      <ItemGrid {...props} ref={ref}>
+      <ItemGrid size={size} {...props} ref={ref}>
         {videos
           .filter((shelfOrVideo): shelfOrVideo is std.Video => 'id' in shelfOrVideo)
           .map((video) => (
-            <VideoCard key={video.id} video={video} />
+            <VideoCard key={video.id} video={video} size={size} />
           ))}
         {loading && Array.from({ length: loadingSkeletonCount }).map((_, i) => <VideoCardSkeleton key={i} />)}
         <InfiniteScrollDetector onLoad={getNext} />

@@ -39,11 +39,14 @@ export const processGridPlaylist = ({ gridPlaylistRenderer: playlist }: GridPlay
     provider: std.ProviderName.YT,
     id: playlist.playlistId,
     title: combineSomeText(playlist.title),
-    author: {
-      id: playlist.longBylineText.runs[0].navigationEndpoint!.browseEndpoint.browseId,
-      name: playlist.longBylineText.runs[0].text,
-      verified: std.verifiedFrom(playlist.ownerBadges.some(isVerifiedBadge)),
-    },
+    author:
+      'longBylineText' in playlist
+        ? {
+            id: playlist.longBylineText.runs[0].navigationEndpoint!.browseEndpoint.browseId,
+            name: playlist.longBylineText.runs[0].text,
+            verified: std.verifiedFrom(playlist.ownerBadges.some(isVerifiedBadge)),
+          }
+        : undefined,
     thumbnail: playlist.thumbnail.thumbnails,
     // fixme: this is an assumption, is there anywhere it wouldn't be true?
     visibility: std.Visibility.Public,

@@ -54,21 +54,23 @@ export enum ResourceType {
   Video = 'video',
 }
 
-export type Resource<Type extends ResourceType> = Type extends ResourceType.Category
-  ? GameCategory
-  : Type extends ResourceType.Channel
-    ? Channel
-    : Type extends ResourceType.Comment
-      ? Comment
-      : Type extends ResourceType.Playlist
-        ? Playlist
-        : Type extends ResourceType.Self
-          ? never
-          : Type extends ResourceType.User
-            ? User
-            : Type extends ResourceType.Video
-              ? Video
-              : never
+// prettier-ignore
+export type Resource<Type extends ResourceType> =
+	Type extends ResourceType.Category
+		? GameCategory
+		: Type extends ResourceType.Channel
+		  ? Channel
+		  : Type extends ResourceType.Comment
+			  ? Comment
+			  : Type extends ResourceType.Playlist
+				  ? Playlist
+				  : Type extends ResourceType.Self
+					  ? never
+					  : Type extends ResourceType.User
+						  ? User
+						  : Type extends ResourceType.Video
+							  ? Video
+							  : never;
 
 export type Provider = {
   listRecommended?: () => AsyncGenerator<(Video | Shelf)[]>

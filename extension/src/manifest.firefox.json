@@ -1,25 +1,25 @@
 {
-	"browser_specific_settings": {
-		"gecko": {
-			"id": "extension@heimdall.tv"
-		}
-	},
-	"action": {},
-	"manifest_version": 3,
-	"background": {
-		"scripts": ["service-worker.js"]
-	},
-	"permissions": [
-		"cookies",
-		"storage",
-		"contextualIdentities",
-		"declarativeNetRequest",
-		"declarativeNetRequestFeedback"
-	],
-	"host_permissions": [
-		"https://*.youtube.com/*",
-		"https://returnyoutubedislikeapi.com/*",
-		"https://yt3.ggpht.com/*",
-		"https://i.ytimg.com/*"
-	]
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "extension@heimdall.tv"
+    }
+  },
+  "action": {},
+  "manifest_version": 3,
+  "background": {
+    "scripts": ["service-worker.js"]
+  },
+  "permissions": [
+    "cookies",
+    "storage",
+    "contextualIdentities",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback"
+  ],
+  "host_permissions": [
+    "https://*.youtube.com/*",
+    "https://returnyoutubedislikeapi.com/*",
+    "https://yt3.ggpht.com/*",
+    "https://i.ytimg.com/*"
+  ]
 }

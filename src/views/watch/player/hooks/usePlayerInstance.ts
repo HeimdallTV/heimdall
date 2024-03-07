@@ -6,6 +6,7 @@
  * consistency across browsers
  */
 
+import { playerAtom } from '@/settings'
 import * as std from '@std'
 import { useEffect, useState } from 'react'
 
@@ -83,8 +84,38 @@ async function canPlay() {
     .catch(() => false)
 }
 
-type PlayerInstanceOptions = {
+const preferredVideoCodecs = ['av1', 'vp9', 'avc1']
+const preferredAudioCodecs = ['opus', 'vorbis', 'mp3']
+
+const pickVideoCodec = (sources: std.Source[], maxWidth: number) => {
+  const videoEl = document.createElement('video')
+  return sources
+    .filter(std.isVideoSource)
+    .filter((source) => videoEl.canPlayType(source.mimetype) === 'probably')
+    .filter((source) => source.width <= maxWidth)
+    .sort(
+      (a, b) =>
+        preferredVideoCodecs.findIndex((codec) => a.mimetype?.includes(codec)) -
+        preferredVideoCodecs.findIndex((codec) => b.mimetype?.includes(codec)),
+    )
+    .sort((a, b) => b.width - a.width)[0]
+}
+const pickAudioCodec = (sources: std.Source[]) => {
+  const audioEl = document.createElement('audio')
+  return sources
+    .filter(std.isAudioSource)
+    .filter((source) => audioEl.canPlayType(source.mimetype) === 'probably')
+    .sort(
+      (a, b) =>
+        preferredAudioCodecs.findIndex((codec) => a.mimetype?.includes(codec)) -
+        preferredAudioCodecs.findIndex((codec) => b.mimetype?.includes(codec)),
+    )
+    .sort((a, b) => b.audioBitrate - a.audioBitrate)[0]
+}
+
+export type PlayerInstanceOptions = {
   startTimeMS?: number
+  defaultVideoWidth: number
 }
 // todo: should play video first and then audio after it loads
 export const createPlayerInstance = (
@@ -105,8 +136,8 @@ export const createPlayerInstance = (
   // todo: need to consider user preference, hardware acceleration, etc.
   // todo: video can expire at which point we need to refresh
   const source = createValueListener<CombinedSource>({
-    video: player.sources.filter(std.isVideoSource).find((source) => source.mimetype?.includes('vp9'))!,
-    audio: player.sources.filter(std.isAudioSource).find((source) => source.mimetype?.includes('opus'))!,
+    video: pickVideoCodec(player.sources, options.defaultVideoWidth)!,
+    audio: pickAudioCodec(player.sources)!,
   })
   const closedCaptions = createValueListener<std.ClosedCaption | undefined>(undefined)
   const durationMS = createValueListener<number | undefined>(undefined)

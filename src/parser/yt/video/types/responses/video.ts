@@ -29,15 +29,34 @@ export type VideoResponse = BaseResponse & {
     {
       endScreen: WatchNextEndScreen<EndScreenVideo | EndScreenPlaylist>
       autoplay: PlayerOverlayAutoplay
+      decoratedPlayerBarRenderer?: DecoratedPlayerBar
       shareButton: Button<Command<'TODO'>>
       addToMenu: Button<Command<'TODO'>>
       videoDetails: Renderer<'TODO'>
     }
   >
-
   overlay: Renderer<'tooltip', { TODO: true }>
   engagementPanels: Renderer<'engagementPanelSectionList', { TODO: true }>
 }
+
+type DecoratedPlayerBar = Renderer<'decoratedPlayerBar', { playerBar: MultiMarkersPlayerBar }>
+type MultiMarkersPlayerBar = Renderer<
+  'multiMarkersPlayerBar',
+  { markersMap: MarkerMap[]; visibleOnLoad: { key: 'DESCRIPTION_CHAPTERS' } }
+>
+type MarkerMap = {
+  key: 'DESCRIPTION_CHAPTERS'
+  value: { chapters: Chapter[]; onChapterRepeat: unknown }
+}
+type Chapter = Renderer<
+  'chapter',
+  {
+    title: Some<Text>
+    timeRangeStartMillis: number
+    thumbnail: Thumbnail
+    onActiveCommand: Command<'TODO'>
+  }
+>
 
 type WatchNextEndScreen<Item extends Renderer> = Renderer<'watchNextEndScreen', { results: Item[] }>
 

@@ -1,8 +1,7 @@
 import { AppendContinuationItemsResponse, getContinuationResponseItems } from '../components/continuation'
-import { Endpoint, fetchEndpointContinuation, makeContinuationIterator } from '../core/api'
+import { fetchBrowseContinuation, makeContinuationIterator } from '../core/api'
 import { fetchPlaylist } from './get'
-import { processPlaylistVideo } from './processors/video'
-import { PlaylistVideo } from './types'
+import { PlaylistVideo, processPlaylistVideo } from './processors/video'
 
 export async function listUserPlaylists() {
   // todo: should use the getChannelPlaylists
@@ -11,9 +10,7 @@ export async function listUserPlaylists() {
 }
 
 type PlaylistVideosContinuationResponse = AppendContinuationItemsResponse<PlaylistVideo>
-const fetchPlaylistVideosContinuation = fetchEndpointContinuation(
-  Endpoint.Browse,
-)<PlaylistVideosContinuationResponse>
+const fetchPlaylistVideosContinuation = fetchBrowseContinuation<PlaylistVideosContinuationResponse>
 
 export function makeListPlaylistVideosIterator(id: string) {
   return makeContinuationIterator(

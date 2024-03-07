@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'wouter'
 import yt from '@yt'
@@ -73,11 +73,13 @@ const NavBarContainer = styled.nav<{ $expanded: boolean }>`
 export const NavBar = memo(() => {
   const { isFullscreen } = useIsFullscreen()
   const [expanded, { toggle }] = useDisclosure(false)
-  const [settingsOpen, { open: openSettings, close: closeSettings }] = useDisclosure(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  console.log(settingsOpen)
   const followedUsers = usePaginated(yt.listFollowedUsers!)
   if (isFullscreen) return null
   return (
     <NavBarContainer $expanded={expanded}>
+      <Settings opened={settingsOpen} onClose={() => setSettingsOpen(false)} />
       {/* Ensures that the tooltip delays are synced with each other */}
       <Tooltip.Group openDelay={1000} closeDelay={500}>
         <NavBarItem
@@ -114,8 +116,7 @@ export const NavBar = memo(() => {
           </Text>
         </NavBarItem>
 
-        <NavBarItem expanded={expanded} onClick={openSettings} tooltip="Settings">
-          <Settings opened={settingsOpen} onClose={closeSettings} />
+        <NavBarItem expanded={expanded} onClick={() => setSettingsOpen(true)} tooltip="Settings">
           <IconSettings size={24} />
           <Text size="sm" fw={700}>
             Settings

@@ -5,6 +5,7 @@ import {
   listChannelShelves,
   listChannelLiveVideos,
   listChannelLinks,
+  listChannelPlaylists,
 } from './channel'
 import { listComments } from './comment'
 import {
@@ -75,6 +76,7 @@ const provider: Provider = Object.freeze({
   listChannelShelves,
   listChannelLiveVideos,
   listChannelLinks,
+  listChannelPlaylists,
 
   listComments,
 

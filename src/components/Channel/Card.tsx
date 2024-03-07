@@ -11,7 +11,6 @@ import { memo } from 'react'
 export const ChannelCard: React.FC<{ channel: std.Channel }> = memo(({ channel }) => {
   // prefetching the channel
   const getChannel = useDelayedEvent(() => yt.getChannel(channel.id), 400)
-
   return (
     <Column
       as={Link}
@@ -22,7 +21,10 @@ export const ChannelCard: React.FC<{ channel: std.Channel }> = memo(({ channel }
       separation="...4px 16px"
       style={{ overflow: 'hidden', padding: '1rem' }}
     >
-      <Avatar src={channel.user.avatar?.sort((a, b) => b.height - a.height)[0]?.url} size={128} />
+      <Avatar
+        src={channel.user.avatar?.sort((a, b) => b.height - a.height)[0]?.url.replace(/^\/\//, 'https://')}
+        size={128}
+      />
       <Text fw="bold" size="lg" lineClamp={1}>
         {channel.user.name}
       </Text>

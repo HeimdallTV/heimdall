@@ -3,7 +3,7 @@ import { forwardRef } from 'react'
 import styled from 'styled-components'
 
 export type ItemGridProps = React.PropsWithChildren<{
-  ref?: React.Ref<HTMLElement>
+  ref?: React.LegacyRef<HTMLElement>
   as?: React.ElementType
   header?: React.ReactElement | string
   size?: 'sm' | 'md'

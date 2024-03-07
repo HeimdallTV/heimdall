@@ -32,14 +32,14 @@
     "react-dom": "^18.2.0",
     "styled-components": "^6.1.8",
     "vite-tsconfig-paths": "^4.3.1",
-    "wouter": "^3.0.1"
+    "wouter": "^3.0.2"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
     "@preact/preset-vite": "^2.8.1",
     "@styled/typescript-styled-plugin": "^1.0.1",
-    "@types/react": "^18.2.61",
-    "@types/react-dom": "^18.2.19",
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.20",
     "@types/webextension-polyfill": "^0.10.7",
     "@vitejs/plugin-react": "^4.2.1",
     "husky": "^9.0.11",
@@ -48,8 +48,8 @@
     "postcss-preset-mantine": "^1.13.0",
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.2.5",
-    "typescript": "^5.3.3",
-    "vite": "^5.1.4",
+    "typescript": "^5.4.2",
+    "vite": "^5.1.5",
     "vite-bundle-visualizer": "^1.0.1",
     "vite-plugin-preload": "^0.3.1"
   },

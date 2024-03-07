@@ -32,6 +32,7 @@ export const formatDayRelative = (date: Date) => {
   }
   if (daysAgo === 0) return 'Today'
   if (daysAgo === 1) return 'Yesterday'
+  if (date.getDay() < currentDate.getDay() && daysAgo < 7) return `${days[date.getDay()]}`
   // todo: what if their week starts on the monday
   if (daysAgo < 7) return `Last ${days[date.getDay()]}`
   return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`

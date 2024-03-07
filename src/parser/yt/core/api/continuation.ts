@@ -7,6 +7,9 @@ export const fetchEndpointContinuation =
   <T>(continuation: string): Promise<T> =>
     fetchYt(endpoint, { continuation })
 
+export const fetchBrowseContinuation = <T>(continuation: string) =>
+  fetchEndpointContinuation(Endpoint.Browse)<T>(continuation)
+
 export const findContinuation = (items: (Renderer | ContinuationItem)[]): string | undefined =>
   findRenderer('continuationItem')(items)?.continuationEndpoint.continuationCommand.token
 

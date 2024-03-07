@@ -25,19 +25,19 @@ export const LikeButtons: React.FC<{
     <Button.Group>
       <CollapsibleButton
         variant="default"
-        collapseWidth="300px"
+        $collapseWidth="300px"
         leftSection={<LikeIcon likeStatus={likeStatus} size="xl" />}
         onClick={() => setLikeStatus(std.toggleLikeStatus(std.LikeStatus.Like, likeStatus))}
       >
-        {toShortHumanReadable(likeCount!) + likeStatus === std.LikeStatus.Like ? 1 : 0}
+        {toShortHumanReadable(likeCount! + (likeStatus === std.LikeStatus.Like ? 1 : 0))}
       </CollapsibleButton>
       <CollapsibleButton
         variant="default"
-        collapseWidth="500px"
+        $collapseWidth="500px"
         leftSection={<DislikeIcon likeStatus={likeStatus} size="xl" />}
         onClick={() => setLikeStatus(std.toggleLikeStatus(std.LikeStatus.Dislike, likeStatus))}
       >
-        {toShortHumanReadable(dislikeCount!) + likeStatus === std.LikeStatus.Dislike ? 1 : 0}
+        {toShortHumanReadable(dislikeCount! + (likeStatus === std.LikeStatus.Dislike ? 1 : 0))}
       </CollapsibleButton>
     </Button.Group>
   )

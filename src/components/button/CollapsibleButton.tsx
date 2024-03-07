@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 // todo: test for rightSection and loading
 export const CollapsibleButton = styled(Button)<
-  { collapseWidth?: string } & ButtonProps & React.HTMLAttributes<HTMLButtonElement>
+  { $collapseWidth?: string } & ButtonProps & React.HTMLAttributes<HTMLButtonElement>
 >`
-  @container (max-width: ${props => props.collapseWidth ?? '400px'}) {
+  @container (max-width: ${(props) => props.$collapseWidth ?? '400px'}) {
     padding-right: var(--_button-padding-left);
     & .mantine-Button-section {
       margin-left: 0;
@@ -17,8 +17,6 @@ export const CollapsibleButton = styled(Button)<
   }
 `
 
-export const CollapsedButton = styled(Button)<
-  { collapseWidth?: string } & ButtonProps & React.HTMLAttributes<HTMLButtonElement>
->`
+export const CollapsedButton = styled(Button)<ButtonProps & React.HTMLAttributes<HTMLButtonElement>>`
   --button-padding-x: calc(var(--button-padding-x-sm) / 1.5);
 `
