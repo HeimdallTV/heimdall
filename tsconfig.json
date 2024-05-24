@@ -1,31 +1,30 @@
 {
-  "compilerOptions": {
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
+	"compilerOptions": {
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"noEmit": true,
 
-    "lib": ["DOM", "DOM.Iterable", "esnext"],
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "jsx": "react-jsx",
+		"lib": ["DOM", "DOM.Iterable", "esnext"],
+		"target": "esnext",
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"jsx": "react-jsx",
 
-    "baseUrl": "src",
-    "paths": {
-      "lese": ["./components/lese/index.ts"],
-      "@/*": ["./*"],
-      "@constants": ["./constants/index.ts"],
-      "@components/*": ["./components/*"],
-      "@extension/*": ["../extension/*"],
-      "@libs/*": ["./libs/*"],
-      "@std": ["./parser/std/index.ts"],
-      "@std/*": ["./parser/std/*"],
-      "@yt": ["./parser/yt/index.ts"],
-      "@yt/*": ["./parser/yt/*"]
-    },
-    "plugins": [{ "name": "@styled/typescript-styled-plugin" }]
-  },
-  "include": ["src/vite-env.d.ts", "src", "extension/src"]
+		"baseUrl": "src",
+		"paths": {
+			"lese": ["./components/lese/index.ts"],
+			"@/*": ["./*"],
+			"@constants": ["./constants/index.ts"],
+			"@components/*": ["./components/*"],
+			"@extension/*": ["../extension/*"],
+			"@libs/*": ["./libs/*"],
+			"@std": ["./parser/std/index.ts"],
+			"@std/*": ["./parser/std/*"],
+			"@yt": ["./parser/yt/index.ts"],
+			"@yt/*": ["./parser/yt/*"]
+		}
+	},
+	"include": ["src/vite-env.d.ts", "src", "extension/src"]
 }

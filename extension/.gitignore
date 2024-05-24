@@ -1,29 +1,8 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# build outputs
+build
+web-ext-artifacts
 
-node_modules
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Config files
+# config
 .webextrc
 .webextrc.*
 
-# Build files
-build
-web-ext-artifacts

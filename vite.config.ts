@@ -1,8 +1,6 @@
 import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
-import preact from '@preact/preset-vite'
-import react from '@vitejs/plugin-react'
-import preload from 'vite-plugin-preload'
+import react from '@vitejs/plugin-react-swc'
 
 export default defineConfig(({ mode }) => ({
   build: {
@@ -14,5 +12,5 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
-  plugins: [tsconfigPaths(), mode === 'development' ? react() : preact(), preload()],
+  plugins: [tsconfigPaths(), react()],
 }))

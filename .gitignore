@@ -1,16 +1,17 @@
+# dependencies
 node_modules
 
+# editors
 .vscode
 .idea
 .DS_Store
 
+# build outputs
 /build
 /tsconfig.tsbuildinfo
 
-# Devenv
+# nix
 .devenv*
 devenv.local.nix
-
-# direnv
 .direnv
 
