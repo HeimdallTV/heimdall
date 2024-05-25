@@ -1,7 +1,7 @@
-import { Image } from './components/image'
-import { User, LikeStatus, ProviderName } from '.'
-import { Playlist } from './playlist'
-import { RichText } from './components/rich-text'
+import type { Image } from './components/image'
+import type { User, LikeStatus, ProviderName } from '.'
+import type { Playlist } from './playlist'
+import type { RichText } from './components/rich-text'
 
 export enum VideoType {
   Live = 'live',

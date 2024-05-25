@@ -1,7 +1,7 @@
 import * as std from '@std'
 import { Endpoint, fetchYt } from '../core/api'
 import { makeListPlaylistVideosIterator } from './list'
-import { PlaylistVideo } from './types'
+import type { PlaylistVideo } from './types'
 import { fetchPlaylist } from './get'
 
 enum Actions {

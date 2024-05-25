@@ -1,6 +1,6 @@
 import * as std from '@std'
 import {
-  PlayerSegmentCategorySettings,
+  type PlayerSegmentCategorySettings,
   PlayerSegmentCategoryBehavior,
   PlayerSegmentHighlightBehavior,
   playerSegmentsAtom,

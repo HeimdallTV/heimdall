@@ -1,11 +1,11 @@
-import { ToggleButton } from '../components/button'
-import { ContinuationItem } from '../components/continuation'
-import { Text } from '../components/text'
-import { Thumbnail, ThumbnailOverlays } from '../components/thumbnail'
-import { BrowseEndpoint } from '../components/utility/endpoint'
-import { LikeEndpoint } from '../components/utility/endpoints'
-import { Command, CommandMetadata, Renderer, Some } from '../core/internals'
-import { PlaylistVideo } from './processors/video'
+import type { ToggleButton } from '../components/button'
+import type { ContinuationItem } from '../components/continuation'
+import type { Text } from '../components/text'
+import type { Thumbnail, ThumbnailOverlays } from '../components/thumbnail'
+import type { BrowseEndpoint } from '../components/utility/endpoint'
+import type { LikeEndpoint } from '../components/utility/endpoints'
+import type { Command, CommandMetadata, Renderer, Some } from '../core/internals'
+import type { PlaylistVideo } from './processors/video'
 
 export type PlaylistVideoList = Renderer<
   'playlistVideoList',

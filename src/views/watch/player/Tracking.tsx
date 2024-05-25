@@ -28,7 +28,7 @@ export function Tracking() {
 
   // track the current time
   usePoll(() => {
-    if (!durationMS || state === PlayerState.Paused) return Infinity
+    if (!durationMS || state === PlayerState.Paused) return Number.POSITIVE_INFINITY
     yt.trackVideoProgress!(player.id, player.currentTimeMS.get(), durationMS)
     return 20_000
   }, [durationMS, state])

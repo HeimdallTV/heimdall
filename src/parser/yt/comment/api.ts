@@ -1,20 +1,20 @@
 import {
-  AppendContinuationItemsResponse,
-  ContinuationItem,
+  type AppendContinuationItemsResponse,
+  type ContinuationItem,
   getContinuationResponseItems,
 } from '@yt/components/continuation'
-import { BaseResponse, Endpoint, fetchYt, makeContinuationIterator } from '@yt/core/api'
+import { type BaseResponse, Endpoint, fetchYt, makeContinuationIterator } from '@yt/core/api'
 import { fetchVideo } from '@yt/video/api'
-import { CommentThread } from './types'
-import { Text } from '../components/text'
-import { Some, isRenderer } from '../core/internals'
-import { CommentsHeader } from './types/comments-header'
-import { ItemSectionWithIdentifier } from '../components/core'
+import type { CommentThread } from './types'
+import type { Text } from '../components/text'
+import { type Some, isRenderer } from '../core/internals'
+import type { CommentsHeader } from './types/comments-header'
+import type { ItemSectionWithIdentifier } from '../components/core'
 
 /** Entry point for fetching comments since we can't retrieve them directly from the video */
 export const fetchVideoCommentsContinuationToken = (videoId: string) =>
   fetchVideo(videoId).then(
-    video =>
+    (video) =>
       video.contents.twoColumnWatchNextResults.results.results.contents.find(
         (renderer): renderer is ItemSectionWithIdentifier<ContinuationItem, 'comment-item-section'> =>
           isRenderer('itemSection')(renderer) &&

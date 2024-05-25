@@ -1,4 +1,4 @@
-import * as std from '@std'
+import type * as std from '@std'
 import yt from '@yt'
 import { Avatar, Text, Title } from '@mantine/core'
 import { Column, Row } from 'lese'
@@ -79,7 +79,15 @@ function ChannelLinks({ channelId }: { channelId: string }) {
         const domain = new URL(link).hostname.split('.').slice(-2).join('.')
         const Icon = icons.find(({ domains }) => domains.includes(domain))?.icon ?? IconLink
         return (
-          <Row as="a" href={link} target="_blank" rel="noopener noreferrer" yAlign separation="4px">
+          <Row
+            key={link}
+            as="a"
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            yAlign
+            separation="4px"
+          >
             <Text>{link.slice('https://'.length)}</Text>
             <Icon size={24} />
           </Row>

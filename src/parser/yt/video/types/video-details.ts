@@ -1,4 +1,4 @@
-import { Thumbnail } from '@yt/components/thumbnail'
+import type { Thumbnail } from '@yt/components/thumbnail'
 
 export type VideoDetails = {
   videoId: string

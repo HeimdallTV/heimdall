@@ -6,7 +6,7 @@ import { getPlayer as fetchPlayer, getVideo as fetchVideo } from '@yt/video'
 import { Player } from './player/Player'
 import { WatchInfo } from './WatchInfo'
 import { PlayerContext } from './player/context'
-import { PlayerInstanceOptions, usePlayerInstance } from './player/hooks/usePlayerInstance'
+import { type PlayerInstanceOptions, usePlayerInstance } from './player/hooks/usePlayerInstance'
 import { useSearch } from 'wouter'
 import { useAtom } from 'jotai'
 import { playerAtom } from '@/settings'
@@ -21,7 +21,7 @@ const WatchContainer = styled.main`
 
 const getStartTimeFromQuery = (query: URLSearchParams) => {
   if (!query.has('t')) return undefined
-  const startTimeSecondsQuery = parseInt(query.get('t') ?? '')
+  const startTimeSecondsQuery = Number.parseInt(query.get('t') ?? '')
   if (Number.isNaN(startTimeSecondsQuery)) return undefined
   return startTimeSecondsQuery * 1000
 }

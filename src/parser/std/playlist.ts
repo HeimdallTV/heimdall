@@ -1,6 +1,6 @@
-import { Image } from './components/image'
-import { RichText } from './components/rich-text'
-import { User, ProviderName, Video, Visibility } from '.'
+import type { Image } from './components/image'
+import type { RichText } from './components/rich-text'
+import { type User, type ProviderName, Video, type Visibility } from '.'
 
 export type Playlist = {
   provider: ProviderName

@@ -1,31 +1,31 @@
 import {
   AppendContinuationItemsAction,
-  AppendContinuationItemsResponse,
+  type AppendContinuationItemsResponse,
   getContinuationResponseItems,
 } from '@yt/components/continuation'
-import { MetadataBadge } from '../components/badge'
-import { Button, SubscribeButton } from '../components/button'
-import { Text } from '../components/text'
-import { Thumbnail } from '../components/thumbnail'
-import { Navigation } from '../components/utility/navigation'
-import { BrowseEndpoint, UrlEndpoint } from '../components/utility/endpoint'
+import type { MetadataBadge } from '../components/badge'
+import type { Button, SubscribeButton } from '../components/button'
+import type { Text } from '../components/text'
+import type { Thumbnail } from '../components/thumbnail'
+import type { Navigation } from '../components/utility/navigation'
+import type { BrowseEndpoint, UrlEndpoint } from '../components/utility/endpoint'
 import {
-  BaseResponse,
+  type BaseResponse,
   BrowseParams,
   Endpoint,
   fetchYt,
   fetchEndpointContinuation,
   fetchBrowseContinuation,
 } from '../core/api'
-import { Renderer, Some, ViewModel, isRenderer } from '../core/internals'
-import { FullChannel, ChannelTabName, ChannelTabByName, ChannelTagline } from './types'
-import { Tab } from '../components/tab'
-import { Video } from '../video/processors/regular'
-import { RichItem } from '../components/item'
-import { InnertubeCommand } from '../components/utility/commands'
+import { type Renderer, type Some, type ViewModel, isRenderer } from '../core/internals'
+import type { FullChannel, ChannelTabName, ChannelTabByName, ChannelTagline } from './types'
+import type { Tab } from '../components/tab'
+import type { Video } from '../video/processors/regular'
+import type { RichItem } from '../components/item'
+import type { InnertubeCommand } from '../components/utility/commands'
 import { ItemSection, SectionList } from '../components/core'
 import { Grid } from '../components/grid'
-import { GridPlaylist } from '../playlist/processors/grid'
+import type { GridPlaylist } from '../playlist/processors/grid'
 
 // Channel
 export const fetchChannelHome = (channelId: string): Promise<ChannelResponse<ChannelTabName.Home>> =>

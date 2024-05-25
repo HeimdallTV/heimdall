@@ -1,7 +1,10 @@
-import { BaseResponse, BrowseId, Endpoint, fetchYt } from '@yt/core/api'
-import { GuideResponse } from './types/responses/guide'
-import { SubscriptionsContinuationResponse, SubscriptionsResponse } from './types/responses/subscriptions'
-import { HistoryContinuationResponse, HistoryResponse } from './types/responses/history'
+import { type BaseResponse, BrowseId, Endpoint, fetchYt } from '@yt/core/api'
+import type { GuideResponse } from './types/responses/guide'
+import type {
+  SubscriptionsContinuationResponse,
+  SubscriptionsResponse,
+} from './types/responses/subscriptions'
+import type { HistoryContinuationResponse, HistoryResponse } from './types/responses/history'
 
 export const fetchGuide = (): Promise<GuideResponse> => fetchYt(Endpoint.Guide, { fetchLiveStatus: true })
 

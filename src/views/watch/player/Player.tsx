@@ -1,4 +1,5 @@
-import React, { memo, useContext, useEffect, useRef } from 'react'
+import type React from 'react'
+import { memo, useContext, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { Row } from 'lese'
@@ -38,7 +39,7 @@ const PlayerContainer = styled.div<{
 
   video {
     width: 100%;
-    height: 100%;
+    height: ${({ $isFullscreen }) => ($isFullscreen ? '100vh' : '100%')};
     max-height: ${({ $isFullscreen }) => ($isFullscreen ? '100vh' : '90vh')};
     background-color: black;
   }

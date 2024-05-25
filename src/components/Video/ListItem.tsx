@@ -1,7 +1,7 @@
 import { Column, Grid } from 'lese'
 import { Link } from 'wouter'
 
-import * as std from '@std'
+import type * as std from '@std'
 
 import { VideoSubLine, getVideoUrl } from './Shared'
 import { VideoThumbnail } from './Thumbnail'

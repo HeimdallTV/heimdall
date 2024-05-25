@@ -23,6 +23,6 @@ function findInReactTree(predicate, node) {
   }
 }
 
-const client = findInReactTree(node => node?.memoizedProps?.client, getReactRoot()).memoizedProps.client
+const client = findInReactTree((node) => node?.memoizedProps?.client, getReactRoot()).memoizedProps.client
 
 console.log(client.queryManager.queries)

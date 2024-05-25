@@ -1,7 +1,7 @@
-import * as std from '@std'
+import type * as std from '@std'
 
-import { findRenderer, Renderer } from '@yt/core/internals'
-import { BaseVideo } from './regular'
+import { findRenderer, type Renderer } from '@yt/core/internals'
+import type { BaseVideo } from './regular'
 import { combineSomeText } from '@yt/components/text'
 import { extractNumber } from '@yt/core/helpers'
 import { ProviderName } from '@std'

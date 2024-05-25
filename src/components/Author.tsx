@@ -1,6 +1,6 @@
-import React from 'react'
+import type React from 'react'
 import * as std from '@std'
-import { MantineColor, MantineSize } from '@mantine/core'
+import type { MantineColor, MantineSize } from '@mantine/core'
 import { VerifiedBadge } from './Badges'
 import { LinkWithHover } from './Link'
 

@@ -1,5 +1,5 @@
-import { Command, CommandMetadata } from '@yt/core/internals'
-import { UrlEndpoint, WatchEndpoint } from '../utility/endpoint'
+import type { Command, CommandMetadata } from '@yt/core/internals'
+import type { UrlEndpoint, WatchEndpoint } from '../utility/endpoint'
 
 export type Unit = {
   // TODO: More here but haven't discovered

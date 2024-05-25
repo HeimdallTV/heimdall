@@ -1,4 +1,4 @@
-import { AudioQuality, Quality, QualityLabel } from '.'
+import type { AudioQuality, Quality, QualityLabel } from '.'
 
 export type StreamingData = {
   /** Time until the links no longer work and must be refreshed. ~6 hours as far as I've seen */

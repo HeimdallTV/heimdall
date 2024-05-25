@@ -1,4 +1,4 @@
-import { Endpoint, Renderer } from "@yt/core/internals"
+import type { Endpoint, Renderer } from '@yt/core/internals'
 
 /** Used for links to reels */
 export type ReelWatchEndpoint = Endpoint<

@@ -1,6 +1,7 @@
-import React, { memo } from 'react'
+import type React from 'react'
+import { memo } from 'react'
 
-import * as std from '@std'
+import type * as std from '@std'
 import yt from '@yt'
 
 import { Card, Skeleton, Stack, Text } from '@mantine/core'

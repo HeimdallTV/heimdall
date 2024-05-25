@@ -1,16 +1,16 @@
-import { PropsWithChildren, useCallback, useContext, useEffect, useState } from 'react'
+import { type PropsWithChildren, useCallback, useContext, useEffect, useState } from 'react'
 import * as std from '@std'
 
 import { Row } from 'lese'
 import styled from 'styled-components'
 
 import { PlayerContext } from '../context'
-import { PlayerInstance, PlayerState } from '../hooks/usePlayerInstance'
+import { type PlayerInstance, PlayerState } from '../hooks/usePlayerInstance'
 import { useBufferedRangesMS, useDurationMS, usePlayerState, useSeekMS, useSegments } from '../hooks/use'
 import usePoll from '@/hooks/usePoll'
 import * as settings from '@/settings'
 import { useAtom } from 'jotai'
-import { MoveCallbackMetadata, useMove } from '@/hooks/useMove'
+import { type MoveCallbackMetadata, useMove } from '@/hooks/useMove'
 
 const SeekBarSectionContainer = styled.div<{ $widthPercent: number }>`
   position: relative;
@@ -100,7 +100,7 @@ const usePlayerTimingsMS = (player: PlayerInstance, minDelay = 16) => {
 
   usePoll(() => {
     setCurrentTimeMS(player.currentTimeMS.get())
-    if (state !== PlayerState.Playing) return Infinity
+    if (state !== PlayerState.Playing) return Number.POSITIVE_INFINITY
 
     // Calculate delay until the next pixel would be updated
     // assuming the video is fullscreen for simplicity
@@ -110,7 +110,7 @@ const usePlayerTimingsMS = (player: PlayerInstance, minDelay = 16) => {
 
   return {
     currentTimeMS,
-    durationMS: durationMS ?? Infinity,
+    durationMS: durationMS ?? Number.POSITIVE_INFINITY,
   }
 }
 

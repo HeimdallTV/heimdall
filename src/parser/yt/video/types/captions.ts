@@ -1,5 +1,5 @@
-import { Text } from '@yt/components/text'
-import { Renderer, Some } from '@yt/core/internals'
+import type { Text } from '@yt/components/text'
+import type { Renderer, Some } from '@yt/core/internals'
 
 export type CaptionTrack = {
   /** URL to the caption track */

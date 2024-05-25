@@ -1,5 +1,5 @@
 import * as std from '@std'
-import { Thumbnail, ThumbnailBadge, ThumbnailProps } from '../Thumbnail'
+import { Thumbnail, ThumbnailBadge, type ThumbnailProps } from '../Thumbnail'
 import { formatNumberDuration } from '@/libs/format'
 import { IconRadar2 } from '@tabler/icons-react'
 

@@ -14,39 +14,39 @@
 import { useEffect, useRef, useState } from 'react'
 
 export const useEagerMutation = <T>(
-	initialValue: T,
-	mutate: (current: T, desired: T) => Promise<unknown>,
-	onError: (error: unknown) => unknown,
+  initialValue: T,
+  mutate: (current: T, desired: T) => Promise<unknown>,
+  onError: (error: unknown) => unknown,
 ) => {
-	const [value, setValue] = useState(initialValue)
-	const [eagerValue, setEagerValue] = useState(initialValue)
-	const runningMutation = useRef<Promise<T> | undefined>()
+  const [value, setValue] = useState(initialValue)
+  const [eagerValue, setEagerValue] = useState(initialValue)
+  const runningMutation = useRef<Promise<T> | undefined>()
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: see comment above
-	useEffect(() => {
-		const abortController = new AbortController()
+  // biome-ignore lint/correctness/useExhaustiveDependencies: see comment above
+  useEffect(() => {
+    const abortController = new AbortController()
 
-		const runMutation = (value: T) => {
-			if (abortController.signal.aborted) return
-			if (value === eagerValue) return
-			runningMutation.current = mutate(value, eagerValue)
-				.then(() => {
-					setValue(eagerValue)
-					return eagerValue
-				})
-				.catch((error) => {
-					onError(error)
-					// If there wasnt a new operation, set the value back to the previous value
-					if (!abortController.signal.aborted) setEagerValue(value)
-					return value
-				})
-		}
+    const runMutation = (value: T) => {
+      if (abortController.signal.aborted) return
+      if (value === eagerValue) return
+      runningMutation.current = mutate(value, eagerValue)
+        .then(() => {
+          setValue(eagerValue)
+          return eagerValue
+        })
+        .catch((error) => {
+          onError(error)
+          // If there wasnt a new operation, set the value back to the previous value
+          if (!abortController.signal.aborted) setEagerValue(value)
+          return value
+        })
+    }
 
-		if (runningMutation.current) runningMutation.current.then(runMutation)
-		else runMutation(value)
+    if (runningMutation.current) runningMutation.current.then(runMutation)
+    else runMutation(value)
 
-		return () => abortController.abort()
-	}, [eagerValue, mutate])
+    return () => abortController.abort()
+  }, [eagerValue, mutate])
 
-	return [value, eagerValue, (value: T) => setEagerValue(value)] as const
+  return [value, eagerValue, (value: T) => setEagerValue(value)] as const
 }

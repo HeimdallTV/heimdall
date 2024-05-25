@@ -1,8 +1,8 @@
-import * as std from '@std'
+import type * as std from '@std'
 import { VideoCard, VideoCardSkeleton } from './Card'
 import { InfiniteScrollDetector } from '../InfiniteScrollDetector'
 import { forwardRef } from 'react'
-import { ItemGrid, ItemGridProps } from '../ItemGrid'
+import { ItemGrid, type ItemGridProps } from '../ItemGrid'
 
 type VideoGridProps = ItemGridProps & {
   loading?: boolean

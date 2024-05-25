@@ -1,4 +1,4 @@
-import { Provider } from 'parser/std'
+import type { Provider } from 'parser/std'
 import {
   getChannel,
   listChannelVideos,

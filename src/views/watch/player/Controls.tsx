@@ -1,6 +1,7 @@
-import React, { RefObject, useContext } from 'react'
+import type React from 'react'
+import { type RefObject, useContext } from 'react'
 
-import { Column, FlexProps, Row } from 'lese'
+import { Column, type FlexProps, Row } from 'lese'
 import styled from 'styled-components'
 
 import { PlayerContext } from './context'
@@ -23,8 +24,8 @@ const ControlsContainer = styled(Column)<{ show: boolean } & FlexProps>`
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 0.8rem;
-  padding-top: 1.2rem;
+  padding: 1.2rem 0.8rem 0.6rem 0.8rem;
+
   z-index: 10;
 
   transition: 0.2s opacity;
@@ -42,31 +43,31 @@ const ControlsContainer = styled(Column)<{ show: boolean } & FlexProps>`
 
 // todo: use a grid?
 export const Controls: React.FC<{ playerRoot: RefObject<HTMLElement>; mouseActive: boolean }> = ({
-	playerRoot,
-	mouseActive,
+  playerRoot,
+  mouseActive,
 }) => {
-	const player = useContext(PlayerContext)!
-	const { state: playerState } = usePlayerState(player)
-	const { hovered, ref: controlsRef } = useHover<HTMLDivElement>()
-	const show = playerState !== PlayerState.Playing || hovered || mouseActive
+  const player = useContext(PlayerContext)!
+  const { state: playerState } = usePlayerState(player)
+  const { hovered, ref: controlsRef } = useHover<HTMLDivElement>()
+  const show = playerState !== PlayerState.Playing || hovered || mouseActive
 
-	return (
-		<ControlsContainer ref={controlsRef} show={show} onClick={(e) => e.stopPropagation()} separation="8px">
-			<SeekBar />
-			<Row xAlign="space-between">
-				<Row separation="20px" yAlign>
-					<PlayButton />
-					<Volume />
-					<Duration />
-				</Row>
-				<Row separation="20px" yAlign>
-					<EndsAt />
-					<ClosedCaption />
-					<PlaybackRate />
-					<Quality />
-					<FullscreenButton playerRoot={playerRoot} />
-				</Row>
-			</Row>
-		</ControlsContainer>
-	)
+  return (
+    <ControlsContainer ref={controlsRef} show={show} onClick={(e) => e.stopPropagation()} separation="8px">
+      <SeekBar />
+      <Row xAlign="space-between">
+        <Row separation="20px" yAlign>
+          <PlayButton />
+          <Volume />
+          <Duration />
+        </Row>
+        <Row separation="20px" yAlign>
+          <EndsAt />
+          <ClosedCaption />
+          <PlaybackRate />
+          <Quality />
+          <FullscreenButton playerRoot={playerRoot} />
+        </Row>
+      </Row>
+    </ControlsContainer>
+  )
 }

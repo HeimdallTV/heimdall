@@ -1,5 +1,5 @@
-import { RichText } from './components/rich-text'
-import { User, ProviderName, LikeStatus } from '.'
+import type { RichText } from './components/rich-text'
+import type { User, ProviderName, LikeStatus } from '.'
 
 /**
  * Includes all necessary information to render a channel page other than the videos and playlists

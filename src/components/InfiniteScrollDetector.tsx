@@ -12,10 +12,10 @@ const InfiniteScrollDetectionBox = styled.div`
 `
 
 export const InfiniteScrollDetector: React.FC<{ onLoad?: () => unknown }> = ({ onLoad }) => {
-	const ref = useRef<HTMLDivElement>(null)
-	const entry = useIntersection(ref, { threshold: 0 })
-	useEffect(() => {
-		if (entry?.isIntersecting) onLoad?.()
-	}, [entry?.isIntersecting, onLoad])
-	return <InfiniteScrollDetectionBox ref={ref} />
+  const ref = useRef<HTMLDivElement>(null)
+  const entry = useIntersection(ref, { threshold: 0 })
+  useEffect(() => {
+    if (entry?.isIntersecting) onLoad?.()
+  }, [entry?.isIntersecting, onLoad])
+  return <InfiniteScrollDetectionBox ref={ref} />
 }

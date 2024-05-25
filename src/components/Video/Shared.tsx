@@ -1,4 +1,4 @@
-import React from 'react'
+import type React from 'react'
 import { formatDateAgo, formatNumberShort } from '@libs/format'
 import * as std from '@std'
 import { Text } from '@mantine/core'

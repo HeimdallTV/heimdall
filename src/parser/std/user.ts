@@ -1,4 +1,4 @@
-import { Image } from './components/image'
+import type { Image } from './components/image'
 
 export type User = {
   name: string

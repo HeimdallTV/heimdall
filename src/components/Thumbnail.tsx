@@ -1,12 +1,12 @@
-import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
+import { createContext, type PropsWithChildren, useContext, useEffect, useState } from 'react'
 
 import { Flex } from 'lese'
 import styled from 'styled-components'
 
 import { when } from '@libs/utils'
-import * as std from '@std'
+import type * as std from '@std'
 import yt from '@yt'
-import { Badge, BadgeProps, DefaultMantineColor, Skeleton } from '@mantine/core'
+import { Badge, type BadgeProps, type DefaultMantineColor, Skeleton } from '@mantine/core'
 
 const TRANSITION = 'opacity 250ms ease 250ms'
 

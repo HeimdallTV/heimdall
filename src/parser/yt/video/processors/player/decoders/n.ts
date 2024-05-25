@@ -17,6 +17,7 @@ const getNParamDecodingFunction = memoizeAsync(
 export async function getDecodedNParam(n: string): Promise<string> {
   const functionBody = await getNParamDecodingFunction()
   // FIXME: Using temporarily until the sandboxed code is sped up
+  // biome-ignore lint/security/noGlobalEval: we need to eval the function to decode the signature
   return eval(`(${functionBody.slice(0, -1)})("${n}")`)
   // return runSandboxedCode(`(${functionBody.slice(0, -1)})("${n}")`)
 }

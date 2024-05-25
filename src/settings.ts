@@ -1,10 +1,13 @@
 import { atomWithStorage } from 'jotai/utils'
-import { DefaultMantineColor, MantineColorsTuple } from '@mantine/core'
+import type { DefaultMantineColor, MantineColorsTuple } from '@mantine/core'
 import * as std from '@std'
 import { focusAtom } from 'jotai-optics'
 
 // todo: categorize
-const enable24HourTimeAtom = atomWithStorage<boolean>('settings-enable-24-hour-time', false)
+export const enable24HourTimeAtom = atomWithStorage<boolean>(
+  'settings-enable-24-hour-time',
+  Intl.DateTimeFormat(navigator.language, { hour: 'numeric' }).resolvedOptions().hourCycle === 'h23',
+)
 
 /// Theme
 type ThemeSettings = {
@@ -24,14 +27,14 @@ export const themeAtom = atomWithStorage<ThemeSettings>('settings-theme', {
   fontFamily: 'Roboto Flex',
   colors: {
     gray: [
-      '#C9C9C9',
+      '#c9c9c9',
       '#b8b8b8',
       '#828282',
       '#696969',
       '#393348',
-      '#332E41',
+      '#332e41',
       '#2d2939',
-      '#1E1E28',
+      '#1e1e28',
       '#1c1a24',
       '#131019',
     ],

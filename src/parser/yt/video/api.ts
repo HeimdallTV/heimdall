@@ -1,19 +1,22 @@
 import * as std from '@std'
 import { BrowseId, Endpoint, fetchYt, fetchEndpointContinuation, getContext } from '../core/api'
-import { CompactContinuationResponse } from './types/responses/compact-continuation'
-import { VideoResponse } from './types/responses/video'
-import { PlayerResponse } from './types/responses/player'
-import { RecommendedResponse } from './types/responses/recommended'
-import { AppendContinuationItemsResponse, ContinuationItem } from '@yt/components/continuation'
-import { RichItem } from '@yt/components/item'
-import { Video } from './processors/regular'
-import { Renderer, isCommand } from '@yt/core/internals'
+import type { CompactContinuationResponse } from './types/responses/compact-continuation'
+import type { VideoResponse } from './types/responses/video'
+import type { PlayerResponse } from './types/responses/player'
+import type { RecommendedResponse } from './types/responses/recommended'
+import type { AppendContinuationItemsResponse, ContinuationItem } from '@yt/components/continuation'
+import type { RichItem } from '@yt/components/item'
+import type { Video } from './processors/regular'
+import { type Renderer, isCommand } from '@yt/core/internals'
 import { fetchProxy } from '@libs/extension'
 import { getSigTimestamp } from './processors/player/decoders/signature'
 
 export const fetchRecommended = (): Promise<RecommendedResponse> => {
   console.log('fetchRecommended')
-  return fetchYt(Endpoint.Browse, { browseId: BrowseId.Recommended })
+  return fetchYt(Endpoint.Browse, { browseId: BrowseId.Recommended }).then((val) => {
+    console.log('fetchRecommendedResults', val)
+    return val
+  })
 }
 export const fetchRecommendedContinuation = (
   continuation: string,
@@ -103,16 +106,47 @@ const getNonce = (videoId: string) => {
 }
 
 /** Used to mark a video as watched */
-export async function fetchPlaybackTracking(videoId: string) {
+export async function fetchPlaybackTracking(videoId: string, currentTimeMS: number, durationMS: number) {
   const player = await fetchPlayer(videoId)
   const playbackURL = new URL(
     player.playbackTracking.videostatsPlaybackUrl.baseUrl.replace('s.youtube.com', 'www.youtube.com'),
   )
+  // todo: should be based on each view, not on the videoId
   playbackURL.searchParams.set('cpn', getNonce(videoId))
+  playbackURL.searchParams.set('euri', '') // todo: no idea what this means, but it's always empty
+
+  // client context
   playbackURL.searchParams.set('c', getContext().client.clientName)
   playbackURL.searchParams.set('cver', getContext().client.clientVersion)
-  playbackURL.searchParams.set('ver', '2')
-  await fetchProxy(playbackURL.toString())
+  playbackURL.searchParams.set('cplayer', getContext().client.clientPlayer)
+  playbackURL.searchParams.set('cplatform', getContext().client.clientPlatform)
+  playbackURL.searchParams.set('cbr', getContext().client.browserName)
+  playbackURL.searchParams.set('cbrver', getContext().client.browserVersion)
+  playbackURL.searchParams.set('cos', getContext().client.osName)
+  playbackURL.searchParams.set('hl', getContext().client.hl) // language
+  playbackURL.searchParams.set('cr', getContext().client.gl) // country code
+  playbackURL.searchParams.set('cl', '621358684') // todo: some kind of client id? it was hard coded. regex: "cl: \(\d+\)\.toString\(\)"
+  playbackURL.searchParams.set('ver', '2') // version of the tracking API
+
+  // playback info
+  playbackURL.searchParams.set('volume', '100')
+  playbackURL.searchParams.set('muted', '0')
+  playbackURL.searchParams.set('mos', '0') // muted or silenced
+  playbackURL.searchParams.set('fs', '0') // fullscreen
+
+  // video info
+  playbackURL.searchParams.set('len', (durationMS / 1000).toFixed(3)) // video length
+  playbackURL.searchParams.set('cmt', (currentTimeMS / 1000).toFixed(3)) // current media time
+  playbackURL.searchParams.set(
+    'fmt',
+    String(player.streamingData.adaptiveFormats.sort((a, b) => b.bitrate - a.bitrate)[0].itag),
+  )
+  playbackURL.searchParams.set('lact', String(Math.random() * 100 + 50)) // time since last action (in milliseconds)
+  playbackURL.searchParams.set('rt', (Math.random() + 0.1).toFixed(3)) // time secind page load (in seconds)
+
+  await fetchProxy(playbackURL.toString(), {
+    headers: { referer: `https://www.youtube.com/watch?v=${videoId}` },
+  })
 }
 /** Reference for the query params:
  * vm: Video Metadata

@@ -1,6 +1,6 @@
-import { Image } from './components/image'
-import { RichText } from './components/rich-text'
-import { Video, Playlist, User, ProviderName, Shelf } from '.'
+import type { Image } from './components/image'
+import type { RichText } from './components/rich-text'
+import { type Video, Playlist, type User, type ProviderName, Shelf } from '.'
 
 // TODO: How to handle twitch's panel?
 /**
@@ -8,13 +8,13 @@ import { Video, Playlist, User, ProviderName, Shelf } from '.'
  * which should be fetched separately since it contains continuation data.
  */
 export type Channel = {
-	provider: ProviderName
-	user: User
-	id: string
-	banner?: Image[]
-	shortDescription?: string
-	description?: RichText
+  provider: ProviderName
+  user: User
+  id: string
+  banner?: Image[]
+  shortDescription?: string
+  description?: RichText
 
-	/** Ex. trailer or hosted channel */
-	featuredVideo?: Video
+  /** Ex. trailer or hosted channel */
+  featuredVideo?: Video
 }

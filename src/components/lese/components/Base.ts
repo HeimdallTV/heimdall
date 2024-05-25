@@ -19,7 +19,7 @@ const getLayoutProperties = propertyGenerator<BaseProps>([
 ])
 
 export default styled.div.withConfig({
-  shouldForwardProp: prop => getLayoutProperties.shouldForwardProp(prop) && isPropValid(prop),
+  shouldForwardProp: (prop) => getLayoutProperties.shouldForwardProp(prop) && isPropValid(prop),
 })<BaseProps>`
   ${getLayoutProperties}
 `

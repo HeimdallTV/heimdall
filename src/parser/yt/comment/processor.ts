@@ -1,5 +1,5 @@
 import * as std from '@std'
-import { Comment, CommentContent, CommentReplies, isVerifiedBadge } from './types'
+import { type Comment, type CommentContent, type CommentReplies, isVerifiedBadge } from './types'
 import { combineSomeText } from '../components/text'
 import { someToArray } from '../core/internals'
 import { getNavigationUrl } from '../components/utility/navigation'
@@ -80,7 +80,7 @@ export function processComment({ commentRenderer: comment }: Comment, replies?: 
 }
 
 export function processCommentContent(content: CommentContent): std.RichText {
-  return someToArray(content).map<std.RichTextChunk>(chunk => ({
+  return someToArray(content).map<std.RichTextChunk>((chunk) => ({
     content: 'simpleText' in chunk ? chunk.simpleText : chunk.text,
     type: std.RichTextChunkType.Text,
     // @ts-expect-error fixme: typescript can't infer that navigation endpoint is defined

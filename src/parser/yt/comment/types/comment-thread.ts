@@ -1,6 +1,6 @@
-import { Renderer } from '../../core/internals'
-import { Comment } from './comment'
-import { CommentReplies } from './comment-replies'
+import type { Renderer } from '../../core/internals'
+import type { Comment } from './comment'
+import type { CommentReplies } from './comment-replies'
 
 export enum RenderingPriority {
   PinnedComment = 'RENDERING_PRIORITY_PINNED_COMMENT',

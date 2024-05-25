@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { PlayerInstance, PlayerState } from './usePlayerInstance'
+import { type PlayerInstance, PlayerState } from './usePlayerInstance'
 
 export const usePlayerState = (player: PlayerInstance) => {
   const [state, setState] = useState(player.state.get)

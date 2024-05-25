@@ -1,10 +1,10 @@
-import { Channel } from '@yt/channel'
-import { ContinuationItem, AppendContinuationItemsResponse } from '@yt/components/continuation'
-import { ItemSectionWithIdentifier, SectionList, Shelf } from '@yt/components/core'
-import { TwoColumnSearchResults } from '@yt/components/two-column'
-import { VerticalList } from '@yt/components/vertical-list'
-import { BaseResponse } from '@yt/core/api'
-import { Video } from '@yt/video/processors/regular'
+import type { Channel } from '@yt/channel'
+import type { ContinuationItem, AppendContinuationItemsResponse } from '@yt/components/continuation'
+import type { ItemSectionWithIdentifier, SectionList, Shelf } from '@yt/components/core'
+import type { TwoColumnSearchResults } from '@yt/components/two-column'
+import type { VerticalList } from '@yt/components/vertical-list'
+import type { BaseResponse } from '@yt/core/api'
+import type { Video } from '@yt/video/processors/regular'
 
 export type SearchSuggestion = [string, number, number[]]
 export type SearchSuggestions = [string, SearchSuggestion[], { e: string; k: number; q: string }]

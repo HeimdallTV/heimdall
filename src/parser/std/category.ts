@@ -1,9 +1,9 @@
-import { Image } from "./components/image"
-import { ProviderName } from "./core"
+import type { Image } from './components/image'
+import type { ProviderName } from './core'
 
 enum CategoryType {
   Generic = 'generic',
-  Gaming = 'gaming'
+  Gaming = 'gaming',
 }
 
 // TODO: To be enabled later
@@ -14,7 +14,7 @@ type Category = {
   name: string
 
   description?: string
-  tags?: { id?: string, name: string }[]
+  tags?: { id?: string; name: string }[]
   viewCount?: number
 
   followed?: boolean

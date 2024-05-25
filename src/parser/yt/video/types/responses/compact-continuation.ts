@@ -1,16 +1,16 @@
-import { ContinuationItem } from "@yt/components/continuation";
-import { BaseResponse } from "@yt/core/api";
-import { Action } from "@yt/core/internals";
-import { CompactVideo } from "@yt/video/processors/compact";
+import type { ContinuationItem } from '@yt/components/continuation'
+import type { BaseResponse } from '@yt/core/api'
+import type { Action } from '@yt/core/internals'
+import type { CompactVideo } from '@yt/video/processors/compact'
 
 export type CompactContinuationResponse = BaseResponse & {
   onResponseReceivedEndpoints: [
     Action<
-      "appendContinuationItems",
+      'appendContinuationItems',
       {
-        continuationItems: (CompactVideo | ContinuationItem)[];
-        targetId: string;
+        continuationItems: (CompactVideo | ContinuationItem)[]
+        targetId: string
       }
-    >
-  ];
-};
+    >,
+  ]
+}

@@ -6,7 +6,7 @@ export const CollapsibleButton = styled(Button)<
   { $collapseWidth?: string } & ButtonProps & React.HTMLAttributes<HTMLButtonElement>
 >`
   @container (max-width: ${(props) => props.$collapseWidth ?? '400px'}) {
-    padding-right: var(--_button-padding-left);
+    padding-right: calc(var(--button-padding-x) / 1.5);
     & .mantine-Button-section {
       margin-left: 0;
       margin-right: 0;

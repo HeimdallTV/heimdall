@@ -1,10 +1,10 @@
-import { ItemSectionWithHeader, SectionList } from '@/parser/yt/components/core'
-import { AppendContinuationItemsResponse, ContinuationItem } from '@yt/components/continuation'
-import { TabWithIdentifier } from '@yt/components/tab'
-import { TwoColumnBrowseResults } from '@yt/components/two-column'
-import { BaseResponse, BrowseId } from '@yt/core/api'
-import { Renderer } from '@yt/core/internals'
-import { Video } from '@yt/video/processors/regular'
+import type { ItemSectionWithHeader, SectionList } from '@/parser/yt/components/core'
+import type { AppendContinuationItemsResponse, ContinuationItem } from '@yt/components/continuation'
+import type { TabWithIdentifier } from '@yt/components/tab'
+import type { TwoColumnBrowseResults } from '@yt/components/two-column'
+import type { BaseResponse, BrowseId } from '@yt/core/api'
+import type { Renderer } from '@yt/core/internals'
+import type { Video } from '@yt/video/processors/regular'
 
 type Item = ItemSectionWithHeader<Video> | ContinuationItem
 

@@ -1,4 +1,4 @@
-import { Endpoint } from '@yt/core/internals'
+import type { Endpoint } from '@yt/core/internals'
 
 /** Used for links to other Youtube videos */
 export type WatchEndpoint = Endpoint<

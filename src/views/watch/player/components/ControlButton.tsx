@@ -1,8 +1,8 @@
-import { UnstyledButton, UnstyledButtonProps } from '@mantine/core'
+import { UnstyledButton, type UnstyledButtonProps } from '@mantine/core'
 import styled from 'styled-components'
 
 export const ControlButton = styled(UnstyledButton)<
-	React.ButtonHTMLAttributes<HTMLButtonElement> & UnstyledButtonProps
+  React.ButtonHTMLAttributes<HTMLButtonElement> & UnstyledButtonProps
 >`
   display: flex;
   align-items: center;

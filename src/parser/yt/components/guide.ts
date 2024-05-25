@@ -1,4 +1,4 @@
-import {
+import type {
   CommandMetadata,
   ExtractCommand,
   Renderer,
@@ -6,11 +6,11 @@ import {
   Some,
   SubCommand,
 } from '@yt/core/internals'
-import { Icon } from './icon'
-import { Text } from './text'
-import { Thumbnail } from './thumbnail'
-import { Navigation } from './utility/navigation'
-import { BrowseEndpoint, ReelWatchEndpoint } from './utility/endpoint'
+import type { Icon } from './icon'
+import type { Text } from './text'
+import type { Thumbnail } from './thumbnail'
+import type { Navigation } from './utility/navigation'
+import type { BrowseEndpoint, ReelWatchEndpoint } from './utility/endpoint'
 
 export type GuideSection<Item extends Renderer> = Renderer<
   'guideSection',

@@ -7,7 +7,9 @@ export function useDebounce<T>(value: T, delay: number, shouldIgnoreUpdate?: (va
   useEffect(() => {
     const timeoutId = setTimeout(
       () =>
-        setDebouncedValue(debouncedValue => (shouldIgnoreUpdate?.(value) ?? false ? debouncedValue : value)),
+        setDebouncedValue((debouncedValue) =>
+          shouldIgnoreUpdate?.(value) ?? false ? debouncedValue : value,
+        ),
       delay,
     )
     return () => clearTimeout(timeoutId)

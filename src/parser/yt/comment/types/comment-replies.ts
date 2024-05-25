@@ -1,6 +1,6 @@
-import { Button } from '../../components/button'
-import { ContinuationItem } from '../../components/continuation'
-import { Renderer } from '../../core/internals'
+import type { Button } from '../../components/button'
+import type { ContinuationItem } from '../../components/continuation'
+import type { Renderer } from '../../core/internals'
 
 export type CommentReplies = Renderer<
   'commentReplies',

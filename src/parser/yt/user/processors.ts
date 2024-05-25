@@ -1,5 +1,5 @@
-import * as std from '@std'
-import { ChannelGuideEntry } from '@yt/components/guide'
+import type * as std from '@std'
+import type { ChannelGuideEntry } from '@yt/components/guide'
 import { combineSomeText } from '@yt/components/text'
 
 export const processChannelGuideEntry = ({ guideEntryRenderer: entry }: ChannelGuideEntry): std.User => ({

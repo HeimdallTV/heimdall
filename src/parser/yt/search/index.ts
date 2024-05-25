@@ -2,7 +2,7 @@ import * as std from '@std'
 import { processChannel } from '@yt/channel/processors/channel'
 import { processVideo } from '@yt/video/processors/regular'
 import { fetchSearchIterator, fetchSearchSuggestions } from './api'
-import { SearchItem } from './types'
+import type { SearchItem } from './types'
 
 const searchItemToResourceType = (item: SearchItem) =>
   'videoRenderer' in item ? std.ResourceType.Video : std.ResourceType.Channel
@@ -23,7 +23,7 @@ export const listSearch = <
        * For now, we'll just return however items are shown when collapsed but we should enable showing
        * all items at some point
        */
-      const items = results.flatMap(item =>
+      const items = results.flatMap((item) =>
         'shelfRenderer' in item
           ? item.shelfRenderer.content.verticalListRenderer.items.slice(
               0,
@@ -34,10 +34,10 @@ export const listSearch = <
 
       // TODO: Playlists?
       yield items
-        .filter(item => resourceTypes.includes(searchItemToResourceType(item) as Type))
+        .filter((item) => resourceTypes.includes(searchItemToResourceType(item) as Type))
         .map(processSearchItem) as std.Resource<Type>[]
     }
   }
 
 export const listSearchSuggestions = (_: std.ResourceType[]) => (query: string) =>
-  fetchSearchSuggestions(query).then(res => res[1].map(suggestion => suggestion[0]))
+  fetchSearchSuggestions(query).then((res) => res[1].map((suggestion) => suggestion[0]))

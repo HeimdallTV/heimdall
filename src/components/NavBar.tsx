@@ -1,4 +1,5 @@
-import React, { memo, useState } from 'react'
+import type React from 'react'
+import { memo, useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'wouter'
 import yt from '@yt'
@@ -74,7 +75,6 @@ export const NavBar = memo(() => {
   const { isFullscreen } = useIsFullscreen()
   const [expanded, { toggle }] = useDisclosure(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
-  console.log(settingsOpen)
   const followedUsers = usePaginated(yt.listFollowedUsers!)
   if (isFullscreen) return null
   return (

@@ -9,26 +9,27 @@ import { createStorageProvider, memoizeAsync } from '@/libs/cache'
 import { fetchBaseJS } from './shared'
 
 export const getSigTimestamp = memoizeAsync(
-	() => fetchBaseJS().then((js) => js.match(/signatureTimestamp:(\d+)/)![1]),
-	{ provider: createStorageProvider('YT_SIG_TIMESTAMP'), timeout: 1000 * 60 * 60 * 24 },
+  () => fetchBaseJS().then((js) => js.match(/signatureTimestamp:(\d+)/)![1]),
+  { provider: createStorageProvider('YT_SIG_TIMESTAMP'), timeout: 1000 * 60 * 60 * 24 },
 )
 
 export const getSigFunction = memoizeAsync(async () => {
-	const baseJS = await fetchBaseJS()
+  const baseJS = await fetchBaseJS()
 
-	const transformFunctionName = baseJS.match(/[a-z]=(\w+)\(decodeURIComponent/)![1]
-	const transformFunctionBody = `var ${
-		baseJS.match(new RegExp(`${transformFunctionName}=function\\(.+?\\){[^]+?};`))![0]
-	}`
+  const transformFunctionName = baseJS.match(/[a-z]=(\w+)\(decodeURIComponent/)![1]
+  const transformFunctionBody = `var ${
+    baseJS.match(new RegExp(`${transformFunctionName}=function\\(.+?\\){[^]+?};`))![0]
+  }`
 
-	const helperFunctionName = transformFunctionBody.match(/;(\w+)\.[\w\d]+\([a-z],\d+\);/)![1]
-	const helperFunctionBody = baseJS.match(new RegExp(`var ${helperFunctionName}={[\\S\\s]+?};`))!
+  const helperFunctionName = transformFunctionBody.match(/;(\w+)\.[\w\d]+\([a-z],\d+\);/)![1]
+  const helperFunctionBody = baseJS.match(new RegExp(`var ${helperFunctionName}={[\\S\\s]+?};`))!
 
-	return {
-		code: [transformFunctionBody, helperFunctionBody].join('\n'),
-		funcName: transformFunctionName,
-	}
+  return {
+    code: [transformFunctionBody, helperFunctionBody].join('\n'),
+    funcName: transformFunctionName,
+  }
 })
 
 export const getDecodedSigParam = (sig: string) =>
-	getSigFunction().then(({ code, funcName }) => eval(`${code}\n${funcName}("${sig}")`))
+  // biome-ignore lint/security/noGlobalEval: we need to eval the function to decode the signature
+  getSigFunction().then(({ code, funcName }) => eval(`${code}\n${funcName}("${sig}")`))

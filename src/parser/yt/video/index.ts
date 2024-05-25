@@ -10,16 +10,16 @@ import {
 } from './api'
 import { fetchSponsorBlock } from './sponsorblock'
 
-import { isLiveBadge, MetadataBadge } from '../components/badge'
-import { findRenderer, findRendererRaw, isRenderer, Renderer } from '../core/internals'
+import { isLiveBadge, type MetadataBadge } from '../components/badge'
+import { findRenderer, findRendererRaw, isRenderer, type Renderer } from '../core/internals'
 import { processFullVideo } from './processors/full'
 import { makeContinuationIterator } from '@yt/core/api'
-import { RichItem } from '@yt/components/item'
-import { processVideo, Video } from './processors/regular'
+import type { RichItem } from '@yt/components/item'
+import { processVideo, type Video } from './processors/regular'
 import { processCompactVideo } from './processors/compact'
 import { processPlayer } from './processors/player'
 import { getContinuationResponseItems } from '../components/continuation'
-import { isLiveThumbnailOverlay, ThumbnailOverlays } from '../components/thumbnail'
+import { isLiveThumbnailOverlay, type ThumbnailOverlays } from '../components/thumbnail'
 export * from './types'
 
 export async function* listRecommended(): AsyncGenerator<std.Video[]> {

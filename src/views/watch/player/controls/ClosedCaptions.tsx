@@ -2,7 +2,7 @@ import { useContext } from 'react'
 
 import styled from 'styled-components'
 
-import { IconBadgeCc } from '@tabler/icons-react'
+import { IconBadgeCc, IconBadgeCcFilled } from '@tabler/icons-react'
 
 import { PlayerContext } from '../context'
 import { useClosedCaptions } from '../hooks/use'
@@ -28,23 +28,37 @@ const ClosedCaptionButton = styled(ControlButton)<{ $enabled: boolean }>`
 `
 
 export const ClosedCaption: React.FC = () => {
-	const playerContext = useContext(PlayerContext)
-	const { closedCaptions, allClosedCaptions, setClosedCaptions } = useClosedCaptions(playerContext!)
-	// todo: Handle no captions available, probably just hide this button?
-	// todo: Allow the user to select the captions rather than choosing the default/first one
-	// probably just a popup when hovering?
-	return (
-		<ClosedCaptionButton
-			$enabled={closedCaptions !== undefined}
-			onClick={() =>
-				setClosedCaptions(
-					closedCaptions === undefined
-						? allClosedCaptions.find((cc) => cc.isDefault) ?? allClosedCaptions[0]
-						: undefined,
-				)
-			}
-		>
-			<IconBadgeCc />
-		</ClosedCaptionButton>
-	)
+  const playerContext = useContext(PlayerContext)
+  const { closedCaptions, allClosedCaptions, setClosedCaptions } = useClosedCaptions(playerContext!)
+  const enabled = closedCaptions !== undefined
+  // todo: Handle no captions available, probably just hide this button?
+  // todo: Allow the user to select the captions rather than choosing the default/first one
+  // probably just a popup when hovering?
+  return (
+    <ClosedCaptionButton
+      $enabled={enabled}
+      onClick={() =>
+        setClosedCaptions(
+          enabled ? undefined : allClosedCaptions.find((cc) => cc.isDefault) ?? allClosedCaptions[0],
+        )
+      }
+    >
+      <IconBadgeCc
+        style={{
+          opacity: Number(!enabled),
+          transition: '0.2s ease',
+        }}
+      />
+      <IconBadgeCcFilled
+        style={{
+          opacity: Number(enabled),
+          transition: '0.2s ease',
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      />
+    </ClosedCaptionButton>
+  )
 }

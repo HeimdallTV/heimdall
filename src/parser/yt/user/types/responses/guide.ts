@@ -1,4 +1,4 @@
-import {
+import type {
   BrowseGuideEntry,
   ButtonGuideEntry,
   ChannelGuideEntry,
@@ -8,7 +8,7 @@ import {
   SubscriptionsGuideSection,
   ReelGuideEntry,
 } from '@yt/components/guide'
-import { BaseResponse } from '@yt/core/api'
+import type { BaseResponse } from '@yt/core/api'
 
 export type GuideResponse = BaseResponse & {
   items: (

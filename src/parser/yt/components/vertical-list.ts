@@ -1,5 +1,5 @@
-import { Renderer, Some } from '@yt/core/internals'
-import { Text } from './text'
+import type { Renderer, Some } from '@yt/core/internals'
+import type { Text } from './text'
 
 export type VerticalList<Item extends Renderer> = Renderer<
   'verticalList',

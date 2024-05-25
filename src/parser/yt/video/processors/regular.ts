@@ -1,23 +1,27 @@
 import * as std from '@std'
 import { getVideoType } from '..'
-import { isVerifiedBadge, MetadataBadge } from '../../components/badge'
-import { combineSomeText, Text } from '../../components/text'
+import { isVerifiedBadge, type MetadataBadge } from '../../components/badge'
+import { combineSomeText, type Text } from '../../components/text'
 import {
-  ChannelThumbnailWithLink,
-  MovingThumbnail,
-  Thumbnail,
+  type ChannelThumbnailWithLink,
+  type MovingThumbnail,
+  type Thumbnail,
   ThumbnailOverlayNowPlaying,
   ThumbnailOverlayResumePlayback,
-  ThumbnailOverlays,
+  type ThumbnailOverlays,
   ThumbnailOverlayTimeStatus,
 } from '../../components/thumbnail'
-import { Renderer, Some } from '../../core/internals'
+import type { Renderer, Some } from '../../core/internals'
 import { extractNumber } from '../../core/helpers'
-import { Accessibility } from '../../components/utility/accessibility'
-import { getBrowseNavigationId, Navigation, NavigationSome } from '../../components/utility/navigation'
+import type { Accessibility } from '../../components/utility/accessibility'
+import {
+  getBrowseNavigationId,
+  type Navigation,
+  type NavigationSome,
+} from '../../components/utility/navigation'
 import { ProviderName } from '@std'
 import { getLength, getViewedLength, relativeToAbsoluteDate } from './helpers'
-import { BrowseEndpoint, WatchEndpoint } from '@yt/components/utility/endpoint'
+import type { BrowseEndpoint, WatchEndpoint } from '@yt/components/utility/endpoint'
 
 /**
  * Currently cannot parse/doesn't handle live streams and upcoming events

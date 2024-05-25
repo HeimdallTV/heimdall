@@ -1,28 +1,28 @@
-import { ContinuationItem } from '@yt/components/continuation'
-import { MetadataBadge } from '../components/badge'
-import { SubscribeButton } from '../components/button'
+import type { ContinuationItem } from '@yt/components/continuation'
+import type { MetadataBadge } from '../components/badge'
+import type { SubscribeButton } from '../components/button'
 import {
-  HorizontalList,
-  ItemSection,
+  type HorizontalList,
+  type ItemSection,
   ItemSectionWithIdentifier,
-  SectionList,
-  Shelf,
+  type SectionList,
+  type Shelf,
 } from '../components/core'
-import { Grid, RichGrid } from '../components/grid'
-import { ExpandableTab, Tab } from '../components/tab'
-import { Text } from '../components/text'
-import { Thumbnail } from '../components/thumbnail'
-import { TwoColumnBrowseResults } from '../components/two-column'
-import { Accessibility } from '../components/utility/accessibility'
-import { Navigation, NavigationSome } from '../components/utility/navigation'
-import { BrowseEndpoint, UrlEndpoint, WatchEndpoint } from '@yt/components/utility/endpoint'
-import { CommandMetadata, Renderer, Some } from '../core/internals'
-import { GridVideo } from '../video/processors/grid'
-import { RichItem } from '../components/item'
-import { Video } from '../video/processors/regular'
-import { Icon } from '../components/icon'
-import { ShowEngagementPanelEndpoint } from '../components/engagement-panel'
-import { GridPlaylist } from '../playlist/processors/grid'
+import type { Grid, RichGrid } from '../components/grid'
+import type { ExpandableTab, Tab } from '../components/tab'
+import type { Text } from '../components/text'
+import type { Thumbnail } from '../components/thumbnail'
+import type { TwoColumnBrowseResults } from '../components/two-column'
+import type { Accessibility } from '../components/utility/accessibility'
+import type { Navigation, NavigationSome } from '../components/utility/navigation'
+import type { BrowseEndpoint, UrlEndpoint, WatchEndpoint } from '@yt/components/utility/endpoint'
+import type { CommandMetadata, Renderer, Some } from '../core/internals'
+import type { GridVideo } from '../video/processors/grid'
+import type { RichItem } from '../components/item'
+import type { Video } from '../video/processors/regular'
+import type { Icon } from '../components/icon'
+import type { ShowEngagementPanelEndpoint } from '../components/engagement-panel'
+import type { GridPlaylist } from '../playlist/processors/grid'
 
 export type FullChannel<SelectedTab extends ChannelTabName> = TwoColumnBrowseResults<ChannelTab<SelectedTab>>
 
@@ -56,28 +56,25 @@ export type ChannelTab<Selected extends ChannelTabName = ChannelTabName> =
   | SearchExpandableTab
 
 // prettier-ignore
-export type ChannelTabByName<Name extends ChannelTabName> = IsTabName<
-	ChannelTabName.Home,
-	Name
-> extends true
-	? HomeTab<true>
-	: IsTabName<ChannelTabName.Videos, Name> extends true
-	  ? VideosTab<true>
-	  : IsTabName<ChannelTabName.Shorts, Name> extends true
-		  ? ShortsTab<true>
-		  : IsTabName<ChannelTabName.Live, Name> extends true
-			  ? LiveTab<true>
-			  : IsTabName<ChannelTabName.Playlists, Name> extends true
-				  ? PlaylistsTab<true>
-				  : IsTabName<ChannelTabName.Community, Name> extends true
-					  ? CommunityTab<true>
-					  : IsTabName<ChannelTabName.Store, Name> extends true
-						  ? StoreTab<true>
-						  : IsTabName<ChannelTabName.Channels, Name> extends true
-							  ? ChannelsTab<true>
-							  : IsTabName<ChannelTabName.About, Name> extends true
-								  ? AboutTab<true>
-								  : never;
+export type ChannelTabByName<Name extends ChannelTabName> = IsTabName<ChannelTabName.Home, Name> extends true
+  ? HomeTab<true>
+  : IsTabName<ChannelTabName.Videos, Name> extends true
+    ? VideosTab<true>
+    : IsTabName<ChannelTabName.Shorts, Name> extends true
+      ? ShortsTab<true>
+      : IsTabName<ChannelTabName.Live, Name> extends true
+        ? LiveTab<true>
+        : IsTabName<ChannelTabName.Playlists, Name> extends true
+          ? PlaylistsTab<true>
+          : IsTabName<ChannelTabName.Community, Name> extends true
+            ? CommunityTab<true>
+            : IsTabName<ChannelTabName.Store, Name> extends true
+              ? StoreTab<true>
+              : IsTabName<ChannelTabName.Channels, Name> extends true
+                ? ChannelsTab<true>
+                : IsTabName<ChannelTabName.About, Name> extends true
+                  ? AboutTab<true>
+                  : never
 
 export type HomeTab<Selected extends boolean> = Tab<
   ChannelTabName.Home,

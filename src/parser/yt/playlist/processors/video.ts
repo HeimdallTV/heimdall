@@ -1,11 +1,11 @@
 import * as std from '@std'
-import { ManyText, Text, combineSomeText } from '../../components/text'
+import { type ManyText, type Text, combineSomeText } from '../../components/text'
 import { parseDate } from '../../video/processors/helpers'
 import { fromShortHumanReadable } from '../../core/helpers'
-import { Renderer, Runs, Some } from '../../core/internals'
-import { Navigation } from '../../components/utility/navigation'
-import { Thumbnail, ThumbnailOverlays } from '../../components/thumbnail'
-import { Menu } from '../../components/menu'
+import type { Renderer, Runs, Some } from '../../core/internals'
+import type { Navigation } from '../../components/utility/navigation'
+import type { Thumbnail, ThumbnailOverlays } from '../../components/thumbnail'
+import type { Menu } from '../../components/menu'
 
 export type PlaylistVideo = Renderer<
   'playlistVideo',

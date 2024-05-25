@@ -1,4 +1,4 @@
-import { MantineSize } from '@mantine/core'
+import type { MantineSize } from '@mantine/core'
 
 const sizes = {
   xs: '0.75rem',

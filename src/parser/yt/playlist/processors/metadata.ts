@@ -1,5 +1,5 @@
 import * as std from '@std'
-import { PlaylistHeader, PlaylistVideoList } from '../types'
+import type { PlaylistHeader, PlaylistVideoList } from '../types'
 import { combineSomeText } from '../../components/text'
 import { extractNumber } from '../../core/helpers'
 

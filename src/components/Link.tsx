@@ -1,4 +1,4 @@
-import { MantineSize } from '@mantine/core'
+import type { MantineSize } from '@mantine/core'
 import styled from 'styled-components'
 import { Link } from 'wouter'
 

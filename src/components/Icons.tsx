@@ -1,4 +1,4 @@
-import { MantineSize } from '@mantine/core'
+import type { MantineSize } from '@mantine/core'
 import { IconThumbDown, IconThumbDownFilled, IconThumbUp, IconThumbUpFilled } from '@tabler/icons-react'
 import * as std from '@std'
 import { resolveSize } from './utils'

@@ -1,4 +1,4 @@
-import * as std from '@std'
+import type * as std from '@std'
 import { useEffect, useState } from 'react'
 import { Column } from 'lese'
 import { Button, Divider, Text } from '@mantine/core'

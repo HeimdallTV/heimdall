@@ -179,8 +179,8 @@ export const createPlayerInstance = (
     else if (newState === PlayerState.Paused) pause()
     else if (newState === PlayerState.Ended || newState === PlayerState.Error) {
       pause()
-      video.currentTime = Infinity
-      audio.currentTime = Infinity
+      video.currentTime = Number.POSITIVE_INFINITY
+      audio.currentTime = Number.POSITIVE_INFINITY
     }
   })
   video.addEventListener('ended', () => state.set(PlayerState.Ended))

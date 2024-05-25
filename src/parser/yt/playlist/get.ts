@@ -1,11 +1,11 @@
-import { ContinuationItem } from '../components/continuation'
-import { ItemSectionWithHeader, SectionList } from '../components/core'
-import { Tab } from '../components/tab'
-import { TwoColumnBrowseResults } from '../components/two-column'
-import { BaseResponse, Endpoint, fetchYt } from '../core/api'
+import type { ContinuationItem } from '../components/continuation'
+import type { ItemSectionWithHeader, SectionList } from '../components/core'
+import type { Tab } from '../components/tab'
+import type { TwoColumnBrowseResults } from '../components/two-column'
+import { type BaseResponse, Endpoint, fetchYt } from '../core/api'
 import { isRenderer } from '../core/internals'
 import { processPlaylistMetadata } from './processors/metadata'
-import { PlaylistHeader, PlaylistVideoList } from './types'
+import type { PlaylistHeader, PlaylistVideoList } from './types'
 
 type PlaylistResponse = BaseResponse & {
   contents: TwoColumnBrowseResults<

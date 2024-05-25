@@ -1,6 +1,6 @@
-import { ContinuationItem } from '@yt/components/continuation'
+import type { ContinuationItem } from '@yt/components/continuation'
 import { fetchYt, Endpoint } from '.'
-import { Renderer, findRenderer } from '../internals'
+import { type Renderer, findRenderer } from '../internals'
 
 export const fetchEndpointContinuation =
   (endpoint: Endpoint) =>

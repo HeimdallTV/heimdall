@@ -1,8 +1,8 @@
-import { Text } from '@yt/components/text'
-import { Thumbnail } from '@yt/components/thumbnail'
-import { NavigationSome } from '@yt/components/utility/navigation'
-import { UrlEndpoint, WatchEndpoint } from '@yt/components/utility/endpoint'
-import { Renderer, Some } from '@yt/core/internals'
+import type { Text } from '@yt/components/text'
+import type { Thumbnail } from '@yt/components/thumbnail'
+import type { NavigationSome } from '@yt/components/utility/navigation'
+import type { UrlEndpoint, WatchEndpoint } from '@yt/components/utility/endpoint'
+import type { Renderer, Some } from '@yt/core/internals'
 
 export type MicroFormat = Renderer<
   'playerMicroformat',

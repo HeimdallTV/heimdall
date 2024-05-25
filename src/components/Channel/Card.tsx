@@ -1,6 +1,6 @@
 import { useDelayedEvent } from '@/hooks/useDelayed'
 import { toShortHumanReadable } from '@/parser/yt/core/helpers'
-import * as std from '@std'
+import type * as std from '@std'
 import yt from '@yt'
 import { Link } from 'wouter'
 import { FollowButton } from '../button'

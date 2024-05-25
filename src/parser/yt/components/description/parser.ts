@@ -1,5 +1,5 @@
-import { RichTextChunk, RichTextChunkType } from '@std'
-import { AttributedDescription, AttributedDescriptionCommand } from './types'
+import { type RichTextChunk, RichTextChunkType } from '@std'
+import type { AttributedDescription, AttributedDescriptionCommand } from './types'
 import { getEndpointUrl } from '../utility/endpoint'
 
 export const parseAttributedDescriptionCommandRuns = (
@@ -7,7 +7,7 @@ export const parseAttributedDescriptionCommandRuns = (
   content: string,
 ): RichTextChunk[] =>
   commandRuns
-    .map(command => ({
+    .map((command) => ({
       ...command,
       endIndex: command.startIndex + command.length,
     }))
@@ -32,7 +32,7 @@ export const parseAttributedDescriptionCommandRuns = (
       [{ type: RichTextChunkType.Text, content }],
     )
     /** The above code can lead to empty  */
-    .filter(chunk => chunk.content.length > 0)
+    .filter((chunk) => chunk.content.length > 0)
 
 /**
  * Parses an attributed description into RichTextChunks

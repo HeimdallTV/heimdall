@@ -1,4 +1,4 @@
-import {
+import type {
   ServiceEndpoint,
   Endpoint,
   Renderer,
@@ -6,9 +6,9 @@ import {
   Action,
   CommandMetadata,
 } from '../../core/internals'
-import { LikeStatus } from '../like-status'
-import { OpenPopupAction } from './actions'
-import { WatchEndpoint } from './endpoint'
+import type { LikeStatus } from '../like-status'
+import type { OpenPopupAction } from './actions'
+import type { WatchEndpoint } from './endpoint'
 
 export type SubscribeEndpoint = Endpoint<'subscribe', { channelIds: string[]; params: string }>
 

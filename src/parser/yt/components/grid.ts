@@ -1,4 +1,4 @@
-import { Renderer } from '../core/internals'
+import type { Renderer } from '../core/internals'
 
 export type Grid<Item extends Renderer> = Renderer<
   'grid',

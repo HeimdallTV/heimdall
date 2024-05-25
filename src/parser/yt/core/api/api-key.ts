@@ -3,7 +3,7 @@ import { endpoints } from '@libs/extension'
 import { addDays } from 'date-fns/addDays'
 
 export async function fetchAPIKey() {
-  const { retrievalDate, value } = await endpoints.storage.local.get('apiKey').then(_ => _.apiKey ?? {})
+  const { retrievalDate, value } = await endpoints.storage.local.get('apiKey').then((_) => _.apiKey ?? {})
   const notExpired = retrievalDate && addDays(new Date(), 2) > new Date(retrievalDate)
   const shouldRefresh = retrievalDate && addDays(new Date(), 1) < new Date(retrievalDate)
   if (value && notExpired) {
@@ -16,8 +16,8 @@ export async function fetchAPIKey() {
 
 export const refreshAPIKey = () =>
   fetchProxy('https://www.youtube.com/feed/you', { credentials: 'include' })
-    .then(res => res.text())
-    .then(text => text.split('"INNERTUBE_API_KEY":"')[1].split('"')[0])
-    .then(key =>
+    .then((res) => res.text())
+    .then((text) => text.split('"INNERTUBE_API_KEY":"')[1].split('"')[0])
+    .then((key) =>
       endpoints.storage.local.set({ apiKey: { retrievalDate: new Date().toISOString(), value: key } }),
     )

@@ -1,7 +1,10 @@
-import { AppendContinuationItemsResponse, getContinuationResponseItems } from '../components/continuation'
+import {
+  type AppendContinuationItemsResponse,
+  getContinuationResponseItems,
+} from '../components/continuation'
 import { fetchBrowseContinuation, makeContinuationIterator } from '../core/api'
 import { fetchPlaylist } from './get'
-import { PlaylistVideo, processPlaylistVideo } from './processors/video'
+import { type PlaylistVideo, processPlaylistVideo } from './processors/video'
 
 export async function listUserPlaylists() {
   // todo: should use the getChannelPlaylists

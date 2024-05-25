@@ -1,12 +1,12 @@
-import { ContinuationItem } from '@yt/components/continuation'
-import { RichGrid } from '@yt/components/grid'
-import { RichItem } from '@yt/components/item'
-import { TabWithIdentifier } from '@yt/components/tab'
-import { Text } from '@yt/components/text'
-import { TwoColumnBrowseResults } from '@yt/components/two-column'
-import { BaseResponse, BrowseId } from '@yt/core/api'
-import { Renderer, Some } from '@yt/core/internals'
-import { Video } from '@yt/video/processors/regular'
+import type { ContinuationItem } from '@yt/components/continuation'
+import type { RichGrid } from '@yt/components/grid'
+import type { RichItem } from '@yt/components/item'
+import type { TabWithIdentifier } from '@yt/components/tab'
+import type { Text } from '@yt/components/text'
+import type { TwoColumnBrowseResults } from '@yt/components/two-column'
+import type { BaseResponse, BrowseId } from '@yt/core/api'
+import type { Renderer, Some } from '@yt/core/internals'
+import type { Video } from '@yt/video/processors/regular'
 
 export type RecommendedResponse = BaseResponse & {
   contents: TwoColumnBrowseResults<

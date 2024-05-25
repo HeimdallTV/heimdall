@@ -1,12 +1,12 @@
-import { SegmentedLikeDislikeButtonVM } from '../../components/button'
-import { Text } from '../../components/text'
-import { Thumbnail } from '../../components/thumbnail'
-import { Renderer, Some } from '../../core/internals'
-import { Accessibility } from '../../components/utility/accessibility'
-import { Navigation, NavigationSome } from '../../components/utility/navigation'
-import { BrowseEndpoint } from '@yt/components/utility/endpoint'
-import { Tracking } from '../../components/utility/tracking'
-import { MetadataBadge } from '@yt/components/badge'
+import type { SegmentedLikeDislikeButtonVM } from '../../components/button'
+import type { Text } from '../../components/text'
+import type { Thumbnail } from '../../components/thumbnail'
+import type { Renderer, Some } from '../../core/internals'
+import type { Accessibility } from '../../components/utility/accessibility'
+import type { Navigation, NavigationSome } from '../../components/utility/navigation'
+import type { BrowseEndpoint } from '@yt/components/utility/endpoint'
+import type { Tracking } from '../../components/utility/tracking'
+import type { MetadataBadge } from '@yt/components/badge'
 
 export type VideoViewCount = Renderer<
   'videoViewCount',

@@ -1,8 +1,8 @@
-import { Renderer, Some, isRenderer } from '../core/internals'
-import { Accessibility } from './utility/accessibility'
-import { Navigation } from './utility/navigation'
-import { Text, combineSomeText } from './text'
-import { Icon } from './icon'
+import { type Renderer, type Some, isRenderer } from '../core/internals'
+import type { Accessibility } from './utility/accessibility'
+import type { Navigation } from './utility/navigation'
+import { type Text, combineSomeText } from './text'
+import type { Icon } from './icon'
 
 export type ThumbnailVariant = {
   /** Absolute url */

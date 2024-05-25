@@ -1,4 +1,4 @@
-import {
+import type {
   Command,
   CommandMetadata,
   ExtractCommand,
@@ -9,26 +9,26 @@ import {
   SubCommand,
   ViewModel,
 } from '../core/internals'
-import { Text } from './text'
-import { Tracking } from './utility/tracking'
-import {
+import type { Text } from './text'
+import type { Tracking } from './utility/tracking'
+import type {
   LikeEndpoint,
   OfflineVideoEndpoint,
   SignalServiceEndpoint,
   SubscribeEndpoint,
 } from './utility/endpoints'
-import { OpenPopupAction } from './utility/actions'
+import type { OpenPopupAction } from './utility/actions'
 import {
-  GestureCommand,
-  InnertubeCommand,
-  OnAddCommand,
-  SerialCommand,
+  type GestureCommand,
+  type InnertubeCommand,
+  type OnAddCommand,
+  type SerialCommand,
   UpdateToggleButtonCommand,
 } from './utility/commands'
-import { Icon } from './icon'
-import { LikeStatus } from './like-status'
-import { Accessibility } from './utility/accessibility'
-import { Thumbnail } from './thumbnail'
+import type { Icon } from './icon'
+import type { LikeStatus } from './like-status'
+import type { Accessibility } from './utility/accessibility'
+import type { Thumbnail } from './thumbnail'
 
 type Size = string // Never seen anything other than "SIZE_DEFAULT" and "BUTTON_VIEW_MODEL_SIZE_DEFAULT"
 

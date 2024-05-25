@@ -25,37 +25,37 @@ const VolumeContainer = styled.div`
 `
 
 export const Volume: React.FC = () => {
-	const player = useContext(PlayerContext)!
-	const { volumeLog: volume, setVolumeLog: setVolume } = useVolume(player)
-	const Icon = volume > 0.5 ? IconVolume : volume > 0 ? IconVolume2 : IconVolumeOff
-	const debouncedNonZeroVolume = useDebounce(volume, 200, (value) => value === 0)
+  const player = useContext(PlayerContext)!
+  const { volumeLog: volume, setVolumeLog: setVolume } = useVolume(player)
+  const Icon = volume > 0.5 ? IconVolume : volume > 0 ? IconVolume2 : IconVolumeOff
+  const debouncedNonZeroVolume = useDebounce(volume, 200, (value) => value === 0)
 
-	// todo: Should pull the default from local storage for when debouncedNonZeroVolume === 0
-	const toggleMute = useCallback(
-		() => setVolume(volume === 0 ? debouncedNonZeroVolume || 1 : 0),
-		[volume, setVolume, debouncedNonZeroVolume],
-	)
-	useHotkeys([['m', toggleMute]])
+  // todo: Should pull the default from local storage for when debouncedNonZeroVolume === 0
+  const toggleMute = useCallback(
+    () => setVolume(volume === 0 ? debouncedNonZeroVolume || 1 : 0),
+    [volume, setVolume, debouncedNonZeroVolume],
+  )
+  useHotkeys([['m', toggleMute]])
 
-	return (
-		<VolumeContainer>
-			<ControlButton onClick={toggleMute}>
-				<Icon />
-			</ControlButton>
-			<Slider
-				color="var(--mantine-color-text)"
-				size="xs"
-				thumbSize="12px"
-				label={null}
-				value={volume * 100}
-				onChange={(volume) => setVolume(volume / 100)}
-				style={{ minWidth: '80px' }}
-				styles={{
-					// min height increases the clickable area
-					root: { '--slider-track-bg': 'rgba(255, 255, 255, 0.3)', minHeight: '32px' },
-					trackContainer: { minHeight: '32px' },
-				}}
-			/>
-		</VolumeContainer>
-	)
+  return (
+    <VolumeContainer>
+      <ControlButton onClick={toggleMute}>
+        <Icon />
+      </ControlButton>
+      <Slider
+        color="var(--mantine-color-text)"
+        size="xs"
+        thumbSize="12px"
+        label={null}
+        value={volume * 100}
+        onChange={(volume) => setVolume(volume / 100)}
+        style={{ minWidth: '80px' }}
+        styles={{
+          // min height increases the clickable area
+          root: { '--slider-track-bg': 'rgba(255, 255, 255, 0.3)', minHeight: '32px' },
+          trackContainer: { minHeight: '32px' },
+        }}
+      />
+    </VolumeContainer>
+  )
 }

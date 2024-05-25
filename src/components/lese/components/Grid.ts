@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import isPropValid from '@emotion/is-prop-valid'
-import Base, { BaseProps } from './Base'
+import Base, { type BaseProps } from './Base'
 import { propertyGenerator } from '../helpers'
 
 export interface GridProps extends BaseProps {
@@ -35,7 +35,7 @@ const getGridProperties = propertyGenerator<GridProps>([
 ])
 
 export default styled(Base).withConfig({
-  shouldForwardProp: prop => getGridProperties.shouldForwardProp(prop) && isPropValid(prop),
+  shouldForwardProp: (prop) => getGridProperties.shouldForwardProp(prop) && isPropValid(prop),
 })<React.PropsWithChildren<GridProps>>`
   display: grid;
   ${getGridProperties}

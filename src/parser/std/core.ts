@@ -1,6 +1,6 @@
-import { Channel, Comment, Playlist, Video, Player, User, HistoryVideos } from '.'
-import { GameCategory } from './category'
-import { Shelf } from './shelf'
+import type { Channel, Comment, Playlist, Video, Player, User, HistoryVideos } from '.'
+import type { GameCategory } from './category'
+import type { Shelf } from './shelf'
 
 export enum Visibility {
   Public = 'public',
@@ -55,22 +55,21 @@ export enum ResourceType {
 }
 
 // prettier-ignore
-export type Resource<Type extends ResourceType> =
-	Type extends ResourceType.Category
-		? GameCategory
-		: Type extends ResourceType.Channel
-		  ? Channel
-		  : Type extends ResourceType.Comment
-			  ? Comment
-			  : Type extends ResourceType.Playlist
-				  ? Playlist
-				  : Type extends ResourceType.Self
-					  ? never
-					  : Type extends ResourceType.User
-						  ? User
-						  : Type extends ResourceType.Video
-							  ? Video
-							  : never;
+export type Resource<Type extends ResourceType> = Type extends ResourceType.Category
+  ? GameCategory
+  : Type extends ResourceType.Channel
+    ? Channel
+    : Type extends ResourceType.Comment
+      ? Comment
+      : Type extends ResourceType.Playlist
+        ? Playlist
+        : Type extends ResourceType.Self
+          ? never
+          : Type extends ResourceType.User
+            ? User
+            : Type extends ResourceType.Video
+              ? Video
+              : never
 
 export type Provider = {
   listRecommended?: () => AsyncGenerator<(Video | Shelf)[]>

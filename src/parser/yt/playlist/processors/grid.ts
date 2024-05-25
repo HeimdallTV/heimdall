@@ -1,9 +1,9 @@
 import * as std from '@std'
-import { MetadataBadge, isVerifiedBadge } from '../../components/badge'
-import { ManyText, Text, combineSomeText } from '../../components/text'
-import { Thumbnail, ThumbnailOverlays } from '../../components/thumbnail'
-import { Navigation } from '../../components/utility/navigation'
-import { Renderer, Runs, Some } from '../../core/internals'
+import { type MetadataBadge, isVerifiedBadge } from '../../components/badge'
+import { type ManyText, type Text, combineSomeText } from '../../components/text'
+import type { Thumbnail, ThumbnailOverlays } from '../../components/thumbnail'
+import type { Navigation } from '../../components/utility/navigation'
+import type { Renderer, Runs, Some } from '../../core/internals'
 
 export type GridPlaylist = Renderer<
   'gridPlaylist',

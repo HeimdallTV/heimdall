@@ -6,6 +6,7 @@ import '@mantine/core/styles.css'
 import { NavBar } from '@/components/NavBar'
 import { useIsFullscreen } from './hooks/useIsFullscreen'
 
+// Hack for development to ignore React warnings about nesting <a> tags
 if (import.meta.env.MODE === 'development') {
   console.log('Development mode')
   const origConsoleError = console.error
@@ -20,6 +21,7 @@ if (import.meta.env.MODE === 'development') {
 }
 
 const theme = createTheme({
+  scale: 0.9,
   fontFamily: 'Roboto Flex',
   colors: {
     dark: [
@@ -52,6 +54,7 @@ const Shell = styled.div<{ $isFullscreen: boolean }>`
 
   > * {
     overflow-y: auto;
+    scrollbar-width: ${(_) => (_.$isFullscreen ? 'none' : 'auto')};
   }
 `
 

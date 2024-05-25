@@ -1,6 +1,6 @@
-import { BrowseEndpoint, getBrowseEndpointUrl } from './browse'
-import { UrlEndpoint, getUrlEndpointUrl } from './url'
-import { WatchEndpoint, getWatchEndpointUrl } from './watch'
+import { type BrowseEndpoint, getBrowseEndpointUrl } from './browse'
+import { type UrlEndpoint, getUrlEndpointUrl } from './url'
+import { type WatchEndpoint, getWatchEndpointUrl } from './watch'
 
 export * from './browse'
 export * from './reel-watch'
