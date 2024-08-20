@@ -21,7 +21,7 @@ const SeekBarSectionContainer = styled.div<{ $widthPercent: number }>`
 
   transition: transform 0.2s ease;
   transform: scaleY(1);
-  &:hover {
+  &:hover, &.dragging {
     transform: scaleY(3);
   }
 `
@@ -34,11 +34,12 @@ const SeekBarSectionPadding = styled.div`
   right: 0;
 `
 
-const SeekBarSection: React.FC<PropsWithChildren<{ widthPercent: number }>> = ({
+const SeekBarSection: React.FC<PropsWithChildren<{ widthPercent: number; isDragging: boolean }>> = ({
   widthPercent,
+  isDragging,
   children,
 }) => (
-  <SeekBarSectionContainer $widthPercent={widthPercent}>
+  <SeekBarSectionContainer className={isDragging ? 'dragging' : ''} $widthPercent={widthPercent}>
     <SeekBarSectionPadding />
     {children}
   </SeekBarSectionContainer>
@@ -83,7 +84,7 @@ const SeekBarThumb: React.FC = () => (
 const SeekBarContainer = styled(Row)`
   position: relative;
   cursor: pointer;
-  &:hover ${SeekBarThumbStyled} {
+  &:hover ${SeekBarThumbStyled}, &.dragging ${SeekBarThumbStyled} {
     transform: translate(50%, -50%) scale(1);
   }
   > * + * {
@@ -118,29 +119,30 @@ export const SeekBar: React.FC = () => {
   const player = useContext(PlayerContext)!
   const { currentTimeMS, durationMS } = usePlayerTimingsMS(player)
   const { segments } = useSegments(player)
+  const [isDragging, setIsDragging] = useState(false)
 
   const onMove = useCallback(
-    (percent: number, { elem, isDragging, isHovering }: MoveCallbackMetadata) => {
-      if (isDragging) {
-        elem.style.setProperty('--current-time-end-override', `${percent}%`)
-        player.currentScrubTimeMS.set((percent / 100) * (player.durationMS.get() ?? 0))
-      }
-      if (isHovering) elem.style.setProperty('--current-hover-time-end', `${percent}%`)
+    (percent: number, { elem }: MoveCallbackMetadata) => {
+      setIsDragging(true)
+      player.currentScrubTimeMS.set((percent / 100) * (player.durationMS.get() ?? 0))
+
+      elem.style.setProperty('--current-time-end-override', `${percent}%`)
+      elem.style.setProperty('--current-hover-time-end', `${percent}%`)
     },
     [player],
   )
-  const onBlur = useCallback((_: unknown, { elem }: MoveCallbackMetadata) => {
-    elem.style.removeProperty('--current-hover-time-end')
-  }, [])
   const onUp = useCallback(
     (percent: number, { elem }: MoveCallbackMetadata) => {
-      player!.seekMS.set((percent / 100) * (player.durationMS.get() ?? 1))
+      setIsDragging(false)
+      player.currentScrubTimeMS.set(undefined)
+      player.seekMS.set((percent / 100) * (player.durationMS.get() ?? 1))
+
       elem.style.removeProperty('--current-time-end-override')
       elem.style.removeProperty('--current-hover-time-end')
     },
     [player],
   )
-  const ref = useMove(onMove, onUp, onBlur)
+  const ref = useMove(onMove, onUp)
 
   const { bufferedRangesMS } = useBufferedRangesMS(player)
   const bufferedRangeCSSVars = bufferedRangesMS.reduce(
@@ -159,6 +161,7 @@ export const SeekBar: React.FC = () => {
   // todo: dont show the overlay for the segments unless in a segment
   return (
     <SeekBarContainer
+      className={isDragging ? 'dragging' : ''}
       ref={ref}
       style={{
         // @ts-expect-error
@@ -166,7 +169,7 @@ export const SeekBar: React.FC = () => {
         ...bufferedRangeCSSVars,
       }}
     >
-      <SeekBarSection widthPercent={100}>
+      <SeekBarSection isDragging={isDragging} widthPercent={100}>
         {bufferedRangesMS.map((_, i) => (
           <SeekBarOverlayVar key={i} $cssVar={`buffered-${i}`} $color="rgba(255, 255, 255, 0.2)" />
         ))}

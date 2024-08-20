@@ -105,6 +105,7 @@ const pickAudioCodec = (sources: std.Source[]) => {
   return sources
     .filter(std.isAudioSource)
     .filter((source) => audioEl.canPlayType(source.mimetype) === 'probably')
+    .filter((source) => source.language?.startsWith('en'))
     .sort(
       (a, b) =>
         preferredAudioCodecs.findIndex((codec) => a.mimetype?.includes(codec)) -

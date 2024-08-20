@@ -10,7 +10,7 @@ export const setDeclarativeNetRequestHeaderRule = memoizeAsync(() =>
       {
         id: 1000,
         condition: {
-          requestDomains: ['yt3.ggpht.com', 'i.ytimg.com'],
+          requestDomains: ['yt3.ggpht.com', 'i.ytimg.com', 'googlevideo.com'],
         },
         action: {
           type: 'modifyHeaders',

@@ -100,7 +100,7 @@ const nonceDict: Record<string, string> = {}
 // the nonce needs to be consistent so YT can understand the session
 // but this code isnt ideal since a user leaving a re-entering a video
 // should regenerate the nonce
-const getNonce = (videoId: string) => {
+export const getNonce = (videoId: string) => {
   if (!(videoId in nonceDict)) nonceDict[videoId] = generateNonce()
   return nonceDict[videoId]
 }

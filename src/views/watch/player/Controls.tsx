@@ -16,7 +16,7 @@ import { Volume } from './controls/Volume'
 import { PlayerState } from './hooks/usePlayerInstance'
 import { SeekBar } from './controls/SeekBar'
 import { useHover } from '@mantine/hooks'
-import { usePlayerState } from './hooks/use'
+import { useCurrentScrubTimeMS, usePlayerState } from './hooks/use'
 
 const ControlsContainer = styled(Column)<{ show: boolean } & FlexProps>`
   background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.1) 20%, rgba(0, 0, 0, 0.8) 100%);
@@ -48,8 +48,10 @@ export const Controls: React.FC<{ playerRoot: RefObject<HTMLElement>; mouseActiv
 }) => {
   const player = useContext(PlayerContext)!
   const { state: playerState } = usePlayerState(player)
+  const { currentScrubTimeMS } = useCurrentScrubTimeMS(player)
   const { hovered, ref: controlsRef } = useHover<HTMLDivElement>()
-  const show = playerState !== PlayerState.Playing || hovered || mouseActive
+  const show =
+    playerState !== PlayerState.Playing || hovered || mouseActive || currentScrubTimeMS !== undefined
 
   return (
     <ControlsContainer ref={controlsRef} show={show} onClick={(e) => e.stopPropagation()} separation="8px">

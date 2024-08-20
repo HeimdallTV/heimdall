@@ -105,7 +105,7 @@ type BaseSource<Type extends SourceType> = {
   url: string
   mimetype?: string
 }
-type AudioSource = { audioBitrate?: number }
+type AudioSource = { audioBitrate?: number; language?: string; isDefault?: boolean }
 type VideoSource = {
   width: number
   height: number

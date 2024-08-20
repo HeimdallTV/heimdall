@@ -5,13 +5,14 @@ import { MantineProvider, createTheme } from '@mantine/core'
 import '@mantine/core/styles.css'
 import { NavBar } from '@/components/NavBar'
 import { useIsFullscreen } from './hooks/useIsFullscreen'
+import { Categories } from './views/watch/player/Categories'
 
 // Hack for development to ignore React warnings about nesting <a> tags
 if (import.meta.env.MODE === 'development') {
   console.log('Development mode')
   const origConsoleError = console.error
   console.error = (...args: unknown[]) => {
-    const isNestingWarning = (arg: unknown) => typeof arg === 'string' && arg.includes('validateDOMNesting')
+    const isNestingWarning = (arg: unknown) => typeof arg === 'string' && 'validateDOMNesting'
     const [formatString, child, parent] = args
     if (isNestingWarning(formatString) && child === '<a>' && parent === 'a') {
       return

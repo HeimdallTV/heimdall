@@ -11,6 +11,7 @@ export function Tracking() {
   const { durationMS } = useDurationMS(player)
 
   // don't track anything in development mode
+  // todo: setting
   if (import.meta.env.MODE === 'development') return
 
   // track the view when the video starts playing

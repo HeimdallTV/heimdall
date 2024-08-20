@@ -25,8 +25,12 @@ export async function processPlayer({
     title: videoDetails.title,
     staticThumbnail: videoDetails.thumbnail.thumbnails,
     sources: await Promise.all([
-      ...streamingData.formats.map(processFormat).map(decodeFormatUrl),
-      ...streamingData.adaptiveFormats.map(processAdaptiveFormat).map(decodeFormatUrl),
+      ...streamingData.formats
+        .map(processFormat)
+        .map((format) => decodeFormatUrl(format, videoDetails.videoId)),
+      ...streamingData.adaptiveFormats
+        .map(processAdaptiveFormat)
+        .map((format) => decodeFormatUrl(format, videoDetails.videoId)),
     ]),
     closedCaptions: captions !== undefined ? processCaptions(captions) : [],
     viewedLength: playerConfig.playbackStartConfig?.startSeconds ?? 0,
@@ -39,7 +43,7 @@ export const processFormat = (format: PlayerFormat): std.Source<std.SourceType.A
   frameRate: format.fps,
   width: format.width,
   height: format.height,
-  url: format.url ? format.url : signatureCipherToUrl(format.signatureCipher!),
+  url: format.signatureCipher ? signatureCipherToUrl(format.signatureCipher!) : format.url!,
   mimetype: format.mimeType,
 })
 
@@ -53,7 +57,7 @@ export const processAdaptiveVideoFormat = (
   frameRate: format.fps,
   width: format.width,
   height: format.height,
-  url: format.url ? format.url : signatureCipherToUrl(format.signatureCipher!),
+  url: format.signatureCipher ? signatureCipherToUrl(format.signatureCipher!) : format.url!,
   mimetype: format.mimeType,
   videoBitrate: format.bitrate,
 })
@@ -65,6 +69,8 @@ export const processAdaptiveAudioFormat = (
   url: format.url ? format.url : signatureCipherToUrl(format.signatureCipher!),
   mimetype: format.mimeType,
   audioBitrate: format.bitrate,
+  language: format.audioTrack?.id.split('.')[0] ?? 'en-US',
+  isDefault: format.audioTrack?.audioIsDefault,
 })
 
 // todo: docs
@@ -80,8 +86,9 @@ const signatureCipherToUrl = (signatureCipher: string): string => {
 
 export const decodeFormatUrl = async <Type extends std.SourceType = std.SourceType>(
   source: std.Source<Type>,
+  videoId: string,
 ): Promise<std.Source<Type>> =>
-  decodeVideoPlaybackUrl(new URL(source.url)).then((url) => ({ ...source, url: url.toString() }))
+  decodeVideoPlaybackUrl(new URL(source.url), videoId).then((url) => ({ ...source, url: url.toString() }))
 
 /*
 nR = function(a, b, c) {

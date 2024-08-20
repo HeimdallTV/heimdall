@@ -4,7 +4,7 @@ import { fetchBaseJS } from './shared'
 const getNParamDecodingFunction = memoizeAsync(
   async (): Promise<string> => {
     const baseJS = await fetchBaseJS()
-    const nameOfConsumerFunction = baseJS.match(/\.get\("n"\).+?(\w+)\[\d+\]\(\w+?\)/)![1]
+    const nameOfConsumerFunction = baseJS.match(/(\w+)\[\d+\]\(\w+?\)/)![1]
     const nameOfWrapperFunction = baseJS.match(new RegExp(`${nameOfConsumerFunction}=\\[(\\w+?)\\]`))![1]
     const functionBody = baseJS.match(
       new RegExp(`${nameOfWrapperFunction}=(function\\(.+?\\){[^]+?};)\\n?.+?=function`),

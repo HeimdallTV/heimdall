@@ -160,3 +160,17 @@ export const playerSegmentsAtom = atomWithStorage<PlayerSegmentsSettings>('setti
 })
 export const playerSegmentsCategoriesAtom = focusAtom(playerSegmentsAtom, (optic) => optic.prop('categories'))
 export const playerSegmentsHighlightAtom = focusAtom(playerSegmentsAtom, (optic) => optic.prop('highlight'))
+
+type Foo = { foo: string }
+type ExtendedFoo = { bar: string }
+
+type KnownCompleteFoos = 'yuh'
+
+type Baz<Token extends string> = Token extends `${string}.${string}`
+  ? Foo
+  : Token extends KnownCompleteFoos
+    ? Foo
+    : ExtendedFoo
+
+type What = 'foo' & 'yo'
+type Test = Baz<'random'>

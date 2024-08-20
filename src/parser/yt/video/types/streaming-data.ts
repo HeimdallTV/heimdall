@@ -39,6 +39,12 @@ export type PlayerAudioFormat = {
   /** Number formatted as string Ex. "44100" */
   audioSampleRate: '44100'
   audioChannels: number
+  audioTrack: {
+    audioIsDefault: false
+    displayName: string
+    /** Language formatted like es-ES.3 */
+    id: string
+  }
   loudnessDb: number
 }
 
